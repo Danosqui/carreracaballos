@@ -46,5 +46,4 @@ public class Jugador {
 	public Caballo getCaballoSeleccionado() {
 		return caballoSeleccionado;
 	}
-
 }
