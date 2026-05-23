@@ -4,7 +4,7 @@ import com.uade.carreracaballos.dao.JugadorDAO;
 import com.uade.carreracaballos.dto.JugadorDTO;
 import com.uade.carreracaballos.model.Jugador;
 
-public class JugadorService {
+public class JugadorService { //FALTA LISTAR JUGADORES
 
     private JugadorDAO jugadorDAO;
 
@@ -17,7 +17,7 @@ public class JugadorService {
         jugadorDAO.crearJugador(jugador);
     }
 
-    public JugadorDTO buscarJugador(String nombreJugador,
+    public JugadorDTO buscarJugador(String nombreJugador, //DEBERIA BUSCAR POR ID
                                     String mail) {
 
         Jugador jugador =

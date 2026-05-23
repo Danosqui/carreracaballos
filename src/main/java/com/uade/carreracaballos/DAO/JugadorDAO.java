@@ -35,7 +35,7 @@ public class JugadorDAO {
         }
     }
 
-    public Jugador buscarJugador(String nombreJugador) {
+    public Jugador buscarJugador(String nombreJugador) { //ESTO DEBERIA BUSCAR POR ID
 
         String sql =
             "SELECT * FROM jugadores WHERE nombre = ?";
