@@ -7,8 +7,8 @@ import java.util.List;
 import com.uade.carreracaballos.service.JugadorService;
 
 public class JugadorController {
-	JugadorService jugadorService;
-	Jugador jugadorSeleccionado;
+	private JugadorService jugadorService;
+	private Jugador jugadorSeleccionado;
 	
 	public JugadorController() {
 		this.jugadorService = new JugadorService();
