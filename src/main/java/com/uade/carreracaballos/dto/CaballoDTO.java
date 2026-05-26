@@ -5,6 +5,8 @@ public abstract class CaballoDTO {
 	protected String nombre;
 	protected double velocidad;
 	protected double resistencia;
+	protected double energia;
+	protected double distanciaRecorrida;
 	public int getId() {
 		return id;
 	}

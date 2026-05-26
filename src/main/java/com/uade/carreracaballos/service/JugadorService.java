@@ -1,10 +1,12 @@
 package com.uade.carreracaballos.service;
 
-import com.uade.carreracaballos.dao.JugadorDAO;
+import com.uade.carreracaballos.DAO.JugadorDAO;
 import com.uade.carreracaballos.dto.JugadorDTO;
 import com.uade.carreracaballos.model.Jugador;
 
-public class JugadorService { //FALTA LISTAR JUGADORES
+import java.util.List;
+
+public class JugadorService {
 
     private JugadorDAO jugadorDAO;
 
@@ -13,31 +15,29 @@ public class JugadorService { //FALTA LISTAR JUGADORES
     }
 
     public void guardarJugador(Jugador jugador) {
-
         jugadorDAO.crearJugador(jugador);
     }
 
-    public JugadorDTO buscarJugador(String nombreJugador, //DEBERIA BUSCAR POR ID
-                                    String mail) {
-
-        Jugador jugador =
-                jugadorDAO.buscarJugador(nombreJugador);
+    public JugadorDTO buscarJugador(String nombre, String mail) {
+        Jugador jugador = jugadorDAO.buscarJugador(nombre);
 
         if (jugador == null || !jugador.getMail().equals(mail)) {
             return null;
         }
-        else{
-            return new JugadorDTO(
+
+        return new JugadorDTO(
                 0,
                 jugador.getNombre(),
                 jugador.getMail(),
                 jugador.getPuntajeAcumulado()
         );
-        }
+    }
+
+    public List<JugadorDTO> listarJugadores() {
+        return jugadorDAO.listarJugadores();
     }
 
     public void actualizarJugador(Jugador jugador) {
-
         jugadorDAO.actualizarJugador(jugador);
     }
 }
