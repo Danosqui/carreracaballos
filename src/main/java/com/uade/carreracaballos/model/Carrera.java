@@ -5,20 +5,20 @@ import java.util.List;
 public class Carrera {
 	
 	private List<Caballo> caballos;
-	private estadoCarrera estado;
+	private EstadoCarrera estado;
 	private int longitudPista;
 	
 	public Carrera(List<Caballo> caballos, int longitudPista) {
 		this.caballos = caballos;
 		this.longitudPista = longitudPista;
-		this.estado=estadoCarrera.STBY;
+		this.estado=EstadoCarrera.STBY;
 	}
 	
 	public void iniciarCarrera() {
-		this.estado = estadoCarrera.EN_CURSO;
+		this.estado = EstadoCarrera.EN_CURSO;
 	}
 	
-	public estadoCarrera avanzarCorredores() {
+	public EstadoCarrera avanzarCorredores() {
 		
 		for (Caballo caballo : caballos) {
 			caballo.avanzar();
@@ -35,7 +35,7 @@ public class Carrera {
 	    }
 	    if (caballos.get(caballos.size()-1).distanciaRecorrida >= longitudPista) { //si el primero ya termino
 			
-			estado = estadoCarrera.FINALIZADA;
+			estado = EstadoCarrera.FINALIZADA;
 			
 		}
 	    return estado;
@@ -44,7 +44,7 @@ public class Carrera {
 	public List<Caballo> obtenerPosiciones(){
 		return caballos;
 	}
-	public estadoCarrera getEstado() {
+	public EstadoCarrera getEstado() {
 		return estado;
 	}
 

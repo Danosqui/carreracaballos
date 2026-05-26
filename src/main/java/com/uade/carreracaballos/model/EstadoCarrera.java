@@ -1,6 +1,6 @@
 package com.uade.carreracaballos.model;
 
-public enum estadoCarrera {
+public enum EstadoCarrera {
 	STBY,
 	EN_CURSO,
 	FINALIZADA
