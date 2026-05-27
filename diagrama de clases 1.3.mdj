@@ -3852,7 +3852,7 @@
 											"top": 647,
 											"width": 319.30322265625,
 											"height": 13,
-											"text": "+sumarPuntajeyGuardar(puntaje: int)",
+											"text": "+procesarPuntaje(posicionJugador: int)",
 											"horizontalAlignment": 0
 										}
 									],
@@ -5535,24 +5535,6 @@
 											"height": 13,
 											"text": "-carrera: Carrera",
 											"horizontalAlignment": 0
-										},
-										{
-											"_type": "UMLAttributeView",
-											"_id": "AAAAAAGeR7MNMMBHAWY=",
-											"_parent": {
-												"$ref": "AAAAAAGdsPdGSCQVx2o="
-											},
-											"model": {
-												"$ref": "AAAAAAGeR7MNJsA1vBs="
-											},
-											"font": "Arial;13;0",
-											"parentStyle": true,
-											"left": 1493,
-											"top": 733,
-											"width": 333.73779296875,
-											"height": 13,
-											"text": "-jugador: Jugador",
-											"horizontalAlignment": 0
 										}
 									],
 									"font": "Arial;13;0",
@@ -5560,7 +5542,7 @@
 									"left": 1488,
 									"top": 713,
 									"width": 343.73779296875,
-									"height": 38
+									"height": 23
 								},
 								{
 									"_type": "UMLOperationCompartmentView",
@@ -5584,7 +5566,7 @@
 											"font": "Arial;13;0",
 											"parentStyle": true,
 											"left": 1493,
-											"top": 756,
+											"top": 741,
 											"width": 333.73779296875,
 											"height": 13,
 											"text": "+crearCarrera(caballos: List<Caballo>, distanciaPista: int)",
@@ -5602,19 +5584,37 @@
 											"font": "Arial;13;0",
 											"parentStyle": true,
 											"left": 1493,
-											"top": 771,
+											"top": 756,
 											"width": 333.73779296875,
 											"height": 13,
 											"text": "+avanzarInstante(): boolean",
+											"horizontalAlignment": 0
+										},
+										{
+											"_type": "UMLOperationView",
+											"_id": "AAAAAAGeZtTFqkm59qs=",
+											"_parent": {
+												"$ref": "AAAAAAGdsPdGSCQWorM="
+											},
+											"model": {
+												"$ref": "AAAAAAGeZtTFnEmwxUE="
+											},
+											"font": "Arial;13;0",
+											"parentStyle": true,
+											"left": 1493,
+											"top": 771,
+											"width": 333.73779296875,
+											"height": 13,
+											"text": "+calcularPuesto(caballo: Caballo)",
 											"horizontalAlignment": 0
 										}
 									],
 									"font": "Arial;13;0",
 									"parentStyle": true,
 									"left": 1488,
-									"top": 751,
+									"top": 736,
 									"width": 343.73779296875,
-									"height": 38
+									"height": 53
 								},
 								{
 									"_type": "UMLReceptionCompartmentView",
@@ -5657,7 +5657,7 @@
 							"left": 1488,
 							"top": 688,
 							"width": 342.73779296875,
-							"height": 101,
+							"height": 116,
 							"nameCompartment": {
 								"$ref": "AAAAAAGdsPdGSCQQwUw="
 							},
@@ -8260,7 +8260,7 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 1615,
+									"left": 1614,
 									"top": 654,
 									"height": 13,
 									"alpha": 1.5707963267948966,
@@ -8282,7 +8282,7 @@
 									"visible": null,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 1601,
+									"left": 1600,
 									"top": 659,
 									"height": 13,
 									"alpha": 1.5707963267948966,
@@ -8304,7 +8304,7 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 1644,
+									"left": 1643,
 									"top": 645,
 									"height": 13,
 									"alpha": -1.5707963267948966,
@@ -8326,8 +8326,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 1618,
-									"top": 661,
+									"left": 1616,
+									"top": 660,
 									"height": 13,
 									"alpha": 0.5235987755982988,
 									"distance": 30,
@@ -8348,8 +8348,8 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 1605,
-									"top": 663,
+									"left": 1603,
+									"top": 662,
 									"height": 13,
 									"alpha": 0.7853981633974483,
 									"distance": 40,
@@ -8370,7 +8370,7 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 1645,
+									"left": 1644,
 									"top": 656,
 									"height": 13,
 									"alpha": -0.5235987755982988,
@@ -8392,7 +8392,7 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 1614,
+									"left": 1612,
 									"top": 648,
 									"height": 13,
 									"alpha": -0.5235987755982988,
@@ -8413,7 +8413,7 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 1602,
+									"left": 1600,
 									"top": 654,
 									"height": 13,
 									"alpha": -0.7853981633974483,
@@ -8434,7 +8434,7 @@
 									"visible": false,
 									"font": "Arial;13;0",
 									"parentStyle": false,
-									"left": 1638,
+									"left": 1637,
 									"top": 635,
 									"height": 13,
 									"alpha": 0.5235987755982988,
@@ -8483,7 +8483,7 @@
 								"$ref": "AAAAAAGdsPdGSCQPA9s="
 							},
 							"lineStyle": 1,
-							"points": "1641:687;1620:625",
+							"points": "1639:687;1619:625",
 							"showVisibility": true,
 							"nameLabel": {
 								"$ref": "AAAAAAGeR71waUC6MhI="
@@ -13212,7 +13212,7 @@
 							"_parent": {
 								"$ref": "AAAAAAGdjf++2AcRLzk="
 							},
-							"name": "sumarPuntajeyGuardar",
+							"name": "procesarPuntaje",
 							"parameters": [
 								{
 									"_type": "UMLParameter",
@@ -13220,7 +13220,7 @@
 									"_parent": {
 										"$ref": "AAAAAAGeR57elAhMFxo="
 									},
-									"name": "puntaje",
+									"name": "posicionJugador",
 									"type": "int"
 								}
 							]
@@ -15956,18 +15956,6 @@
 							"type": {
 								"$ref": "AAAAAAGdY1Phe0wZ7kI="
 							}
-						},
-						{
-							"_type": "UMLAttribute",
-							"_id": "AAAAAAGeR7MNJsA1vBs=",
-							"_parent": {
-								"$ref": "AAAAAAGdsPdGSCQNGoQ="
-							},
-							"name": "jugador",
-							"visibility": "private",
-							"type": {
-								"$ref": "AAAAAAGdY05ZNkr7cwQ="
-							}
 						}
 					],
 					"operations": [
@@ -16015,6 +16003,27 @@
 									},
 									"type": "boolean",
 									"direction": "return"
+								}
+							]
+						},
+						{
+							"_type": "UMLOperation",
+							"_id": "AAAAAAGeZtTFnEmwxUE=",
+							"_parent": {
+								"$ref": "AAAAAAGdsPdGSCQNGoQ="
+							},
+							"name": "calcularPuesto",
+							"parameters": [
+								{
+									"_type": "UMLParameter",
+									"_id": "AAAAAAGeZtUeVk8bKZY=",
+									"_parent": {
+										"$ref": "AAAAAAGeZtTFnEmwxUE="
+									},
+									"name": "caballo",
+									"type": {
+										"$ref": "AAAAAAGdY0+lBEtGKRg="
+									}
 								}
 							]
 						}
