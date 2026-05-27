@@ -32,11 +32,11 @@ public class JugadorDTO {
 	public void setMail(String mail) {
 		this.mail = mail;
 	}
-	public int getPnutaje() {
+	public int getPuntaje() {
 		return puntaje;
 	}
-	public void setPnutaje(int pnutaje) {
-		this.puntaje = pnutaje;
+	public void setPuntaje(int puntaje) {
+		this.puntaje = puntaje;
 	}
 	public CaballoDTO getCaballoSeleccionado() {
 		return caballoSeleccionado;

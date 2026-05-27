@@ -94,13 +94,15 @@ public class CaballoDAO {
     }
 
     private Caballo construirCaballo(ResultSet rs) throws SQLException {
-        String tipo   = rs.getString("tipo");
-        String nombre = rs.getString("nombre");
+        String tipo        = rs.getString("tipo");
+        String nombre      = rs.getString("nombre");
+        double velocidad   = rs.getDouble("velocidad");
+        double resistencia = rs.getDouble("resistencia");
 
         switch (tipo) {
-            case "VELOZ":       return new CaballoVeloz(nombre);
-            case "RESISTENTE":  return new CaballoResistente(nombre);
-            case "EQUILIBRADO": return new CaballoEquilibrado(nombre);
+            case "VELOZ":       return new CaballoVeloz(nombre, velocidad, resistencia);
+            case "RESISTENTE":  return new CaballoResistente(nombre, velocidad, resistencia);
+            case "EQUILIBRADO": return new CaballoEquilibrado(nombre, velocidad, resistencia);
             default:
                 System.err.println("Tipo desconocido: " + tipo);
                 return null;

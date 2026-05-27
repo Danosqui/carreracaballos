@@ -131,7 +131,7 @@ public class Main {
             for (int i = 0; i < jugadores.size(); i++) {
                 JugadorDTO j = jugadores.get(i);
                 System.out.printf("  %d) %-15s  %-30s  puntaje=%d%n",
-                        i + 1, j.getNombre(), j.getMail(), j.getPnutaje());
+                        i + 1, j.getNombre(), j.getMail(), j.getPuntaje());
             }
         }
         System.out.println(" --------------------------------------------------");
@@ -157,7 +157,7 @@ public class Main {
                 return;
             }
             JugadorDTO elegido = jugadores.get(idx);
-            jugadorController.seleccionarJugador(elegido.getNombre(), elegido.getMail());
+            jugadorController.seleccionarJugador(elegido);
             hayJugador = true;
             System.out.println(">> Jugador '" + elegido.getNombre() + "' cargado desde la DB.\n");
         } catch (NumberFormatException e) {

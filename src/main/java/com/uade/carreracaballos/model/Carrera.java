@@ -21,10 +21,12 @@ public class Carrera {
 	public EstadoCarrera avanzarCorredores() {
 		for (Caballo caballo : caballos) {
 			caballo.avanzar();
-			if (caballo.distanciaRecorrida >= this.longitudPista) estado = EstadoCarrera.FINALIZADA;
+			if (caballo.distanciaRecorrida >= this.longitudPista) {
+				estado = EstadoCarrera.FINALIZADA;
+				break;
+			}
 		}
-		
-	    return estado;
+		return estado;
 	}
 	
 	public List<Caballo> obtenerPosiciones(){

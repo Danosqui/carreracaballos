@@ -16,6 +16,14 @@ public abstract class Caballo {
         this.distanciaRecorrida = 0.0;
     }
 
+    protected Caballo(String nombre, double velocidad, double resistencia) {
+        this.nombre = nombre;
+        this.velocidad = velocidad;
+        this.resistencia = resistencia;
+        this.energia = 100.0;
+        this.distanciaRecorrida = 0.0;
+    }
+
     public abstract void avanzar();
 
     public void descansar() {

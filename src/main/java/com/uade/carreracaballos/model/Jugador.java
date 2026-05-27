@@ -11,7 +11,7 @@ public class Jugador {
 	public Jugador(String nombre, String mail, int puntaje) {
 		this.nombre = nombre;
 		this.mail = mail;
-		this.puntajeAcumulado= 0;
+		this.puntajeAcumulado = puntaje;
 		this.caballoSeleccionado = null;
 	}
 	

@@ -35,12 +35,11 @@ public class JugadorDAO {
 
             try (ResultSet rs = stmt.executeQuery()) {
                 if (rs.next()) {
-                    Jugador jugador = new Jugador(
+                    return new Jugador(
                             rs.getString("nombre"),
-                            rs.getString("mail")
+                            rs.getString("mail"),
+                            rs.getInt("puntaje")
                     );
-                    jugador.sumarPuntaje(rs.getInt("puntaje"));
-                    return jugador;
                 }
             }
 

@@ -16,12 +16,10 @@ import com.uade.carreracaballos.service.CaballoService;
 
 public class CaballoController {
 
-	private List<Caballo> caballos;
 	private CaballoService caballoService;
 
 	public CaballoController() {
 		this.caballoService = new CaballoService();
-		this.caballos = new ArrayList<>();
 	}
 
 	public void crearCaballo(AtributoCaballo atributo, String nombre) {
@@ -39,7 +37,6 @@ public class CaballoController {
 			default:
 				throw new RuntimeException("El tipo de caballo no existe");
 		}
-		caballos.add(nuevoCaballo);
 		caballoService.crearCaballo(nuevoCaballo);
 	}
 
@@ -64,6 +61,7 @@ public class CaballoController {
 		dto.setVelocidad(c.getVelocidad());
 		dto.setResistencia(c.getResistencia());
 		dto.setEnergia(c.getEnergia());
+		dto.setDistanciaRecorrida(c.getDistanciaRecorrida());
 		return dto;
 	}
 }

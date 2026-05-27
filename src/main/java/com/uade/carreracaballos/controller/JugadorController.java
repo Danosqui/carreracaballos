@@ -5,45 +5,42 @@ import com.uade.carreracaballos.model.Caballo;
 import com.uade.carreracaballos.model.Jugador;
 import com.uade.carreracaballos.service.JugadorService;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class JugadorController {
 
 	private JugadorService jugadorService;
-	private List<Jugador> jugadores;
 	private Jugador jugadorSeleccionado;
 
 	public JugadorController() {
 		this.jugadorService = new JugadorService();
-		this.jugadores = new ArrayList<>();
 		this.jugadorSeleccionado = null;
 	}
 
 	public void nuevoJugador(String nombre, String mail) {
 		Jugador jugador = new Jugador(nombre, mail, 0);
 		jugadorService.guardarJugador(jugador);
-		jugadores.add(jugador);
 	}
 
 	public void seleccionarJugador(JugadorDTO jugador) {
-		if (jugador != null) {
-			this.jugadorSeleccionado = new Jugador(
-					jugador.getNombre(),
-					jugador.getMail(),
-					jugador.getPnutaje()
-			);
-		} else {
-			throw new RuntimeException("Error de parametro: jugador es null");
-		}
+		if (jugador == null) throw new RuntimeException("Error de parametro: jugador es null");
+		this.jugadorSeleccionado = new Jugador(
+				jugador.getNombre(),
+				jugador.getMail(),
+				jugador.getPuntaje()
+		);
+	}
+
+	public void seleccionarJugador(String nombre, String mail) {
+		JugadorDTO dto = jugadorService.buscarJugador(nombre, mail);
+		if (dto == null) throw new RuntimeException("Jugador no encontrado: " + nombre);
+		this.jugadorSeleccionado = new Jugador(dto.getNombre(), dto.getMail(), dto.getPuntaje());
 	}
 
 	public void seleccionarCaballo(Caballo caballo) {
-		if (jugadorSeleccionado != null) {
-			jugadorSeleccionado.seleccionarCaballo(caballo);
-		} else {
+		if (jugadorSeleccionado == null)
 			throw new RuntimeException("Error: no se seleccionó un jugador");
-		}
+		jugadorSeleccionado.seleccionarCaballo(caballo);
 	}
 
 	public List<JugadorDTO> listarJugadores() {
@@ -51,11 +48,7 @@ public class JugadorController {
 	}
 
 	public void procesarPuntaje(int posicionJugador) {
-		//	AAAAAAAAAAAAAA
-		// REIVSAR QUE EL PUNTAJE ESTE BIEN SETEADOOOO
-		// AAAAAAAAAA
 		int puntaje = 10;
-
 		if (posicionJugador == 1) puntaje = 30;
 		else if (posicionJugador == 2) puntaje = 20;
 

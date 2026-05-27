@@ -37,5 +37,10 @@ public abstract class CaballoDTO {
 	public void setResistencia(double resistencia) {
 		this.resistencia = resistencia;
 	}
-	
+	public double getDistanciaRecorrida() {
+		return distanciaRecorrida;
+	}
+	public void setDistanciaRecorrida(double distanciaRecorrida) {
+		this.distanciaRecorrida = distanciaRecorrida;
+	}
 }

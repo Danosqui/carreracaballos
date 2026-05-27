@@ -8,6 +8,10 @@ public class CaballoVeloz extends Caballo {
         this.resistencia = 35.0 + Math.random() * 10.0;
     }
 
+    public CaballoVeloz(String nombre, double velocidad, double resistencia) {
+        super(nombre, velocidad, resistencia);
+    }
+
     @Override
     public void avanzar() {
         double avance = velocidad * (energia / 100.0);
