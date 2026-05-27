@@ -5,6 +5,7 @@ import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Properties;
 
 public class DBConnection {
@@ -34,6 +35,34 @@ public class DBConnection {
             Class.forName("com.mysql.cj.jdbc.Driver");
         } catch (ClassNotFoundException e) {
             throw new RuntimeException("Driver MySQL no encontrado. Verificar mysql-connector-java en pom.xml", e);
+        }
+        initSchema();
+    }
+
+    private void initSchema() {
+        try (Connection con = DriverManager.getConnection(URL, USER, PASSWORD);
+             Statement st = con.createStatement()) {
+            st.execute(
+                "CREATE TABLE IF NOT EXISTS caballos (" +
+                "  id INT AUTO_INCREMENT PRIMARY KEY," +
+                "  nombre VARCHAR(100) NOT NULL," +
+                "  tipo VARCHAR(20) NOT NULL," +
+                "  velocidad DOUBLE," +
+                "  resistencia DOUBLE," +
+                "  energia DOUBLE," +
+                "  distanciaRecorrida DOUBLE" +
+                ")"
+            );
+            st.execute(
+                "CREATE TABLE IF NOT EXISTS jugadores (" +
+                "  id INT AUTO_INCREMENT PRIMARY KEY," +
+                "  nombre VARCHAR(100) NOT NULL," +
+                "  mail VARCHAR(100)," +
+                "  puntaje INT" +
+                ")"
+            );
+        } catch (SQLException e) {
+            throw new RuntimeException("Error al inicializar el esquema de la base de datos", e);
         }
     }
 
