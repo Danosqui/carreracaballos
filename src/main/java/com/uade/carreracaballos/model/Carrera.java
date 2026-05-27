@@ -19,31 +19,18 @@ public class Carrera {
 	}
 	
 	public EstadoCarrera avanzarCorredores() {
-		
 		for (Caballo caballo : caballos) {
 			caballo.avanzar();
+			if (caballo.distanciaRecorrida >= this.longitudPista) estado = EstadoCarrera.FINALIZADA;
 		}
-		int n = caballos.size();
-	    for (int i = 0; i < n - 1; i++) { //bubble sort cortesia de claude esperemos que funque
-	        for (int j = 0; j < n - i - 1; j++) {
-	            if (caballos.get(j).getDistanciaRecorrida() < caballos.get(j + 1).getDistanciaRecorrida()) {
-	                Caballo temp = caballos.get(j);
-	                caballos.set(j, caballos.get(j + 1));
-	                caballos.set(j + 1, temp);
-	            }
-	        }
-	    }
-	    if (caballos.get(caballos.size()-1).distanciaRecorrida >= longitudPista) { //si el primero ya termino
-			
-			estado = EstadoCarrera.FINALIZADA;
-			
-		}
+		
 	    return estado;
 	}
 	
 	public List<Caballo> obtenerPosiciones(){
 		return caballos;
 	}
+
 	public EstadoCarrera getEstado() {
 		return estado;
 	}

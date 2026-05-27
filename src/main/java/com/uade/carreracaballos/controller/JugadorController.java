@@ -51,7 +51,15 @@ public class JugadorController {
 		return jugadorService.listarJugadores();
 	}
 
-	public void sumarPuntajeYGuardar(int puntaje) {
+	public void procesarPuntaje(int posicionJugador) {
+		//	AAAAAAAAAAAAAA
+		// REIVSAR QUE EL PUNTAJE ESTE BIEN SETEADOOOO
+		// AAAAAAAAAA
+		int puntaje = 10;
+
+		if (posicionJugador == 1) puntaje = 30;
+		else if (posicionJugador == 2) puntaje = 20;
+
 		jugadorSeleccionado.sumarPuntaje(puntaje);
 		jugadorService.actualizarJugador(jugadorSeleccionado);
 	}
