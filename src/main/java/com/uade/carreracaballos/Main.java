@@ -3,6 +3,10 @@ package com.uade.carreracaballos;
 import com.uade.carreracaballos.controller.CaballoController;
 import com.uade.carreracaballos.controller.CarreraController;
 import com.uade.carreracaballos.controller.JugadorController;
+import com.uade.carreracaballos.dto.CaballoDTO;
+import com.uade.carreracaballos.dto.CaballoEquilibradoDTO;
+import com.uade.carreracaballos.dto.CaballoResistenteDTO;
+import com.uade.carreracaballos.dto.CaballoVelozDTO;
 import com.uade.carreracaballos.dto.JugadorDTO;
 import com.uade.carreracaballos.model.AtributoCaballo;
 import com.uade.carreracaballos.model.Caballo;
@@ -58,10 +62,6 @@ public class Main {
         System.out.println("        CARRERA DE CABALLOS  -  CLI de prueba    ");
         System.out.println("==================================================");
         System.out.println("(Requiere MySQL disponible: la persistencia pasa por los DAOs)\n");
-
-        // Como en una app Swing, los caballos quedan listos apenas arranca el programa:
-        // no hay que pedirlos por menu, se cargan y persisten una sola vez al inicio.
-        cargarCaballos();
 
         boolean salir = false;
         while (!salir) {
@@ -185,60 +185,113 @@ public class Main {
     }
 
     // ------------------------------------------------------------------
-    // Caballos disponibles (ya cargados al iniciar el programa)
+    // Caballos
     // ------------------------------------------------------------------
-    /** Genera el pool fijo y lo persiste via CaballoController. Se llama una sola vez al inicio. */
-    private void cargarCaballos() {
-        pool = generarPool();
-        for (Caballo c : pool) {
-            caballoController.crearCaballo(atributoDe(c), c.getNombre());
+    /**
+     * Accion de menu "Seleccionar caballo": lista todos los caballos guardados en la DB,
+     * permite crear uno nuevo (solo tipo y nombre) y deja elegir uno como el del jugador.
+     * El pool de la carrera se arma con todos los caballos de esa lista.
+     */
+    private void seleccionarCaballo() {
+        pool = poolDesdeDB();
+
+        System.out.println("==================================================");
+        System.out.println(" SELECCIONAR CABALLO");
+        System.out.println("==================================================");
+        if (pool.isEmpty()) {
+            System.out.println(" (no hay caballos guardados todavia)");
+        } else {
+            for (int i = 0; i < pool.size(); i++) {
+                Caballo c = pool.get(i);
+                String marca = (i == indiceSeleccionado) ? "  <== TU CABALLO" : "";
+                System.out.printf("  %d) %-14s [%-11s]%s%n",
+                        i + 1, c.getNombre(), atributoDe(c), marca);
+            }
         }
-        System.out.println(">> Se cargo un pool de " + pool.size()
-                + " caballos y se persistio via CaballoController.\n");
+        System.out.println(" --------------------------------------------------");
+        System.out.println("  C) Crear nuevo caballo");
+        System.out.println("  0) Volver al menu");
+        System.out.println();
+
+        String entrada = leerTexto("Elegi un caballo (numero) o una opcion: ").trim();
+
+        if (entrada.equalsIgnoreCase("0")) {
+            return;
+        }
+        if (entrada.equalsIgnoreCase("C")) {
+            crearCaballo();
+            return;
+        }
+
+        try {
+            int idx = Integer.parseInt(entrada) - 1;
+            if (idx < 0 || idx >= pool.size()) {
+                System.out.println(">> Numero fuera de rango.\n");
+                return;
+            }
+            indiceSeleccionado = idx;
+            if (hayJugador) {
+                jugadorController.seleccionarCaballo(pool.get(idx));
+            }
+            System.out.println(">> Elegiste a " + pool.get(idx).getNombre()
+                    + ". El resto correran de forma automatica.\n");
+        } catch (NumberFormatException e) {
+            System.out.println(">> Opcion invalida.\n");
+        }
     }
 
-    /** Pool fijo y variado: VELOZ / RESISTENTE / EQUILIBRADO. */
-    private List<Caballo> generarPool() {
-        List<Caballo> nuevos = new ArrayList<>();
-        nuevos.add(new CaballoVeloz("Rayo"));
-        nuevos.add(new CaballoVeloz("Relampago"));
-        nuevos.add(new CaballoResistente("Tanque"));
-        nuevos.add(new CaballoResistente("Roble"));
-        nuevos.add(new CaballoEquilibrado("Centurion"));
-        nuevos.add(new CaballoEquilibrado("Comodin"));
-        return nuevos;
+    /** Alta de caballo: solo pide tipo y nombre. Persiste y lo deja como el caballo elegido. */
+    private void crearCaballo() {
+        System.out.println("Tipo de caballo:");
+        System.out.println("  1) Veloz");
+        System.out.println("  2) Resistente");
+        System.out.println("  3) Equilibrado");
+        int tipo = leerEntero("Selecciona el tipo: ");
+        AtributoCaballo atributo;
+        switch (tipo) {
+            case 1: atributo = AtributoCaballo.VELOZ;       break;
+            case 2: atributo = AtributoCaballo.RESISTENTE;  break;
+            case 3: atributo = AtributoCaballo.EQUILIBRADO; break;
+            default:
+                System.out.println(">> Tipo invalido.\n");
+                return;
+        }
+
+        String nombre = leerTexto("Nombre del caballo: ");
+        caballoController.crearCaballo(atributo, nombre);
+
+        // Refrescamos el pool y seleccionamos el recien creado (siempre queda al final).
+        pool = poolDesdeDB();
+        indiceSeleccionado = pool.size() - 1;
+        if (hayJugador) {
+            jugadorController.seleccionarCaballo(pool.get(indiceSeleccionado));
+        }
+        System.out.println(">> Caballo '" + nombre + "' creado y seleccionado.\n");
+    }
+
+    /** Reconstruye el pool de modelo desde los caballos persistidos en la DB. */
+    private List<Caballo> poolDesdeDB() {
+        List<Caballo> resultado = new ArrayList<>();
+        for (CaballoDTO dto : caballoController.listarCaballos()) {
+            resultado.add(caballoDesdeDTO(dto));
+        }
+        return resultado;
+    }
+
+    /** Convierte un DTO al objeto de modelo correspondiente segun su subtipo. */
+    private Caballo caballoDesdeDTO(CaballoDTO dto) {
+        if (dto instanceof CaballoVelozDTO)      return new CaballoVeloz(dto.getNombre());
+        if (dto instanceof CaballoResistenteDTO) return new CaballoResistente(dto.getNombre());
+        return new CaballoEquilibrado(dto.getNombre());
     }
 
     private void mostrarPool() {
         for (int i = 0; i < pool.size(); i++) {
             Caballo c = pool.get(i);
             String marca = (i == indiceSeleccionado) ? "  <== TU CABALLO" : "";
-            System.out.printf("  %d) %-12s [%-11s]  vel=%.2f  res=%.2f  energia=%.2f%s%n",
-                    i + 1, c.getNombre(), atributoDe(c), c.getVelocidad(),
-                    c.getResistencia(), c.getEnergia(), marca);
+            System.out.printf("  %d) %-14s [%-11s]%s%n",
+                    i + 1, c.getNombre(), atributoDe(c), marca);
         }
-    }
-
-    // ------------------------------------------------------------------
-    // 3) Seleccion de caballo
-    // ------------------------------------------------------------------
-    private void seleccionarCaballo() {
-        System.out.println("Caballos disponibles:");
-        mostrarPool();
-        int idx = leerEntero("Numero de caballo a elegir: ") - 1;
-        if (idx < 0 || idx >= pool.size()) {
-            System.out.println(">> Numero fuera de rango.\n");
-            return;
-        }
-
-        indiceSeleccionado = idx;
-        // Si ya hay jugador, le asociamos el caballo ahora; si todavia no, se asocia al iniciar
-        // la carrera (la seleccion de caballo no depende de haber elegido jugador antes).
-        if (hayJugador) {
-            jugadorController.seleccionarCaballo(pool.get(idx));
-        }
-        System.out.println(">> Elegiste a " + pool.get(idx).getNombre()
-                + ". El resto correran de forma automatica.\n");
     }
 
     // ------------------------------------------------------------------
