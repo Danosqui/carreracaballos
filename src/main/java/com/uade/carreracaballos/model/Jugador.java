@@ -8,7 +8,7 @@ public class Jugador {
 	private int puntajeAcumulado;
 	private Caballo caballoSeleccionado;
 
-	public Jugador(String nombre, String mail) {
+	public Jugador(String nombre, String mail, int puntaje) {
 		this.nombre = nombre;
 		this.mail = mail;
 		this.puntajeAcumulado= 0;

@@ -21,21 +21,20 @@ public class JugadorController {
 	}
 
 	public void nuevoJugador(String nombre, String mail) {
-		Jugador jugador = new Jugador(nombre, mail);
+		Jugador jugador = new Jugador(nombre, mail, 0);
 		jugadorService.guardarJugador(jugador);
 		jugadores.add(jugador);
 	}
 
-	public void seleccionarJugador(String nombre, String mail) {
-		JugadorDTO jugadorDTO = jugadorService.buscarJugador(nombre, mail);
-		if (jugadorDTO != null) {
+	public void seleccionarJugador(JugadorDTO jugador) {
+		if (jugador != null) {
 			this.jugadorSeleccionado = new Jugador(
-					jugadorDTO.getNombre(),
-					jugadorDTO.getMail()
+					jugador.getNombre(),
+					jugador.getMail(),
+					jugador.getPnutaje()
 			);
-			this.jugadorSeleccionado.sumarPuntaje(jugadorDTO.getPnutaje());
 		} else {
-			throw new RuntimeException("Jugador no encontrado");
+			throw new RuntimeException("Error de parametro: jugador es null");
 		}
 	}
 
