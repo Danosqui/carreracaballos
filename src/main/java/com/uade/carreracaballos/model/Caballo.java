@@ -32,6 +32,8 @@ public abstract class Caballo {
 
     protected static final double K = 10.0;
 
+    protected Caballo() {}
+
     public Caballo(String nombre) {
         this.nombre = nombre;
         this.energia = 100.0;

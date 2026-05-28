@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8"/>
+  <title>Informe de Cambios — Carrera de Caballos</title>
+  <style>
+    @media print {
+      body { font-size: 11pt; }
+      .page-break { page-break-before: always; }
+      header { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .change-card { break-inside: avoid; }
+      .tag { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Arial, sans-serif; background: #fff; color: #1a1a2e; line-height: 1.6; }
+
+    header {
+      background: #1a1a2e;
+      color: white;
+      padding: 2rem 2.5rem;
+    }
+    header h1 { font-size: 1.6rem; margin-bottom: 0.3rem; }
+    header .meta { font-size: 0.85rem; opacity: 0.7; display: flex; gap: 2rem; margin-top: 0.5rem; }
+
+    .container { max-width: 820px; margin: 0 auto; padding: 1.5rem 2rem 4rem; }
+
+    /* SUMMARY TABLE */
+    .summary-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 0.88rem; }
+    .summary-table th { background: #1a1a2e; color: white; padding: 0.5rem 0.8rem; text-align: left; }
+    .summary-table td { padding: 0.45rem 0.8rem; border-bottom: 1px solid #e8e8e8; vertical-align: top; }
+    .summary-table tr:nth-child(even) td { background: #f7f8fa; }
+    .summary-table .num { text-align: center; font-weight: bold; color: #666; }
+
+    /* TAGS */
+    .tag {
+      display: inline-block; border-radius: 3px; padding: 0.15rem 0.5rem;
+      font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .tag-bug    { background: #fde8e8; color: #c0392b; }
+    .tag-config { background: #e8f4fd; color: #1a6fa8; }
+    .tag-arch   { background: #fef9e7; color: #b7950b; }
+    .tag-test   { background: #eafaf1; color: #1e8449; }
+
+    /* CHANGE CARDS */
+    h2.section { font-size: 1rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px;
+      color: #555; border-bottom: 2px solid #1a1a2e; padding-bottom: 0.3rem; margin: 2rem 0 1rem; }
+
+    .change-card {
+      border: 1px solid #e0e0e0; border-radius: 8px; margin-bottom: 1.2rem; overflow: hidden;
+    }
+    .card-header {
+      background: #f0f2f5; padding: 0.6rem 1rem;
+      display: flex; align-items: center; gap: 0.8rem;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    .card-header .file { font-family: 'Courier New', monospace; font-size: 0.85rem; font-weight: 700; color: #1a1a2e; }
+    .card-body { padding: 1rem; }
+
+    .reason { background: #fef9e7; border-left: 3px solid #f39c12; padding: 0.6rem 0.8rem;
+      font-size: 0.85rem; margin-bottom: 0.8rem; border-radius: 0 4px 4px 0; }
+    .reason strong { color: #c0392b; }
+
+    /* DIFF */
+    .diff { font-family: 'Courier New', monospace; font-size: 0.82rem; border-radius: 4px; overflow: hidden; margin: 0.5rem 0; }
+    .diff .diff-header { background: #2c3e50; color: #aaa; padding: 0.3rem 0.8rem; font-size: 0.75rem; }
+    .diff .diff-body { background: #1e1e2e; padding: 0.5rem 0.8rem; }
+    .diff .del { color: #ff6b6b; }
+    .diff .del::before { content: "− "; }
+    .diff .add { color: #98ff6b; }
+    .diff .add::before { content: "+ "; }
+    .diff .ctx { color: #888; }
+    .diff .ctx::before { content: "  "; }
+    .diff span { display: block; line-height: 1.5; }
+
+    /* IMPACT */
+    .impact { font-size: 0.82rem; color: #555; margin-top: 0.6rem; padding: 0.5rem 0.8rem;
+      background: #f7f8fa; border-radius: 4px; }
+    .impact strong { color: #1a1a2e; }
+
+    /* FINAL */
+    .final { background: #1a1a2e; color: white; border-radius: 8px; padding: 1.5rem; margin-top: 2rem; }
+    .final h3 { margin-bottom: 0.8rem; font-size: 1rem; }
+    .final table { width: 100%; border-collapse: collapse; font-size: 0.85rem; }
+    .final td, .final th { padding: 0.4rem 0.8rem; text-align: left; }
+    .final th { border-bottom: 1px solid rgba(255,255,255,0.2); opacity: 0.7; font-weight: normal; font-size: 0.75rem; text-transform: uppercase; }
+    .final td { border-bottom: 1px solid rgba(255,255,255,0.08); }
+    .ok { color: #98ff6b; font-weight: bold; }
+  </style>
+</head>
+<body>
+
+<header>
+  <h1>Informe de Cambios — Carrera de Caballos</h1>
+  <div class="meta">
+    <span>Proyecto: com.uade.carreracaballos</span>
+    <span>Fecha: 27 de mayo de 2026</span>
+    <span>Total de archivos modificados: 10</span>
+  </div>
+</header>
+
+<div class="container">
+
+  <h2 class="section">Resumen de cambios</h2>
+
+  <table class="summary-table">
+    <thead>
+      <tr><th>#</th><th>Archivo</th><th>Tipo</th><th>Descripción breve</th></tr>
+    </thead>
+    <tbody>
+      <tr><td class="num">1</td><td>persistence.xml</td><td><span class="tag tag-config">Config</span></td><td>Nombre de unidad y contraseña incorrectos</td></tr>
+      <tr><td class="num">2</td><td>pom.xml</td><td><span class="tag tag-config">Config</span></td><td>Dependencia mysql-connector-j duplicada</td></tr>
+      <tr><td class="num">3</td><td>Caballo.java</td><td><span class="tag tag-bug">Bug</span></td><td>Faltaba constructor sin argumentos para JPA</td></tr>
+      <tr><td class="num">4</td><td>Jugador.java</td><td><span class="tag tag-bug">Bug</span></td><td>Faltaba constructor sin argumentos para JPA</td></tr>
+      <tr><td class="num">5</td><td>CaballoVeloz.java</td><td><span class="tag tag-arch">Arquitectura</span></td><td>Anotaciones JPA duplicadas e incorrectas en subclase</td></tr>
+      <tr><td class="num">6</td><td>CaballoResistente.java</td><td><span class="tag tag-arch">Arquitectura</span></td><td>Anotaciones JPA duplicadas e incorrectas en subclase</td></tr>
+      <tr><td class="num">7</td><td>CaballoEquilibrado.java</td><td><span class="tag tag-arch">Arquitectura</span></td><td>Anotaciones JPA duplicadas e incorrectas en subclase</td></tr>
+      <tr><td class="num">8</td><td>CaballoDAO.java</td><td><span class="tag tag-bug">Bug</span></td><td>JPQL con nombre de tabla en vez de clase; remove sin merge</td></tr>
+      <tr><td class="num">9</td><td>JugadorDAO.java</td><td><span class="tag tag-bug">Bug</span></td><td>JPQL incorrecto; excepción silenciosa; getSingleResult frágil</td></tr>
+      <tr><td class="num">10</td><td>DAOTest.java</td><td><span class="tag tag-test">Test</span></td><td>Limpieza de DB al inicio para ejecuciones repetibles</td></tr>
+    </tbody>
+  </table>
+
+  <!-- ===================== 1. persistence.xml ===================== -->
+  <h2 class="section">Cambio 1 — persistence.xml</h2>
+  <div class="change-card">
+    <div class="card-header">
+      <span class="file">src/main/resources/META-INF/persistence.xml</span>
+      <span class="tag tag-config">Configuración</span>
+    </div>
+    <div class="card-body">
+      <div class="reason"><strong>Problema A:</strong> El nombre de la unidad de persistencia era <code>herenciaPU</code> (copiado de otro ejercicio), pero <code>JPAUtil.java</code> busca <code>carreracaballosPU</code>. JPA lanza <em>No Persistence provider for EntityManager named carreracaballosPU</em>.</div>
+      <div class="diff">
+        <div class="diff-header">persistence.xml — nombre de unidad</div>
+        <div class="diff-body">
+          <span class="del">&lt;persistence-unit name="herenciaPU" transaction-type="RESOURCE_LOCAL"&gt;</span>
+          <span class="add">&lt;persistence-unit name="carreracaballosPU" transaction-type="RESOURCE_LOCAL"&gt;</span>
+        </div>
+      </div>
+      <div class="reason" style="margin-top:0.8rem;"><strong>Problema B:</strong> La contraseña <code>root</code> era el valor de ejemplo. MySQL devolvía <em>Access denied (error 1045)</em>.</div>
+      <div class="diff">
+        <div class="diff-header">persistence.xml — contraseña</div>
+        <div class="diff-body">
+          <span class="del">&lt;property name="jakarta.persistence.jdbc.password" value="root"/&gt;</span>
+          <span class="add">&lt;property name="jakarta.persistence.jdbc.password" value="admin123"/&gt;</span>
+        </div>
+      </div>
+      <div class="impact"><strong>Error que producía:</strong> La aplicación no podía iniciar — fallaba al crear el <code>EntityManagerFactory</code>.</div>
+    </div>
+  </div>
+
+  <!-- ===================== 2. pom.xml ===================== -->
+  <h2 class="section">Cambio 2 — pom.xml</h2>
+  <div class="change-card">
+    <div class="card-header">
+      <span class="file">pom.xml</span>
+      <span class="tag tag-config">Configuración</span>
+    </div>
+    <div class="card-body">
+      <div class="reason"><strong>Problema:</strong> <code>mysql-connector-j</code> estaba declarado dos veces con versiones distintas (8.0.33 y 9.0.0). Maven no sabe cuál usar y avisa que el build está malformado.</div>
+      <div class="diff">
+        <div class="diff-header">pom.xml — dependencia duplicada</div>
+        <div class="diff-body">
+          <span class="del">&lt;dependency&gt;</span>
+          <span class="del">  &lt;groupId&gt;com.mysql&lt;/groupId&gt;</span>
+          <span class="del">  &lt;artifactId&gt;mysql-connector-j&lt;/artifactId&gt;</span>
+          <span class="del">  &lt;version&gt;8.0.33&lt;/version&gt;  &lt;!-- ELIMINADA --&gt;</span>
+          <span class="del">&lt;/dependency&gt;</span>
+          <span class="ctx">&lt;!-- Se conserva solo la versión 9.0.0 --&gt;</span>
+        </div>
+      </div>
+      <div class="impact"><strong>Efecto:</strong> Warning en cada build. En versiones futuras de Maven bloquea la compilación.</div>
+    </div>
+  </div>
+
+  <!-- ===================== 3. Caballo.java ===================== -->
+  <h2 class="section">Cambio 3 — Caballo.java</h2>
+  <div class="change-card">
+    <div class="card-header">
+      <span class="file">src/.../model/Caballo.java</span>
+      <span class="tag tag-bug">Bug</span>
+    </div>
+    <div class="card-body">
+      <div class="reason"><strong>Problema:</strong> JPA/Hibernate requiere un constructor sin argumentos en toda entidad para poder instanciar objetos al leer desde la base de datos. Sin él, las subclases tampoco podían declarar su propio constructor vacío (el compilador busca implícitamente <code>super()</code>).</div>
+      <div class="diff">
+        <div class="diff-header">Caballo.java — constructor vacío</div>
+        <div class="diff-body">
+          <span class="ctx">public abstract class Caballo {</span>
+          <span class="add">    protected Caballo() {}</span>
+          <span class="ctx">    public Caballo(String nombre) { ... }</span>
+        </div>
+      </div>
+      <div class="impact"><strong>Error que producía:</strong> Error de compilación en las tres subclases + Hibernate no podía reconstruir objetos al hacer SELECT.</div>
+    </div>
+  </div>
+
+  <!-- ===================== 4. Jugador.java ===================== -->
+  <h2 class="section">Cambio 4 — Jugador.java</h2>
+  <div class="change-card">
+    <div class="card-header">
+      <span class="file">src/.../model/Jugador.java</span>
+      <span class="tag tag-bug">Bug</span>
+    </div>
+    <div class="card-body">
+      <div class="reason"><strong>Problema:</strong> Mismo problema que Caballo — JPA no puede instanciar la entidad sin constructor vacío. Hibernate lo advertía en los logs: <em>No default (no-argument) constructor for class Jugador</em>.</div>
+      <div class="diff">
+        <div class="diff-header">Jugador.java — constructor vacío</div>
+        <div class="diff-body">
+          <span class="ctx">public class Jugador {</span>
+          <span class="add">    protected Jugador() {}</span>
+          <span class="ctx">    public Jugador(String nombre, String mail, int puntaje) { ... }</span>
+        </div>
+      </div>
+      <div class="impact"><strong>Error que producía:</strong> Al hacer <code>listarJugadores()</code> o <code>buscarJugador()</code>, Hibernate no podía crear los objetos de retorno.</div>
+    </div>
+  </div>
+
+  <!-- ===================== 5-7. Subclases ===================== -->
+  <div class="page-break"></div>
+  <h2 class="section">Cambios 5, 6 y 7 — CaballoVeloz / CaballoResistente / CaballoEquilibrado</h2>
+  <div class="change-card">
+    <div class="card-header">
+      <span class="file">src/.../model/CaballoVeloz.java &nbsp;|&nbsp; CaballoResistente.java &nbsp;|&nbsp; CaballoEquilibrado.java</span>
+      <span class="tag tag-arch">Arquitectura</span>
+    </div>
+    <div class="card-body">
+      <div class="reason"><strong>Problema A — anotaciones duplicadas en subclases SINGLE_TABLE:</strong> Con la estrategia <code>SINGLE_TABLE</code>, SOLO la clase raíz (<code>Caballo</code>) define la tabla y la estrategia de herencia. Las subclases NO deben llevar <code>@Table</code>, <code>@Inheritance</code> ni <code>@DiscriminatorColumn</code>. Hibernate lanzaba: <em>Entity is a subclass in a SINGLE_TABLE hierarchy and may not be annotated @Table</em>.</div>
+
+      <div class="reason" style="margin-top:0.6rem;"><strong>Problema B — nombre de tabla inconsistente:</strong> <code>Caballo</code> usaba <code>@Table(name="caballo")</code> y las subclases <code>@Table(name="caballos")</code> — singular vs plural, dos tablas distintas.</div>
+
+      <div class="reason" style="margin-top:0.6rem;"><strong>Problema C — falta constructor vacío:</strong> Igual que en Caballo.java.</div>
+
+      <div class="diff">
+        <div class="diff-header">CaballoVeloz.java (igual para Resistente y Equilibrado)</div>
+        <div class="diff-body">
+          <span class="del">import jakarta.persistence.DiscriminatorColumn;</span>
+          <span class="del">import jakarta.persistence.Inheritance;</span>
+          <span class="del">import jakarta.persistence.InheritanceType;</span>
+          <span class="del">import jakarta.persistence.Table;</span>
+          <span class="add">import jakarta.persistence.DiscriminatorValue;</span>
+          <span class="ctx"> </span>
+          <span class="del">@Entity</span>
+          <span class="del">@Table(name="caballos")</span>
+          <span class="del">@Inheritance(strategy=InheritanceType.SINGLE_TABLE)</span>
+          <span class="del">@DiscriminatorColumn(name="tipo_caballo")</span>
+          <span class="del">public class CaballoVeloz extends Caballo {</span>
+          <span class="add">@Entity</span>
+          <span class="add">@DiscriminatorValue("VELOZ")</span>
+          <span class="add">public class CaballoVeloz extends Caballo {</span>
+          <span class="ctx"> </span>
+          <span class="add">    protected CaballoVeloz() {}</span>
+          <span class="ctx">    public CaballoVeloz(String nombre) { ... }</span>
+        </div>
+      </div>
+
+      <div class="impact">
+        <strong>Regla:</strong> en herencia SINGLE_TABLE, la tabla la define la clase raíz. Las subclases solo agregan
+        <code>@Entity</code> y <code>@DiscriminatorValue("VALOR")</code> para identificar su fila en la columna discriminadora.<br>
+        <strong>Error que producía:</strong> <em>AnnotationException</em> al iniciar — Hibernate rechazaba el modelo antes de ejecutar cualquier query.
+      </div>
+    </div>
+  </div>
+
+  <!-- ===================== 8. CaballoDAO ===================== -->
+  <h2 class="section">Cambio 8 — CaballoDAO.java</h2>
+  <div class="change-card">
+    <div class="card-header">
+      <span class="file">src/.../dao/CaballoDAO.java</span>
+      <span class="tag tag-bug">Bug</span>
+    </div>
+    <div class="card-body">
+
+      <div class="reason"><strong>Problema A — JPQL usa nombre de tabla en vez de nombre de clase:</strong> JPQL (Java Persistence Query Language) opera sobre las clases Java, no sobre las tablas SQL. El nombre debe coincidir exactamente con el nombre de la clase anotada con <code>@Entity</code>.</div>
+      <div class="diff">
+        <div class="diff-header">CaballoDAO.java — listarCaballos()</div>
+        <div class="diff-body">
+          <span class="del">return em.createQuery("SELECT c FROM caballo c", Caballo.class)</span>
+          <span class="add">return em.createQuery("SELECT c FROM Caballo c", Caballo.class)</span>
+        </div>
+      </div>
+      <div class="diff" style="margin-top:0.5rem;">
+        <div class="diff-header">CaballoDAO.java — getRandomCaballos()</div>
+        <div class="diff-body">
+          <span class="del">return em.createQuery("SELECT c FROM caballo c WHERE c.id &lt;&gt; :excluir", Caballo.class)</span>
+          <span class="add">return em.createQuery("SELECT c FROM Caballo c WHERE c.id &lt;&gt; :excluir", Caballo.class)</span>
+        </div>
+      </div>
+
+      <div class="reason" style="margin-top:0.8rem;"><strong>Problema B — remove sobre entidad detached:</strong> Cuando se recibe un objeto de fuera del EntityManager actual, ese objeto está en estado "detached" (desconectado). Llamar <code>remove()</code> sobre él lanza una excepción. Primero hay que "reattacharlo" con <code>merge()</code>.</div>
+      <div class="diff">
+        <div class="diff-header">CaballoDAO.java — borrarCaballo()</div>
+        <div class="diff-body">
+          <span class="del">em.remove(caballo);</span>
+          <span class="add">em.remove(em.merge(caballo));</span>
+        </div>
+      </div>
+      <div class="impact"><strong>Error que producían:</strong> A — <em>UnknownEntityException: Could not resolve root entity 'caballo'</em> al listar. B — <em>IllegalArgumentException: Removing a detached instance</em> al borrar.</div>
+    </div>
+  </div>
+
+  <!-- ===================== 9. JugadorDAO ===================== -->
+  <div class="page-break"></div>
+  <h2 class="section">Cambio 9 — JugadorDAO.java</h2>
+  <div class="change-card">
+    <div class="card-header">
+      <span class="file">src/.../dao/JugadorDAO.java</span>
+      <span class="tag tag-bug">Bug</span>
+    </div>
+    <div class="card-body">
+
+      <div class="reason"><strong>Problema A — JPQL con nombre de tabla:</strong> Mismo problema que CaballoDAO.</div>
+      <div class="diff">
+        <div class="diff-header">JugadorDAO.java — listarJugadores()</div>
+        <div class="diff-body">
+          <span class="del">return em.createQuery("SELECT j FROM jugador j", Jugador.class)</span>
+          <span class="add">return em.createQuery("SELECT j FROM Jugador j", Jugador.class)</span>
+        </div>
+      </div>
+
+      <div class="reason" style="margin-top:0.8rem;"><strong>Problema B — excepción silenciosa en crearJugador():</strong> El bloque <code>catch</code> hacía rollback pero no relanzaba la excepción. Si el INSERT fallaba, el código que llamó al método nunca lo sabía — falla silenciosa.</div>
+      <div class="diff">
+        <div class="diff-header">JugadorDAO.java — crearJugador()</div>
+        <div class="diff-body">
+          <span class="ctx">catch(RuntimeException e) {</span>
+          <span class="ctx">    if (em.getTransaction().isActive()) em.getTransaction().rollback();</span>
+          <span class="add">    throw e;  // relanzar para que el error sea visible</span>
+          <span class="ctx">}</span>
+        </div>
+      </div>
+
+      <div class="reason" style="margin-top:0.8rem;"><strong>Problema C — getSingleResult() frágil:</strong> <code>getSingleResult()</code> lanza <em>NonUniqueResultException</em> si hay más de un jugador con el mismo nombre. Ocurrió en las pruebas con registros duplicados de ejecuciones anteriores.</div>
+      <div class="diff">
+        <div class="diff-header">JugadorDAO.java — buscarJugador()</div>
+        <div class="diff-body">
+          <span class="del">return enti.createQuery(...).setParameter("nombre", nombre).getSingleResult();</span>
+          <span class="add">List&lt;Jugador&gt; resultados = enti.createQuery(...)</span>
+          <span class="add">    .setParameter("nombre", nombre).setMaxResults(1).getResultList();</span>
+          <span class="add">return resultados.isEmpty() ? null : resultados.get(0);</span>
+        </div>
+      </div>
+
+      <div class="reason" style="margin-top:0.8rem;"><strong>Problema D — remove sobre entidad detached:</strong> Mismo problema que CaballoDAO.</div>
+      <div class="diff">
+        <div class="diff-header">JugadorDAO.java — borrarJugador()</div>
+        <div class="diff-body">
+          <span class="del">em.remove(jugador);</span>
+          <span class="add">em.remove(em.merge(jugador));</span>
+        </div>
+      </div>
+
+      <div class="impact"><strong>Errores que producían:</strong> A — UnknownEntityException al listar. B — falla silenciosa al crear. C — NonUniqueResultException con datos duplicados. D — IllegalArgumentException al borrar.</div>
+    </div>
+  </div>
+
+  <!-- ===================== 10. DAOTest ===================== -->
+  <h2 class="section">Cambio 10 — DAOTest.java</h2>
+  <div class="change-card">
+    <div class="card-header">
+      <span class="file">src/.../DAOTest.java</span>
+      <span class="tag tag-test">Test</span>
+    </div>
+    <div class="card-body">
+      <div class="reason"><strong>Problema:</strong> El test insertaba los mismos registros (Rayo, Titán, Centauro, Carlos, María, Juan) en cada ejecución. Al correrlo varias veces, la base de datos acumulaba duplicados y los tests empezaban a fallar (búsquedas con resultados múltiples, conteos incorrectos).</div>
+      <div class="diff">
+        <div class="diff-header">DAOTest.java — método limpiarDB() agregado</div>
+        <div class="diff-body">
+          <span class="add">private static void limpiarDB() {</span>
+          <span class="add">    EntityManager em = JPAUtil.getInstance().crearEntityManager();</span>
+          <span class="add">    try {</span>
+          <span class="add">        em.getTransaction().begin();</span>
+          <span class="add">        em.createQuery("DELETE FROM Jugador").executeUpdate();</span>
+          <span class="add">        em.createQuery("DELETE FROM Caballo").executeUpdate();</span>
+          <span class="add">        em.getTransaction().commit();</span>
+          <span class="add">    } finally { em.close(); }</span>
+          <span class="add">}</span>
+        </div>
+      </div>
+      <div class="diff" style="margin-top:0.5rem;">
+        <div class="diff-header">DAOTest.java — llamada en main()</div>
+        <div class="diff-body">
+          <span class="ctx">try {</span>
+          <span class="add">    limpiarDB();  // siempre partir de DB vacía</span>
+          <span class="ctx">    testCaballoDAO();</span>
+          <span class="ctx">    testJugadorDAO();</span>
+        </div>
+      </div>
+      <div class="impact"><strong>Efecto:</strong> El test es ahora idempotente — se puede ejecutar N veces seguidas con el mismo resultado.</div>
+    </div>
+  </div>
+
+  <!-- RESULTADO FINAL -->
+  <div class="final">
+    <h3>Resultado final — ejecución del DAOTest</h3>
+    <table>
+      <thead><tr><th>Test</th><th>Operación</th><th>Resultado</th></tr></thead>
+      <tbody>
+        <tr><td>CaballoDAO</td><td>crearCaballo × 3 (VELOZ, RESISTENTE, EQUILIBRADO)</td><td class="ok">✓ OK</td></tr>
+        <tr><td>CaballoDAO</td><td>listarCaballos — devuelve 3 registros con tipo correcto</td><td class="ok">✓ OK</td></tr>
+        <tr><td>CaballoDAO</td><td>getRandomCaballos — query con exclusión y límite</td><td class="ok">✓ OK</td></tr>
+        <tr><td>JugadorDAO</td><td>crearJugador × 3 (Carlos, María, Juan)</td><td class="ok">✓ OK</td></tr>
+        <tr><td>JugadorDAO</td><td>listarJugadores — devuelve 3 registros</td><td class="ok">✓ OK</td></tr>
+        <tr><td>JugadorDAO</td><td>buscarJugador("Carlos") — encontrado</td><td class="ok">✓ OK</td></tr>
+        <tr><td>JugadorDAO</td><td>actualizarJugador — María puntaje 0 → 100, verificado en DB</td><td class="ok">✓ OK</td></tr>
+        <tr><td>JugadorDAO</td><td>actualizarJugador — Juan puntaje 0 → 50</td><td class="ok">✓ OK</td></tr>
+        <tr><td>JugadorDAO</td><td>listarJugadores post-actualización — puntajes correctos</td><td class="ok">✓ OK</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+</body>
+</html>
