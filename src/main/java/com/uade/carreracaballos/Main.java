@@ -1,5 +1,6 @@
 package com.uade.carreracaballos;
 
+import com.uade.carreracaballos.DAO.DBConnection;
 import com.uade.carreracaballos.controller.CaballoController;
 import com.uade.carreracaballos.controller.CarreraController;
 import com.uade.carreracaballos.controller.JugadorController;
@@ -14,7 +15,10 @@ import com.uade.carreracaballos.model.CaballoEquilibrado;
 import com.uade.carreracaballos.model.CaballoResistente;
 import com.uade.carreracaballos.model.CaballoVeloz;
 import com.uade.carreracaballos.model.EstadoCarrera;
+import com.uade.carreracaballos.view.VentanaCarrera;
 
+import java.sql.Connection;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
@@ -54,7 +58,34 @@ public class Main {
     private int indiceSeleccionado = -1;              // indice del caballo elegido por el jugador
 
     public static void main(String[] args) {
-        new Main().ejecutar();
+        // new Main().ejecutar();   // flujo interactivo normal
+
+        // --- Codigo de prueba: arranca la carrera automaticamente ---
+        new Main().pruebaRapida();
+    }
+
+    /**
+     * Prueba rapida: apenas se ejecuta arranca la carrera con el primer jugador y el
+     * primer caballo de la DB, sobre una pista de 400 metros (sin pasar por el menu).
+     */
+    private void pruebaRapida() {
+        verificarConexion();
+
+        List<JugadorDTO> jugadores = jugadorController.listarJugadores();
+        if (jugadores.isEmpty()) {
+            throw new IllegalStateException("No hay jugadores en la DB para la prueba.");
+        }
+        jugadorController.seleccionarJugador(jugadores.get(0));
+        hayJugador = true;
+
+        pool = poolDesdeDB();
+        if (pool.isEmpty()) {
+            throw new IllegalStateException("No hay caballos en la DB para la prueba.");
+        }
+        indiceSeleccionado = 0;
+        jugadorController.seleccionarCaballo(pool.get(0));
+
+        ejecutarCarrera(400);
     }
 
     private void ejecutar() {
@@ -62,6 +93,8 @@ public class Main {
         System.out.println("        CARRERA DE CABALLOS  -  CLI de prueba    ");
         System.out.println("==================================================");
         System.out.println("(Requiere MySQL disponible: la persistencia pasa por los DAOs)\n");
+
+        verificarConexion();
 
         boolean salir = false;
         while (!salir) {
@@ -86,6 +119,19 @@ public class Main {
 
         System.out.println("Hasta luego!");
         scanner.close();
+    }
+
+    /**
+     * Verifica la conexion a la base de datos al arrancar. Si no se puede conectar,
+     * tira excepcion y corta el programa (no tiene sentido seguir sin persistencia).
+     */
+    private void verificarConexion() {
+        try (Connection con = DBConnection.getInstance().getConnection()) {
+            System.out.println(">> Conexion a la base de datos establecida.\n");
+        } catch (SQLException | RuntimeException e) {
+            throw new IllegalStateException(
+                    "No se pudo conectar a la base de datos. El programa se cerrara.", e);
+        }
     }
 
     private void mostrarMenu() {
@@ -317,6 +363,11 @@ public class Main {
             return;
         }
 
+        ejecutarCarrera(longitud);
+    }
+
+    /** Corre la carrera completa para una longitud dada (abre la ventana, simula y muestra el resultado). */
+    private void ejecutarCarrera(int longitud) {
         // Reiniciamos el estado de los caballos por si ya corrieron antes.
         for (Caballo c : pool) {
             c.descansar();
@@ -327,6 +378,9 @@ public class Main {
         // Toda la mecanica de la carrera ocurre del controller para abajo.
         carreraController.crearCarrera(pool, longitud);
         carreraController.iniciarCarrera();
+
+        // Abrimos la ventana Swing de la carrera (por ahora vacia).
+        javax.swing.SwingUtilities.invokeLater(() -> new VentanaCarrera().setVisible(true));
 
         System.out.println("\n=== LARGAN! Pista de " + longitud + " metros ===\n");
 
