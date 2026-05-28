@@ -1,11 +1,33 @@
 package com.uade.carreracaballos.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.Table;
+
+@Entity
+@Table(name = "caballo")
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name = "tipo_caballo")
 public abstract class Caballo {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	protected int id;
+	@Column(nullable=false, length=100)
     protected String nombre;
+	@Column(nullable=false)
     protected double velocidad;
+	@Column(nullable=false)
     protected double energia;
+	@Column(nullable=false)
     protected double resistencia;
+	@Column(nullable=false)
     protected double distanciaRecorrida;
 
     protected static final double K = 10.0;
