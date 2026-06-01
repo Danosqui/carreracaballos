@@ -1,6 +1,6 @@
 package com.uade.carreracaballos.service;
 
-import com.uade.carreracaballos.DAO.CaballoDAO;
+import com.uade.carreracaballos.dao.CaballoDAO;
 import com.uade.carreracaballos.model.Caballo;
 
 import java.util.List;
@@ -28,7 +28,7 @@ public class CaballoService {
         return caballoDAO.getRandomCaballos(idExcluir);
     }
 
-    public void borrarCaballo(int caballoId) {
-        caballoDAO.borrarCaballo(caballoId);
+    public void borrarCaballo(Caballo caballo) {
+        caballoDAO.borrarCaballo(caballo);
     }
 }

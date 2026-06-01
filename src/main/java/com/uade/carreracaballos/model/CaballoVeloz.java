@@ -1,7 +1,19 @@
+
 package com.uade.carreracaballos.model;
 
-public class CaballoVeloz extends Caballo {
+import jakarta.persistence.DiscriminatorColumn;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.Table;
 
+@Entity
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="tipo_caballo")
+public class CaballoVeloz extends Caballo {
+	protected CaballoVeloz() {
+    	//idem padre
+    }
     public CaballoVeloz(String nombre) {
         super(nombre);
         this.velocidad = 8.0 + Math.random() * 2.0;

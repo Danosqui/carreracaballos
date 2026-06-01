@@ -1,12 +1,33 @@
 package com.uade.carreracaballos.model;
 
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
+
+@Entity
+@Table(name="jugadores")
 public class Jugador {
 	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
 	
+	@Column(nullable=false, length=100)
 	private String nombre;
+	@Column(nullable=false, length=100)
 	private String mail;
+	@Column(nullable=false, name="puntaje")
 	private int puntajeAcumulado;
+	@Transient
 	private Caballo caballoSeleccionado;
+	
+	public Jugador() {
+		//requerido por jpa hibernate
+	}
 
 	public Jugador(String nombre, String mail, int puntaje) {
 		this.nombre = nombre;
@@ -45,5 +66,10 @@ public class Jugador {
 
 	public Caballo getCaballoSeleccionado() {
 		return caballoSeleccionado;
+	}
+
+	public int getid() {
+		// TODO Auto-generated method stub
+		return id;
 	}
 }
