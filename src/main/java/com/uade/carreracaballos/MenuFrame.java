@@ -17,12 +17,11 @@ public class MenuFrame extends JFrame {
     private CarreraController carreraCont;
     private CaballoController caballoCont;
 
-    private JTextField campoNombre;
-    private JTextField campoMail;
-    private JButton botonCrear;
-    private JButton botonSeleccionar;
-    private JTable tablaJugadores;
-    private DefaultTableModel modeloTabla;
+    private JButton btnCrearJugador;
+    private JTable tablaJugadores, tablaCaballos;
+    private DefaultTableModel modeloTablaJugadores, modeloTablaCaballos;
+    
+    private JLabel nombreJugSelec, mailJugSelec;
 
     public MenuFrame() {
 
@@ -31,92 +30,101 @@ public class MenuFrame extends JFrame {
         caballoCont = new CaballoController();
 
         configurarVentana();
-        crearComponentes();
-        cargarJugadores();
+        crearPanelJugador();
     }
 
     private void configurarVentana() {
 
         setTitle("Gestión de Jugadores");
-        setSize(700, 500);
+        setSize(500, 500);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
     }
 
-    private void crearComponentes() {
+    
+    private void crearPanelJugador() {
+        JPanel panelJugador = new JPanel(new BorderLayout(10, 10));
+        panelJugador.setBorder(BorderFactory.createTitledBorder("Jugador"));
 
-        JPanel panelFormulario = new JPanel();
+        modeloTablaJugadores = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            } 
+        };
+        modeloTablaJugadores.addColumn("Nombre");
+        modeloTablaJugadores.addColumn("Mail");
+        modeloTablaJugadores.addColumn("Puntaje");
 
-        panelFormulario.setBorder(BorderFactory.createTitledBorder("Nuevo Jugador"));
-
-        panelFormulario.setLayout(new GridLayout(3, 2, 10, 10));
-
-        JLabel textoNombre = new JLabel("Nombre");
-        campoNombre = new JTextField();
-
-        JLabel textoMail = new JLabel("Mail");
-        campoMail = new JTextField();
-
-        botonCrear = new JButton("Crear Jugador");
-        botonSeleccionar = new JButton("Seleccionar Jugador");
-
-        panelFormulario.add(textoNombre);
-        panelFormulario.add(campoNombre);
-
-        panelFormulario.add(textoMail);
-        panelFormulario.add(campoMail);
-
-        panelFormulario.add(botonCrear);
-        panelFormulario.add(botonSeleccionar);
-
-        add(panelFormulario, BorderLayout.NORTH);
-
-        modeloTabla = new DefaultTableModel();
-
-        modeloTabla.addColumn("Nombre");
-        modeloTabla.addColumn("Mail");
-        modeloTabla.addColumn("Puntaje");
-
-        tablaJugadores = new JTable(modeloTabla);
-
+        tablaJugadores = new JTable(modeloTablaJugadores);
+        tablaJugadores.setPreferredScrollableViewportSize(new Dimension(450, 120));
         JScrollPane scrollTabla = new JScrollPane(tablaJugadores);
+        panelJugador.add(scrollTabla, BorderLayout.CENTER);
 
-        add(scrollTabla, BorderLayout.CENTER);
 
-        botonCrear.addActionListener(e -> crearJugador());
-        botonSeleccionar.addActionListener(e -> seleccionarJugador());
+        JPanel panelInferior = new JPanel(new GridLayout(1, 2, 10, 10));
+
+        JPanel panelSeleccionado = new JPanel(new GridLayout(2, 2, 5, 5));
+        panelSeleccionado.setBorder(BorderFactory.createTitledBorder("Jugador seleccionado"));
+        panelSeleccionado.add(new JLabel("Nombre:"));
+        nombreJugSelec = new JLabel("-");
+        panelSeleccionado.add(nombreJugSelec);
+        panelSeleccionado.add(new JLabel("Mail:"));
+        mailJugSelec = new JLabel("-");
+        panelSeleccionado.add(mailJugSelec);
+
+        JPanel panelAcciones = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        btnCrearJugador = new JButton("Crear Jugador");
+        panelAcciones.add(btnCrearJugador);
+
+        panelInferior.add(panelSeleccionado);
+        panelInferior.add(panelAcciones);
+        panelJugador.add(panelInferior, BorderLayout.SOUTH);
+        add(panelJugador, BorderLayout.CENTER);
+        
+        btnCrearJugador.addActionListener(e -> crearJugador());
+        tablaJugadores.getSelectionModel().addListSelectionListener(e->seleccionarJugador());
+        
+        cargarJugadores();
     }
-
+    
+   
+    
     private void crearJugador() {
+    	String nombre = JOptionPane.showInputDialog(this, "Ingresá el nombre del jugador:");
 
-        String nombre = campoNombre.getText().trim();
-        String mail = campoMail.getText().trim();
+    	if (nombre == null || nombre.isBlank()) {
+    		JOptionPane.showMessageDialog(
+			    this,
+			    "Ingresaste un nombre invalido.",
+			    "Error",
+			    JOptionPane.ERROR_MESSAGE
+			);
+    	    return;
+    	}
+    	
+    	String mail = JOptionPane.showInputDialog(this, "Ingresá el email del jugador:");
 
-        if (nombre.isEmpty() || mail.isEmpty()) {
-
-            JOptionPane.showMessageDialog(this, "Complete todos los campos");
-
-            return;
-        }
-
-        try {
-
-            jugadorCont.nuevoJugador(nombre, mail);
-            JOptionPane.showMessageDialog(this, "Jugador creado correctamente");
-
-            limpiarCampos();
-            cargarJugadores();
-
-        } catch (Exception error) {
-
-            JOptionPane.showMessageDialog(this, error.getMessage());
-        }
+    	if (mail == null || mail.isBlank()) {
+    		JOptionPane.showMessageDialog(
+			    this,
+			    "Ingresaste un mail invalido.",
+			    "Error",
+			    JOptionPane.ERROR_MESSAGE
+			);
+    		
+    		return;
+    	}
+    	
+    	jugadorCont.nuevoJugador(nombre, mail);
+    	cargarJugadores();
+        
     }
 
     private void cargarJugadores() {
 
-        modeloTabla.setRowCount(0);
+        modeloTablaJugadores.setRowCount(0);
         List<Jugador> listaJugadores = jugadorCont.listarJugadores();
 
         for (Jugador jugador : listaJugadores) {
@@ -126,12 +134,11 @@ public class MenuFrame extends JFrame {
                     jugador.getPuntajeAcumulado()
             };
 
-            modeloTabla.addRow(fila);
+            modeloTablaJugadores.addRow(fila);
         }
     }
 
     private void seleccionarJugador() {
-
         int filaSeleccionada = tablaJugadores.getSelectedRow();
         if (filaSeleccionada == -1) {
             JOptionPane.showMessageDialog(this, "Seleccione un jugador");
@@ -139,13 +146,14 @@ public class MenuFrame extends JFrame {
             return;
         }
 
-        String nombre = modeloTabla.getValueAt(filaSeleccionada, 0).toString();
-        String mail = modeloTabla.getValueAt(filaSeleccionada, 1).toString();
+        String nombre = modeloTablaJugadores.getValueAt(filaSeleccionada, 0).toString();
+        String mail = modeloTablaJugadores.getValueAt(filaSeleccionada, 1).toString();
 
         try {
 
             jugadorCont.seleccionarJugador(nombre, mail);
-            JOptionPane.showMessageDialog(this, "Jugador seleccionado");
+            nombreJugSelec.setText(nombre);
+            mailJugSelec.setText(mail);
 
         } catch (Exception error) {
 
@@ -153,9 +161,4 @@ public class MenuFrame extends JFrame {
         }
     }
 
-    private void limpiarCampos() {
-
-        campoNombre.setText("");
-        campoMail.setText("");
-    }
 }
