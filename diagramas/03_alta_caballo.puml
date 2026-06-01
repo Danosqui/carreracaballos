@@ -1,0 +1,55 @@
+@startuml 03_alta_caballo
+title Alta de caballo
+
+actor "Vista" as V
+participant "CaballoController" as CC
+participant "CaballoVeloz" as CV
+participant "CaballoResistente" as CR
+participant "CaballoEquilibrado" as CE
+participant "CaballoService" as CS
+participant "CaballoDAO" as CD
+
+V -> CC : crearCaballo(atributo, nombre)
+activate CC
+
+alt atributo == VELOZ
+    CC -> CV ** : new CaballoVeloz(nombre)
+    activate CV
+    CV --> CC : nuevoCaballo
+    deactivate CV
+
+else atributo == RESISTENTE
+    CC -> CR ** : new CaballoResistente(nombre)
+    activate CR
+    CR --> CC : nuevoCaballo
+    deactivate CR
+
+else atributo == EQUILIBRADO
+    CC -> CE ** : new CaballoEquilibrado(nombre)
+    activate CE
+    CE --> CC : nuevoCaballo
+    deactivate CE
+
+else otro
+    CC --> V : RuntimeException("El tipo de caballo no existe")
+end
+
+CC -> CS : crearCaballo(nuevoCaballo)
+activate CS
+
+CS -> CD : crearCaballo(caballo)
+activate CD
+note right of CD
+  Persiste el caballo en la DB
+  (transaccion JPA encapsulada)
+end note
+CD --> CS
+deactivate CD
+
+CS --> CC : caballo
+deactivate CS
+
+CC --> V
+deactivate CC
+
+@enduml
