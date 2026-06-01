@@ -1,6 +1,6 @@
 package com.uade.carreracaballos.service;
 
-import com.uade.carreracaballos.dao.CaballoDAO;
+import com.uade.carreracaballos.DAO.CaballoDAO;
 import com.uade.carreracaballos.model.Caballo;
 
 import java.util.List;

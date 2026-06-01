@@ -1,6 +1,7 @@
-package com.uade.carreracaballos.ui;
+package com.uade.carreracaballos;
 
 import com.uade.carreracaballos.controller.JugadorController;
+import com.uade.carreracaballos.model.Jugador;
 import com.uade.carreracaballos.dto.JugadorDTO;
 
 import javax.swing.*;
@@ -110,13 +111,13 @@ public class CarreraFrame extends JFrame {
     private void cargarJugadores() {
 
         modeloTabla.setRowCount(0);
-        List<JugadorDTO> listaJugadores = controlador.listarJugadores();
+        List<Jugador> listaJugadores = controlador.listarJugadores();
 
-        for (JugadorDTO jugador : listaJugadores) {
+        for (Jugador jugador : listaJugadores) {
             Object[] fila = {
                     jugador.getNombre(),
                     jugador.getMail(),
-                    jugador.getPuntaje()
+                    jugador.getPuntajeAcumulado()
             };
 
             modeloTabla.addRow(fila);

@@ -1,4 +1,4 @@
-package com.uade.carreracaballos.dao;
+package com.uade.carreracaballos.DAO;
 
 import com.uade.carreracaballos.model.Caballo;
 import com.uade.carreracaballos.model.Jugador;

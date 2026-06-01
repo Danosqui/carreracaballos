@@ -1,6 +1,6 @@
 package com.uade.carreracaballos.service;
 
-import com.uade.carreracaballos.dao.JugadorDAO;
+import com.uade.carreracaballos.DAO.JugadorDAO;
 import com.uade.carreracaballos.dto.JugadorDTO;
 import com.uade.carreracaballos.model.Jugador;
 
