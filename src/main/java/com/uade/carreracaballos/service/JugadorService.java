@@ -18,19 +18,14 @@ public class JugadorService {
         jugadorDAO.crearJugador(jugador);
     }
 
-    public JugadorDTO buscarJugador(String nombre, String mail) {
+    public Jugador buscarJugador(String nombre, String mail) {
         Jugador jugador = jugadorDAO.buscarJugador(nombre);
 
         if (jugador == null || !jugador.getMail().equals(mail)) {
             return null;
         }
 
-        return new JugadorDTO(
-                0,
-                jugador.getNombre(),
-                jugador.getMail(),
-                jugador.getPuntajeAcumulado()
-        );
+        return jugador;
     }
 
     public List<Jugador> listarJugadores() {

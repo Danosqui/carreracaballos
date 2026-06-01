@@ -14,6 +14,7 @@ import com.uade.carreracaballos.model.CaballoEquilibrado;
 import com.uade.carreracaballos.model.CaballoResistente;
 import com.uade.carreracaballos.model.CaballoVeloz;
 import com.uade.carreracaballos.model.EstadoCarrera;
+import com.uade.carreracaballos.model.Jugador;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,7 +121,7 @@ public class Main {
      * para elegir uno, y ofrece "crear nuevo" dentro de la misma pantalla.
      */
     private void seleccionarJugador() {
-        List<JugadorDTO> jugadores = jugadorController.listarJugadores();
+        List<Jugador> jugadores = jugadorController.listarJugadores();
 
         System.out.println("==================================================");
         System.out.println(" SELECCIONAR JUGADOR");
@@ -129,9 +130,9 @@ public class Main {
             System.out.println(" (no hay jugadores guardados todavia)");
         } else {
             for (int i = 0; i < jugadores.size(); i++) {
-                JugadorDTO j = jugadores.get(i);
+                Jugador j = jugadores.get(i);
                 System.out.printf("  %d) %-15s  %-30s  puntaje=%d%n",
-                        i + 1, j.getNombre(), j.getMail(), j.getPuntaje());
+                        i + 1, j.getNombre(), j.getMail(), j.getPuntajeAcumulado());
             }
         }
         System.out.println(" --------------------------------------------------");
@@ -156,7 +157,7 @@ public class Main {
                 System.out.println(">> Numero fuera de rango.\n");
                 return;
             }
-            JugadorDTO elegido = jugadores.get(idx);
+            Jugador elegido = jugadores.get(idx);
             jugadorController.seleccionarJugador(elegido);
             hayJugador = true;
             System.out.println(">> Jugador '" + elegido.getNombre() + "' cargado desde la DB.\n");

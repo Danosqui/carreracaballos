@@ -46,7 +46,7 @@ public class JugadorDAO {
     public List<Jugador> listarJugadores(){
     	EntityManager em = JPAUtil.getInstance().crearEntityManager();
     	try {
-    		return em.createQuery("SELECT j FROM jugador j", Jugador.class)
+    		return em.createQuery("SELECT j FROM Jugador j", Jugador.class)
     				.getResultList();
     	}
     	finally {
@@ -57,6 +57,7 @@ public class JugadorDAO {
     public void actualizarJugador(Jugador jugador) {
     	EntityManager enti = JPAUtil.getInstance().crearEntityManager();
     	try {
+    		System.out.println(jugador);
     		enti.getTransaction().begin();
     		enti.merge(jugador);
     		enti.getTransaction().commit();

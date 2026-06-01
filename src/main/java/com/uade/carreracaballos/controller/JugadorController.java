@@ -22,19 +22,15 @@ public class JugadorController {
 		jugadorService.guardarJugador(jugador);
 	}
 
-	public void seleccionarJugador(JugadorDTO jugador) {
+	public void seleccionarJugador(Jugador jugador) {
 		if (jugador == null) throw new RuntimeException("Error de parametro: jugador es null");
-		this.jugadorSeleccionado = new Jugador(
-				jugador.getNombre(),
-				jugador.getMail(),
-				jugador.getPuntaje()
-		);
+		this.jugadorSeleccionado = jugador;
 	}
 
 	public void seleccionarJugador(String nombre, String mail) {
-		JugadorDTO dto = jugadorService.buscarJugador(nombre, mail);
-		if (dto == null) throw new RuntimeException("Jugador no encontrado: " + nombre);
-		this.jugadorSeleccionado = new Jugador(dto.getNombre(), dto.getMail(), dto.getPuntaje());
+		Jugador jugador = jugadorService.buscarJugador(nombre, mail);
+		if (jugador == null) throw new RuntimeException("Jugador no encontrado: " + nombre);
+		this.jugadorSeleccionado = jugador;
 	}
 
 	public void seleccionarCaballo(Caballo caballo) {
@@ -43,7 +39,7 @@ public class JugadorController {
 		jugadorSeleccionado.seleccionarCaballo(caballo);
 	}
 
-	public List<JugadorDTO> listarJugadores() {
+	public List<Jugador> listarJugadores() {
 		return jugadorService.listarJugadores();
 	}
 

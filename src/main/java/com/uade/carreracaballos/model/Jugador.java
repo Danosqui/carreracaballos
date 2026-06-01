@@ -24,6 +24,10 @@ public class Jugador {
 	private int puntajeAcumulado;
 	@Transient
 	private Caballo caballoSeleccionado;
+	
+	public Jugador() {
+		//requerido por jpa hibernate
+	}
 
 	public Jugador(String nombre, String mail, int puntaje) {
 		this.nombre = nombre;
@@ -62,5 +66,10 @@ public class Jugador {
 
 	public Caballo getCaballoSeleccionado() {
 		return caballoSeleccionado;
+	}
+
+	public int getid() {
+		// TODO Auto-generated method stub
+		return id;
 	}
 }

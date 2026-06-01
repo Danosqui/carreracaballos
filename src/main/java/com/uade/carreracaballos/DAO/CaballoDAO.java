@@ -31,7 +31,7 @@ public class CaballoDAO {
     public List<Caballo> listarCaballos() {
     	EntityManager em = JPAUtil.getInstance().crearEntityManager();
     	try {
-    		return em.createQuery("SELECT c FROM caballo c", Caballo.class)
+    		return em.createQuery("SELECT c FROM Caballo c", Caballo.class)
     				.getResultList();
     	}
     	finally {
@@ -43,7 +43,7 @@ public class CaballoDAO {
     	EntityManager em = JPAUtil.getInstance().crearEntityManager();
     	int CANTIDAD_CABALLOS_CARRERA=5;
     	try { //NOTA: SI ESTO NO FUNCIONA CAMBIAR EL <> POR !=, ESTOY CONFIANDO EN CLAUDIA ME DIJO Q ES ASI
-    		return em.createQuery("SELECT c FROM caballo c WHERE c.id <> :excluir", Caballo.class)
+    		return em.createQuery("SELECT c FROM Caballo c WHERE c.id <> :excluir", Caballo.class)
     		.setParameter("excluir", idExcluir)
     		.setMaxResults(CANTIDAD_CABALLOS_CARRERA)
     		.getResultList();

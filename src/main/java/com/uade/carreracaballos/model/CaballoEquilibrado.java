@@ -7,11 +7,12 @@ import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
 
 @Entity
-@Table(name="caballos")
 @Inheritance(strategy=InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name="tipo_caballo")
 public class CaballoEquilibrado extends Caballo {
-
+	protected CaballoEquilibrado() {
+    	//idem padre
+    }
     public CaballoEquilibrado(String nombre) {
         super(nombre);
         this.velocidad = 5.5 + Math.random() * 1.5;

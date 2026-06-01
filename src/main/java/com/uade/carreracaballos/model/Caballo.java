@@ -31,6 +31,10 @@ public abstract class Caballo {
     protected double distanciaRecorrida;
 
     protected static final double K = 10.0;
+    
+    protected Caballo() {
+    	//hibernate se queja si no hay un default constructor :/
+    }
 
     public Caballo(String nombre) {
         this.nombre = nombre;
