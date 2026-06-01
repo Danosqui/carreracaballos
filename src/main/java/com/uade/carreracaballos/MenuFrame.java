@@ -4,7 +4,9 @@ import com.uade.carreracaballos.controller.JugadorController;
 import com.uade.carreracaballos.controller.CaballoController;
 import com.uade.carreracaballos.controller.CarreraController;
 import com.uade.carreracaballos.model.Jugador;
+import com.uade.carreracaballos.model.AtributoCaballo;
 import com.uade.carreracaballos.dto.JugadorDTO;
+import com.uade.carreracaballos.dto.CaballoDTO;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
@@ -18,10 +20,12 @@ public class MenuFrame extends JFrame {
     private CaballoController caballoCont;
 
     private JButton btnCrearJugador;
+    private JButton btnCrearCaballo;
     private JTable tablaJugadores, tablaCaballos;
     private DefaultTableModel modeloTablaJugadores, modeloTablaCaballos;
-    
+
     private JLabel nombreJugSelec, mailJugSelec;
+    private JLabel nombreCabSelec, velocidadCabSelec;
 
     public MenuFrame() {
 
@@ -31,6 +35,7 @@ public class MenuFrame extends JFrame {
 
         configurarVentana();
         crearPanelJugador();
+        crearPanelCaballos();
     }
 
     private void configurarVentana() {
@@ -142,7 +147,7 @@ public class MenuFrame extends JFrame {
         int filaSeleccionada = tablaJugadores.getSelectedRow();
         if (filaSeleccionada == -1) {
             JOptionPane.showMessageDialog(this, "Seleccione un jugador");
-            
+
             return;
         }
 
@@ -159,6 +164,125 @@ public class MenuFrame extends JFrame {
 
             JOptionPane.showMessageDialog(this, error.getMessage());
         }
+    }
+
+    private void crearPanelCaballos() {
+        JPanel panelCaballos = new JPanel(new BorderLayout(10, 10));
+        panelCaballos.setBorder(BorderFactory.createTitledBorder("Caballo"));
+
+        modeloTablaCaballos = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
+        modeloTablaCaballos.addColumn("Nombre");
+        modeloTablaCaballos.addColumn("Velocidad");
+        modeloTablaCaballos.addColumn("Resistencia");
+        modeloTablaCaballos.addColumn("Energía");
+
+        tablaCaballos = new JTable(modeloTablaCaballos);
+        tablaCaballos.setPreferredScrollableViewportSize(new Dimension(450, 120));
+        JScrollPane scrollTabla = new JScrollPane(tablaCaballos);
+        panelCaballos.add(scrollTabla, BorderLayout.CENTER);
+
+
+        JPanel panelInferior = new JPanel(new GridLayout(1, 2, 10, 10));
+
+        JPanel panelSeleccionado = new JPanel(new GridLayout(2, 2, 5, 5));
+        panelSeleccionado.setBorder(BorderFactory.createTitledBorder("Caballo seleccionado"));
+        panelSeleccionado.add(new JLabel("Nombre:"));
+        nombreCabSelec = new JLabel("-");
+        panelSeleccionado.add(nombreCabSelec);
+        panelSeleccionado.add(new JLabel("Velocidad:"));
+        velocidadCabSelec = new JLabel("-");
+        panelSeleccionado.add(velocidadCabSelec);
+
+        JPanel panelAcciones = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        btnCrearCaballo = new JButton("Crear Caballo");
+        panelAcciones.add(btnCrearCaballo);
+
+        panelInferior.add(panelSeleccionado);
+        panelInferior.add(panelAcciones);
+        panelCaballos.add(panelInferior, BorderLayout.SOUTH);
+        add(panelCaballos, BorderLayout.SOUTH);
+
+        btnCrearCaballo.addActionListener(e -> crearCaballo());
+        tablaCaballos.getSelectionModel().addListSelectionListener(e -> seleccionarCaballo());
+
+        cargarCaballos();
+    }
+
+    private void crearCaballo() {
+    	String nombre = JOptionPane.showInputDialog(this, "Ingresá el nombre del caballo:");
+
+    	if (nombre == null || nombre.isBlank()) {
+    		JOptionPane.showMessageDialog(
+				    this,
+				    "Ingresaste un nombre invalido.",
+				    "Error",
+				    JOptionPane.ERROR_MESSAGE
+				);
+    	    return;
+    	}
+
+    	AtributoCaballo[] opciones = AtributoCaballo.values();
+    	AtributoCaballo atributo = (AtributoCaballo) JOptionPane.showInputDialog(
+				this,
+				"Elegí el tipo de caballo:",
+				"Tipo",
+				JOptionPane.QUESTION_MESSAGE,
+				null,
+				opciones,
+				opciones[0]
+			);
+
+    	if (atributo == null) {
+    		JOptionPane.showMessageDialog(
+				    this,
+				    "Tipo de caballo invalido.",
+				    "Error",
+				    JOptionPane.ERROR_MESSAGE
+				);
+
+    		return;
+    	}
+
+    	caballoCont.crearCaballo(atributo, nombre);
+    	cargarCaballos();
+
+    }
+
+    private void cargarCaballos() {
+
+        modeloTablaCaballos.setRowCount(0);
+        List<CaballoDTO> listaCaballos = caballoCont.listarCaballos();
+
+        for (CaballoDTO caballo : listaCaballos) {
+            Object[] fila = {
+                    caballo.getNombre(),
+                    caballo.getVelocidad(),
+                    caballo.getResistencia(),
+                    caballo.getEnergia()
+            };
+
+            modeloTablaCaballos.addRow(fila);
+        }
+    }
+
+    private void seleccionarCaballo() {
+        int filaSeleccionada = tablaCaballos.getSelectedRow();
+        if (filaSeleccionada == -1) {
+            JOptionPane.showMessageDialog(this, "Seleccione un caballo");
+
+            return;
+        }
+
+        String nombre = modeloTablaCaballos.getValueAt(filaSeleccionada, 0).toString();
+        String velocidad = modeloTablaCaballos.getValueAt(filaSeleccionada, 1).toString();
+
+        nombreCabSelec.setText(nombre);
+        velocidadCabSelec.setText(velocidad);
     }
 
 }
