@@ -21,11 +21,14 @@ public class MenuFrame extends JFrame {
 
     private JButton btnCrearJugador;
     private JButton btnCrearCaballo;
+    private JButton btnIniciarCarrera;
     private JTable tablaJugadores, tablaCaballos;
     private DefaultTableModel modeloTablaJugadores, modeloTablaCaballos;
 
     private JLabel nombreJugSelec, mailJugSelec;
     private JLabel nombreCabSelec, velocidadCabSelec;
+
+    private JPanel panelContenedor;
 
     public MenuFrame() {
 
@@ -36,6 +39,7 @@ public class MenuFrame extends JFrame {
         configurarVentana();
         crearPanelJugador();
         crearPanelCaballos();
+        crearPanelIniciar();
     }
 
     private void configurarVentana() {
@@ -45,6 +49,9 @@ public class MenuFrame extends JFrame {
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
+
+        panelContenedor = new JPanel(new GridLayout(2, 1, 10, 10));
+        add(panelContenedor, BorderLayout.CENTER);
     }
 
     
@@ -86,7 +93,7 @@ public class MenuFrame extends JFrame {
         panelInferior.add(panelSeleccionado);
         panelInferior.add(panelAcciones);
         panelJugador.add(panelInferior, BorderLayout.SOUTH);
-        add(panelJugador, BorderLayout.CENTER);
+        panelContenedor.add(panelJugador);
         
         btnCrearJugador.addActionListener(e -> crearJugador());
         tablaJugadores.getSelectionModel().addListSelectionListener(e->seleccionarJugador());
@@ -205,7 +212,7 @@ public class MenuFrame extends JFrame {
         panelInferior.add(panelSeleccionado);
         panelInferior.add(panelAcciones);
         panelCaballos.add(panelInferior, BorderLayout.SOUTH);
-        add(panelCaballos, BorderLayout.SOUTH);
+        panelContenedor.add(panelCaballos);
 
         btnCrearCaballo.addActionListener(e -> crearCaballo());
         tablaCaballos.getSelectionModel().addListSelectionListener(e -> seleccionarCaballo());
@@ -283,6 +290,13 @@ public class MenuFrame extends JFrame {
 
         nombreCabSelec.setText(nombre);
         velocidadCabSelec.setText(velocidad);
+    }
+
+    private void crearPanelIniciar() {
+        JPanel panelIniciar = new JPanel(new FlowLayout(FlowLayout.CENTER));
+        btnIniciarCarrera = new JButton("Iniciar Carrera");
+        panelIniciar.add(btnIniciarCarrera);
+        add(panelIniciar, BorderLayout.SOUTH);
     }
 
 }
