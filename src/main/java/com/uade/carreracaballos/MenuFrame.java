@@ -1,6 +1,8 @@
 package com.uade.carreracaballos;
 
 import com.uade.carreracaballos.controller.JugadorController;
+import com.uade.carreracaballos.controller.CaballoController;
+import com.uade.carreracaballos.controller.CarreraController;
 import com.uade.carreracaballos.model.Jugador;
 import com.uade.carreracaballos.dto.JugadorDTO;
 
@@ -9,9 +11,11 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.util.List;
 
-public class CarreraFrame extends JFrame {
+public class MenuFrame extends JFrame {
 
-    private JugadorController controlador;
+    private JugadorController jugadorCont;
+    private CarreraController carreraCont;
+    private CaballoController caballoCont;
 
     private JTextField campoNombre;
     private JTextField campoMail;
@@ -20,9 +24,11 @@ public class CarreraFrame extends JFrame {
     private JTable tablaJugadores;
     private DefaultTableModel modeloTabla;
 
-    public CarreraFrame() {
+    public MenuFrame() {
 
-        controlador = new JugadorController();
+        jugadorCont = new JugadorController();
+        carreraCont = new CarreraController();
+        caballoCont = new CaballoController();
 
         configurarVentana();
         crearComponentes();
@@ -96,7 +102,7 @@ public class CarreraFrame extends JFrame {
 
         try {
 
-            controlador.nuevoJugador(nombre, mail);
+            jugadorCont.nuevoJugador(nombre, mail);
             JOptionPane.showMessageDialog(this, "Jugador creado correctamente");
 
             limpiarCampos();
@@ -111,7 +117,7 @@ public class CarreraFrame extends JFrame {
     private void cargarJugadores() {
 
         modeloTabla.setRowCount(0);
-        List<Jugador> listaJugadores = controlador.listarJugadores();
+        List<Jugador> listaJugadores = jugadorCont.listarJugadores();
 
         for (Jugador jugador : listaJugadores) {
             Object[] fila = {
@@ -138,7 +144,7 @@ public class CarreraFrame extends JFrame {
 
         try {
 
-            controlador.seleccionarJugador(nombre, mail);
+            jugadorCont.seleccionarJugador(nombre, mail);
             JOptionPane.showMessageDialog(this, "Jugador seleccionado");
 
         } catch (Exception error) {
