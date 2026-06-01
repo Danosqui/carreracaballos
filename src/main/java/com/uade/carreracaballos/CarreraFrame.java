@@ -152,14 +152,4 @@ public class CarreraFrame extends JFrame {
         campoNombre.setText("");
         campoMail.setText("");
     }
-
-    public static void main(String[] args) {
-
-        SwingUtilities.invokeLater(() -> {
-
-            CarreraFrame ventana = new CarreraFrame();
-
-            ventana.setVisible(true);
-        });
-    }
 }
