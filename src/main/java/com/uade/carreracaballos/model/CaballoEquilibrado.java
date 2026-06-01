@@ -1,13 +1,16 @@
 package com.uade.carreracaballos.model;
 
-import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.DiscriminatorColumn;
 import jakarta.persistence.Entity;
+import jakarta.persistence.Inheritance;
+import jakarta.persistence.InheritanceType;
+import jakarta.persistence.Table;
 
 @Entity
-@DiscriminatorValue("EQUILIBRADO")
+@Table(name="caballos")
+@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@DiscriminatorColumn(name="tipo_caballo")
 public class CaballoEquilibrado extends Caballo {
-
-    protected CaballoEquilibrado() {}
 
     public CaballoEquilibrado(String nombre) {
         super(nombre);

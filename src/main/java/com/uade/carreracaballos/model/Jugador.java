@@ -25,8 +25,6 @@ public class Jugador {
 	@Transient
 	private Caballo caballoSeleccionado;
 
-	protected Jugador() {}
-
 	public Jugador(String nombre, String mail, int puntaje) {
 		this.nombre = nombre;
 		this.mail = mail;

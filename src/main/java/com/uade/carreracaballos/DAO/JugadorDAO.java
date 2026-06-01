@@ -2,6 +2,7 @@ package com.uade.carreracaballos.dao;
 
 import com.uade.carreracaballos.model.Jugador;
 import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
 import com.uade.carreracaballos.config.JPAUtil;
 
 
@@ -21,7 +22,6 @@ public class JugadorDAO {
     		if (em.getTransaction().isActive()) {
     			em.getTransaction().rollback();
     		}
-    		throw e;
     	}
     	finally {
     		em.close();
@@ -31,11 +31,12 @@ public class JugadorDAO {
     public Jugador buscarJugador(String nombre) {
     	EntityManager enti = JPAUtil.getInstance().crearEntityManager();
     	try {
-    		List<Jugador> resultados = enti.createQuery("SELECT j FROM Jugador j WHERE j.nombre = :nombre", Jugador.class)
+    		return enti.createQuery("SELECT j FROM Jugador j WHERE j.nombre = :nombre", Jugador.class)
     		.setParameter("nombre", nombre)
-    		.setMaxResults(1)
-    		.getResultList();
-    		return resultados.isEmpty() ? null : resultados.get(0);
+    		.getSingleResult();
+    	}
+    	catch(NoResultException e){
+    		return null;
     	}
     	finally {
     		enti.close();
@@ -45,7 +46,7 @@ public class JugadorDAO {
     public List<Jugador> listarJugadores(){
     	EntityManager em = JPAUtil.getInstance().crearEntityManager();
     	try {
-    		return em.createQuery("SELECT j FROM Jugador j", Jugador.class)
+    		return em.createQuery("SELECT j FROM jugador j", Jugador.class)
     				.getResultList();
     	}
     	finally {
@@ -75,7 +76,7 @@ public class JugadorDAO {
     	EntityManager em = JPAUtil.getInstance().crearEntityManager();
     	try {
     		em.getTransaction().begin();
-    		em.remove(em.merge(jugador));
+    		em.remove(jugador);
     		em.getTransaction().commit();
     	}
     	catch(RuntimeException e) {
