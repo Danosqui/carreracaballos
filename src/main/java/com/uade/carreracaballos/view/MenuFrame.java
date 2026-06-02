@@ -1,4 +1,4 @@
-package com.uade.carreracaballos;
+package com.uade.carreracaballos.view;
 
 import com.uade.carreracaballos.controller.JugadorController;
 import com.uade.carreracaballos.controller.CaballoController;
