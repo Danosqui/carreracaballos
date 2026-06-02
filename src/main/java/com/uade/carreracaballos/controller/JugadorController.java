@@ -5,6 +5,7 @@ import com.uade.carreracaballos.model.Caballo;
 import com.uade.carreracaballos.model.Jugador;
 import com.uade.carreracaballos.service.JugadorService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class JugadorController {
@@ -22,9 +23,9 @@ public class JugadorController {
 		jugadorService.guardarJugador(jugador);
 	}
 
-	public void seleccionarJugador(Jugador jugador) {
-		if (jugador == null) throw new RuntimeException("Error de parametro: jugador es null");
-		this.jugadorSeleccionado = jugador;
+	public void seleccionarJugador(int id) {
+		
+		this.jugadorSeleccionado = jugadorService.getJugador(id);
 	}
 
 	public void seleccionarJugador(String nombre, String mail) {
@@ -35,13 +36,18 @@ public class JugadorController {
 
 	public void seleccionarCaballo(Caballo caballo) {
 		// hay que hacer que el caballo se reciba por id, y que el caballo service devuelva el caballo partiendo de esa id.
+		// dantenota: no se como hacer, porque segun claude los controllers deberian hablar entre si, y segun gemini los service severian hablar entre si
 		if (jugadorSeleccionado == null)
 			throw new RuntimeException("Error: no se seleccionó un jugador");
 		jugadorSeleccionado.seleccionarCaballo(caballo);
 	}
 
-	public List<Jugador> listarJugadores() {
-		return jugadorService.listarJugadores();
+	public List<JugadorDTO> listarJugadores() {
+		List<JugadorDTO> dtos = new ArrayList<JugadorDTO>();
+		for (Jugador j : jugadorService.listarJugadores()) {
+			dtos.add(construirDTO(j));
+		}
+		return dtos;
 	}
 
 	public void procesarPuntaje(int posicionJugador) {
@@ -53,7 +59,21 @@ public class JugadorController {
 		jugadorService.actualizarJugador(jugadorSeleccionado);
 	}
 
-	public Jugador getJugadorSeleccionado() {
-		return jugadorSeleccionado;
+	public JugadorDTO getJugadorSeleccionado() {
+		if (jugadorSeleccionado==null) {
+			return null;
+		}
+		return construirDTO(jugadorSeleccionado);
 	}
+	
+	private JugadorDTO construirDTO(Jugador jug) {
+		JugadorDTO dto = new JugadorDTO(
+    			jug.getId(),
+    			jug.getNombre(),
+    			jug.getMail(),
+    			jug.getPuntajeAcumulado()
+    			);
+    	return dto;
+    	
+    }
 }

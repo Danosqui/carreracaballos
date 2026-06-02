@@ -68,7 +68,7 @@ public class Jugador {
 		return caballoSeleccionado;
 	}
 
-	public int getid() {
+	public int getId() {
 		// TODO Auto-generated method stub
 		return id;
 	}

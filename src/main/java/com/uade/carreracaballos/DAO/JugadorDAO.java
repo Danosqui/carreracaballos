@@ -42,6 +42,18 @@ public class JugadorDAO {
     		enti.close();
     	}
     }
+    public Jugador getJugadorById(int id) {
+    	EntityManager enti = JPAUtil.getInstance().crearEntityManager();
+    	try {
+    		return enti.find(Jugador.class, id);
+    	}
+    	catch(NoResultException e) {
+    		return null;
+    	}
+    	finally {
+    		enti.close();
+    	}
+    }
 
     public List<Jugador> listarJugadores(){
     	EntityManager em = JPAUtil.getInstance().crearEntityManager();

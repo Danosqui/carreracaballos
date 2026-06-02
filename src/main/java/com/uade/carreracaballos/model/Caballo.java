@@ -63,6 +63,7 @@ public abstract class Caballo {
     public double getVelocidad() { return velocidad; }
     public double getEnergia() { return energia; }
     public double getResistencia() { return resistencia; }
+    public int getId() { return id;}
 
     public double getDistanciaRecorrida() { return distanciaRecorrida; }
     public void setDistanciaRecorrida(double distanciaRecorrida) { this.distanciaRecorrida = distanciaRecorrida; }

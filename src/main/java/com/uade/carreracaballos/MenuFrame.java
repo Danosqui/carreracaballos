@@ -3,9 +3,9 @@ package com.uade.carreracaballos;
 import com.uade.carreracaballos.controller.JugadorController;
 import com.uade.carreracaballos.controller.CaballoController;
 import com.uade.carreracaballos.controller.CarreraController;
-import com.uade.carreracaballos.model.Jugador;
+
 import com.uade.carreracaballos.model.AtributoCaballo;
-import com.uade.carreracaballos.model.Caballo;
+
 import com.uade.carreracaballos.dto.JugadorDTO;
 import com.uade.carreracaballos.dto.CaballoDTO;
 
@@ -139,13 +139,13 @@ public class MenuFrame extends JFrame {
     private void cargarJugadores() {
 
         modeloTablaJugadores.setRowCount(0);
-        List<Jugador> listaJugadores = jugadorCont.listarJugadores();
+        List<JugadorDTO> listaJugadores = jugadorCont.listarJugadores();
 
-        for (Jugador jugador : listaJugadores) {
+        for (JugadorDTO jugador : listaJugadores) {
             Object[] fila = {
                     jugador.getNombre(),
                     jugador.getMail(),
-                    jugador.getPuntajeAcumulado()
+                    jugador.getPuntaje()
             };
 
             modeloTablaJugadores.addRow(fila);
@@ -289,7 +289,7 @@ public class MenuFrame extends JFrame {
             return;
         }
         
-        Jugador jugadorSeleccionado = jugadorCont.getJugadorSeleccionado();
+        JugadorDTO jugadorSeleccionado = jugadorCont.getJugadorSeleccionado();
         if (jugadorSeleccionado == null) {
         	JOptionPane.showMessageDialog(
 			    this,
@@ -321,7 +321,7 @@ public class MenuFrame extends JFrame {
     }
     
     private void iniciarCarrera() {
-        Jugador jugadorSeleccionado = jugadorCont.getJugadorSeleccionado();
+        JugadorDTO jugadorSeleccionado = jugadorCont.getJugadorSeleccionado();
 
         if (jugadorSeleccionado == null) {
             JOptionPane.showMessageDialog(
@@ -334,9 +334,9 @@ public class MenuFrame extends JFrame {
             return;
         }
 
-        Caballo caballoSeleccionado = jugadorSeleccionado.getCaballoSeleccionado();
+        int caballoSeleccionadoId = jugadorSeleccionado.getCaballoSeleccionadoId();
 
-        if (caballoSeleccionado == null) {
+        if (caballoSeleccionadoId == -1) {
             JOptionPane.showMessageDialog(
                 this,
                 "El jugador seleccionado no tiene un caballo asignado.",

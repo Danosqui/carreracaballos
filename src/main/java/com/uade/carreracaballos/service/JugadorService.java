@@ -27,6 +27,12 @@ public class JugadorService {
 
         return jugador;
     }
+    
+    public Jugador getJugador(int id) {
+    	Jugador jugador = jugadorDAO.getJugadorById(id);
+    	return jugador;
+    	
+    }
 
     public List<Jugador> listarJugadores() {
         return jugadorDAO.listarJugadores();
@@ -35,4 +41,6 @@ public class JugadorService {
     public void actualizarJugador(Jugador jugador) {
         jugadorDAO.actualizarJugador(jugador);
     }
+    
+    
 }
