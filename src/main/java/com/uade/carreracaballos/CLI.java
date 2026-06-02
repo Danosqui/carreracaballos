@@ -14,7 +14,6 @@ import com.uade.carreracaballos.model.CaballoEquilibrado;
 import com.uade.carreracaballos.model.CaballoResistente;
 import com.uade.carreracaballos.model.CaballoVeloz;
 import com.uade.carreracaballos.model.EstadoCarrera;
-import com.uade.carreracaballos.model.Jugador;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -92,7 +91,7 @@ public class CLI {
     private void mostrarMenu() {
         String jugadorTxt = hayJugador
                 ? jugadorController.getJugadorSeleccionado().getNombre()
-                + " (puntaje: " + jugadorController.getJugadorSeleccionado().getPuntajeAcumulado() + ")"
+                + " (puntaje: " + jugadorController.getJugadorSeleccionado().getPuntaje() + ")"
                 : "ninguno";
         String caballoTxt = indiceSeleccionado >= 0
                 ? pool.get(indiceSeleccionado).getNombre()
@@ -121,7 +120,7 @@ public class CLI {
      * para elegir uno, y ofrece "crear nuevo" dentro de la misma pantalla.
      */
     private void seleccionarJugador() {
-        List<Jugador> jugadores = jugadorController.listarJugadores();
+        List<JugadorDTO> jugadores = jugadorController.listarJugadores();
 
         System.out.println("==================================================");
         System.out.println(" SELECCIONAR JUGADOR");
@@ -130,9 +129,9 @@ public class CLI {
             System.out.println(" (no hay jugadores guardados todavia)");
         } else {
             for (int i = 0; i < jugadores.size(); i++) {
-                Jugador j = jugadores.get(i);
+                JugadorDTO j = jugadores.get(i);
                 System.out.printf("  %d) %-15s  %-30s  puntaje=%d%n",
-                        i + 1, j.getNombre(), j.getMail(), j.getPuntajeAcumulado());
+                        i + 1, j.getNombre(), j.getMail(), j.getPuntaje());
             }
         }
         System.out.println(" --------------------------------------------------");
@@ -157,8 +156,8 @@ public class CLI {
                 System.out.println(">> Numero fuera de rango.\n");
                 return;
             }
-            Jugador elegido = jugadores.get(idx);
-            jugadorController.seleccionarJugador(elegido);
+            JugadorDTO elegido = jugadores.get(idx);
+            jugadorController.seleccionarJugador(elegido.getId());
             hayJugador = true;
             System.out.println(">> Jugador '" + elegido.getNombre() + "' cargado desde la DB.\n");
         } catch (NumberFormatException e) {
@@ -385,9 +384,9 @@ public class CLI {
         }
 
         // El puntaje lo calcula y persiste el JugadorController segun el puesto.
-        int antes = jugadorController.getJugadorSeleccionado().getPuntajeAcumulado();
+        int antes = jugadorController.getJugadorSeleccionado().getPuntaje();
         jugadorController.procesarPuntaje(puestoJugador);
-        int despues = jugadorController.getJugadorSeleccionado().getPuntajeAcumulado();
+        int despues = jugadorController.getJugadorSeleccionado().getPuntaje();
 
         System.out.println();
         System.out.println(" Ganador        : " + orden.get(0).getNombre());
