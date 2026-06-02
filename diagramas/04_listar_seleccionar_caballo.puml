@@ -1,0 +1,62 @@
+@startuml 04_listar_seleccionar_caballo
+title Listar caballos y asociar uno al jugador
+
+actor "Vista" as V
+participant "CaballoController" as CC
+participant "CaballoService" as CS
+participant "CaballoDAO" as CD
+participant "CaballoDTO" as DTO
+participant "JugadorController" as JC
+participant "Jugador" as J
+
+== Listar caballos (convierte a DTO) ==
+
+V -> CC : listarCaballos()
+activate CC
+
+CC -> CS : listarCaballos()
+activate CS
+CS -> CD : listarCaballos()
+activate CD
+CD --> CS : List<Caballo>
+deactivate CD
+CS --> CC : List<Caballo>
+deactivate CS
+
+loop por cada Caballo c
+    CC -> CC : convertirADTO(c)
+    activate CC
+    note right of CC
+      Crea CaballoVelozDTO / CaballoResistenteDTO /
+      CaballoEquilibradoDTO segun el subtipo concreto
+      y copia nombre, velocidad, resistencia,
+      energia y distanciaRecorrida.
+    end note
+    CC -> DTO ** : new CaballoXxxDTO()
+    activate DTO
+    DTO --> CC : dto
+    deactivate DTO
+    CC --> CC : dto
+    deactivate CC
+end
+
+CC --> V : List<CaballoDTO>
+deactivate CC
+
+== Asociar caballo al jugador activo ==
+
+V -> JC : seleccionarCaballo(caballo)
+activate JC
+
+alt jugadorSeleccionado == null
+    JC --> V : RuntimeException("no se selecciono un jugador")
+else jugador activo presente
+    JC -> J : seleccionarCaballo(caballo)
+    activate J
+    J --> JC
+    deactivate J
+    JC --> V
+end
+deactivate JC
+
+@enduml

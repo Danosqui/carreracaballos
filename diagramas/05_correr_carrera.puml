@@ -1,0 +1,125 @@
+@startuml 05_correr_carrera
+title Correr una carrera completa
+
+actor "Vista" as V
+participant "CarreraController" as CarC
+participant "Carrera" as Car
+participant "Caballo" as Cab
+participant "JugadorController" as JC
+participant "Jugador" as J
+participant "JugadorService" as JS
+participant "JugadorDAO" as JD
+
+== Crear e iniciar la carrera ==
+
+V -> CarC : crearCarrera(caballos, longitudPista)
+activate CarC
+CarC -> Car ** : new Carrera(caballos, longitudPista)
+activate Car
+note right of Car : estado = STBY
+Car --> CarC : carrera
+deactivate Car
+CarC --> V
+deactivate CarC
+
+V -> CarC : iniciarCarrera()
+activate CarC
+CarC -> Car : iniciarCarrera()
+activate Car
+note right of Car : estado = EN_CURSO
+Car --> CarC
+deactivate Car
+CarC --> V
+deactivate CarC
+
+== Bucle de simulacion (un instante representativo) ==
+
+loop hasta que obtenerEstado() == FINALIZADA
+    V -> CarC : avanzarInstante()
+    activate CarC
+
+    alt carrera == null o estado == FINALIZADA
+        CarC --> V : false
+    else
+        CarC -> Car : avanzarCorredores()
+        activate Car
+
+        loop por cada Caballo del pool
+            Car -> Cab : avanzar()
+            activate Cab
+            note right of Cab
+              avanzar() es polimorfico:
+              CaballoVeloz / CaballoResistente /
+              CaballoEquilibrado tienen su propia
+              formula de avance y desgaste.
+            end note
+            Cab --> Car
+            deactivate Cab
+
+            alt distanciaRecorrida >= longitudPista
+                note right of Car : estado = FINALIZADA
+            end
+        end
+
+        Car --> CarC : estado
+        deactivate Car
+        CarC --> V : true
+    end
+    deactivate CarC
+
+    V -> CarC : obtenerPosiciones()
+    activate CarC
+    CarC -> Car : obtenerPosiciones()
+    activate Car
+    Car --> CarC : List<Caballo>
+    deactivate Car
+    CarC --> V : List<Caballo>
+    deactivate CarC
+end
+
+== Resolver puesto del caballo del jugador ==
+
+V -> CarC : calcularPuesto(miCaballo)
+activate CarC
+CarC -> Car : obtenerPosiciones()
+activate Car
+Car --> CarC : List<Caballo>
+deactivate Car
+note right of CarC
+  Ordena por distanciaRecorrida descendente
+  y devuelve indice+1 del caballo del jugador.
+end note
+CarC --> V : puesto
+deactivate CarC
+
+== Procesar puntaje del jugador ==
+
+V -> JC : procesarPuntaje(puesto)
+activate JC
+note right of JC
+  30 si puesto = 1
+  20 si puesto = 2
+  10 en otro caso
+end note
+
+JC -> J : sumarPuntaje(puntaje)
+activate J
+J --> JC
+deactivate J
+
+JC -> JS : actualizarJugador(jugador)
+activate JS
+JS -> JD : actualizarJugador(jugador)
+activate JD
+note right of JD
+  Merge JPA del puntaje acumulado
+end note
+JD --> JS
+deactivate JD
+JS --> JC
+deactivate JS
+
+JC --> V
+deactivate JC
+
+@enduml

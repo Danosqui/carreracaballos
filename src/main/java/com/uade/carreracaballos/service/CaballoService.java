@@ -17,6 +17,10 @@ public class CaballoService {
         caballoDAO.crearCaballo(caballo);
         return caballo;
     }
+    
+    public Caballo getCaballo(int id) {
+    	return caballoDAO.getCaballo(id);
+    }
 
     // Devuelve modelo, NO DTOs. La conversión la hace el Controller.
     public List<Caballo> listarCaballos() {
@@ -28,7 +32,7 @@ public class CaballoService {
         return caballoDAO.getRandomCaballos(idExcluir);
     }
 
-    public void borrarCaballo(int caballoId) {
-        caballoDAO.borrarCaballo(caballoId);
+    public void borrarCaballo(Caballo caballo) {
+        caballoDAO.borrarCaballo(caballo);
     }
 }

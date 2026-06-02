@@ -57,6 +57,7 @@ public class CaballoController {
 		} else {
 			dto = new CaballoEquilibradoDTO();
 		}
+		dto.setId(c.getId());
 		dto.setNombre(c.getNombre());
 		dto.setVelocidad(c.getVelocidad());
 		dto.setResistencia(c.getResistencia());

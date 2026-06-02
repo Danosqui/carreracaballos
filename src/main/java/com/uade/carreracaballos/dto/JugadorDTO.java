@@ -6,12 +6,14 @@ public class JugadorDTO {
 	private String nombre;
 	private String mail;
 	private int puntaje;
+	private int caballoSeleccionadoId;
 	
 	public JugadorDTO(int id, String nombre, String mail, int puntaje) {
 		this.id=id;
 		this.nombre=nombre;
 		this.mail=mail;
 		this.puntaje=puntaje;
+		this.caballoSeleccionadoId = -1;
 	}
 	
 	public int getId() {
@@ -38,13 +40,12 @@ public class JugadorDTO {
 	public void setPuntaje(int puntaje) {
 		this.puntaje = puntaje;
 	}
-	public CaballoDTO getCaballoSeleccionado() {
-		return caballoSeleccionado;
+	public int getCaballoSeleccionadoId() {
+		return caballoSeleccionadoId;
 	}
-	public void setCaballoSeleccionado(CaballoDTO caballoSeleccionado) {
-		this.caballoSeleccionado = caballoSeleccionado;
+	public void setCaballoSeleccionado(int id) {
+		this.caballoSeleccionadoId = id;
 	}
-	private CaballoDTO caballoSeleccionado;
 	
 
 }

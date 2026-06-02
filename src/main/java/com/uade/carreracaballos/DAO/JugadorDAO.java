@@ -1,91 +1,104 @@
 package com.uade.carreracaballos.DAO;
 
-import com.uade.carreracaballos.dto.JugadorDTO;
 import com.uade.carreracaballos.model.Jugador;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+import com.uade.carreracaballos.config.JPAUtil;
 
-import java.sql.*;
-import java.util.ArrayList;
+
+
 import java.util.List;
 
 public class JugadorDAO {
 
     public void crearJugador(Jugador jugador) {
-        String sql = "INSERT INTO jugadores(nombre, mail, puntaje) VALUES (?, ?, ?)";
-
-        try (Connection conn = DBConnection.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, jugador.getNombre());
-            stmt.setString(2, jugador.getMail());
-            stmt.setInt(3, jugador.getPuntajeAcumulado());
-            stmt.executeUpdate();
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al crear jugador", e);
-        }
+    	EntityManager em = JPAUtil.getInstance().crearEntityManager();
+    	try {
+    		em.getTransaction().begin();
+    		em.persist(jugador);
+    		em.getTransaction().commit();
+    	}
+    	catch(RuntimeException e) {
+    		if (em.getTransaction().isActive()) {
+    			em.getTransaction().rollback();
+    		}
+    	}
+    	finally {
+    		em.close();
+    	}
     }
 
     public Jugador buscarJugador(String nombre) {
-        String sql = "SELECT * FROM jugadores WHERE nombre = ?";
-
-        try (Connection conn = DBConnection.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setString(1, nombre);
-
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return new Jugador(
-                            rs.getString("nombre"),
-                            rs.getString("mail"),
-                            rs.getInt("puntaje")
-                    );
-                }
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al buscar jugador", e);
-        }
-
-        return null;
+    	EntityManager enti = JPAUtil.getInstance().crearEntityManager();
+    	try {
+    		return enti.createQuery("SELECT j FROM Jugador j WHERE j.nombre = :nombre", Jugador.class)
+    		.setParameter("nombre", nombre)
+    		.getSingleResult();
+    	}
+    	catch(NoResultException e){
+    		return null;
+    	}
+    	finally {
+    		enti.close();
+    	}
+    }
+    public Jugador getJugadorById(int id) {
+    	EntityManager enti = JPAUtil.getInstance().crearEntityManager();
+    	try {
+    		return enti.find(Jugador.class, id);
+    	}
+    	catch(NoResultException e) {
+    		return null;
+    	}
+    	finally {
+    		enti.close();
+    	}
     }
 
-    public List<JugadorDTO> listarJugadores() {
-        List<JugadorDTO> jugadores = new ArrayList<>();
-        String sql = "SELECT * FROM jugadores ORDER BY puntaje DESC";
-
-        try (Connection conn = DBConnection.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
-             ResultSet rs = stmt.executeQuery()) {
-
-            while (rs.next()) {
-                jugadores.add(new JugadorDTO(
-                        rs.getInt("id"),
-                        rs.getString("nombre"),
-                        rs.getString("mail"),
-                        rs.getInt("puntaje")
-                ));
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al listar jugadores", e);
-        }
-
-        return jugadores;
+    public List<Jugador> listarJugadores(){
+    	EntityManager em = JPAUtil.getInstance().crearEntityManager();
+    	try {
+    		return em.createQuery("SELECT j FROM Jugador j", Jugador.class)
+    				.getResultList();
+    	}
+    	finally {
+    		em.close();
+    	}
     }
 
     public void actualizarJugador(Jugador jugador) {
-        String sql = "UPDATE jugadores SET puntaje = ? WHERE mail = ?";
-
-        try (Connection conn = DBConnection.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
-
-            stmt.setInt(1, jugador.getPuntajeAcumulado());
-            stmt.setString(2, jugador.getMail());
-            stmt.executeUpdate();
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Error al actualizar jugador", e);
-        }
+    	EntityManager enti = JPAUtil.getInstance().crearEntityManager();
+    	try {
+    		enti.getTransaction().begin();
+    		enti.merge(jugador);
+    		enti.getTransaction().commit();
+    	}
+    	catch(RuntimeException e){
+            if (enti.getTransaction().isActive()) {
+                enti.getTransaction().rollback();
+            }
+            throw e;
+    	}
+    	finally {
+    		enti.close();
+    	}
+    }
+    
+    public void borrarJugador(Jugador jugador) {
+    	EntityManager em = JPAUtil.getInstance().crearEntityManager();
+    	try {
+    		em.getTransaction().begin();
+    		em.remove(jugador);
+    		em.getTransaction().commit();
+    	}
+    	catch(RuntimeException e) {
+    		if (em.getTransaction().isActive()) {
+    			em.getTransaction().rollback();
+    		}
+    		throw e;
+    	}
+    	finally {
+    		em.close();
+    	}
     }
 }

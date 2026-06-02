@@ -18,26 +18,29 @@ public class JugadorService {
         jugadorDAO.crearJugador(jugador);
     }
 
-    public JugadorDTO buscarJugador(String nombre, String mail) {
+    public Jugador buscarJugador(String nombre, String mail) {
         Jugador jugador = jugadorDAO.buscarJugador(nombre);
 
         if (jugador == null || !jugador.getMail().equals(mail)) {
             return null;
         }
 
-        return new JugadorDTO(
-                0,
-                jugador.getNombre(),
-                jugador.getMail(),
-                jugador.getPuntajeAcumulado()
-        );
+        return jugador;
+    }
+    
+    public Jugador getJugador(int id) {
+    	Jugador jugador = jugadorDAO.getJugadorById(id);
+    	return jugador;
+    	
     }
 
-    public List<JugadorDTO> listarJugadores() {
+    public List<Jugador> listarJugadores() {
         return jugadorDAO.listarJugadores();
     }
 
     public void actualizarJugador(Jugador jugador) {
         jugadorDAO.actualizarJugador(jugador);
     }
+    
+    
 }
