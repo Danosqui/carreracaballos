@@ -67,6 +67,8 @@ public class MenuFrame extends JFrame {
                 return false;
             } 
         };
+        
+        modeloTablaJugadores.addColumn("ID");
         modeloTablaJugadores.addColumn("Nombre");
         modeloTablaJugadores.addColumn("Mail");
         modeloTablaJugadores.addColumn("Puntaje");
@@ -143,6 +145,7 @@ public class MenuFrame extends JFrame {
 
         for (JugadorDTO jugador : listaJugadores) {
             Object[] fila = {
+            		jugador.getId(),
                     jugador.getNombre(),
                     jugador.getMail(),
                     jugador.getPuntaje()
@@ -160,12 +163,13 @@ public class MenuFrame extends JFrame {
             return;
         }
 
-        String nombre = modeloTablaJugadores.getValueAt(filaSeleccionada, 0).toString();
-        String mail = modeloTablaJugadores.getValueAt(filaSeleccionada, 1).toString();
+        int id = Integer.parseInt(modeloTablaJugadores.getValueAt(filaSeleccionada, 0).toString());
+        String nombre = modeloTablaJugadores.getValueAt(filaSeleccionada, 1).toString();
+        String mail = modeloTablaJugadores.getValueAt(filaSeleccionada, 2).toString();
 
         try {
 
-            jugadorCont.seleccionarJugador(nombre, mail);
+            jugadorCont.seleccionarJugador(id);
             nombreJugSelec.setText(nombre);
             mailJugSelec.setText(mail);
 
@@ -309,7 +313,7 @@ public class MenuFrame extends JFrame {
         nombreCabSelec.setText(nombre);
         velocidadCabSelec.setText(velocidad);
         
-        //jugadorCont.seleccionarCaballo(id);
+        jugadorCont.seleccionarCaballo(id);
     }
 
     private void crearPanelIniciar() {

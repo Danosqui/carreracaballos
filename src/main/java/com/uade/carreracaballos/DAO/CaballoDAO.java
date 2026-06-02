@@ -27,6 +27,11 @@ public class CaballoDAO {
     		enti.close();
     	}
     }
+    
+    public Caballo getCaballo(int id) {
+    	EntityManager em = JPAUtil.getInstance().crearEntityManager();
+    	return em.find(Caballo.class, id);
+    }
 
     public List<Caballo> listarCaballos() {
     	EntityManager em = JPAUtil.getInstance().crearEntityManager();

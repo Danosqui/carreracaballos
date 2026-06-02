@@ -4,6 +4,7 @@ import com.uade.carreracaballos.dto.JugadorDTO;
 import com.uade.carreracaballos.model.Caballo;
 import com.uade.carreracaballos.model.Jugador;
 import com.uade.carreracaballos.service.JugadorService;
+import com.uade.carreracaballos.service.CaballoService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,10 +12,15 @@ import java.util.List;
 public class JugadorController {
 
 	private JugadorService jugadorService;
+	private CaballoService caballoService; // no estamos del todo seguros de que sea asi.
+	// Habria q ver bien q onda, no sabemos si corresponde esto ya que se crean 2 instancias del service, o sino crear una sola instancia en main y mandarsela a los controllers
+	// info al respecto https://claude.ai/share/9e54dd5f-08bc-4fa8-b627-94a1af79903a
+	
 	private Jugador jugadorSeleccionado;
 
 	public JugadorController() {
 		this.jugadorService = new JugadorService();
+		this.caballoService = new CaballoService();
 		this.jugadorSeleccionado = null;
 	}
 
@@ -40,6 +46,14 @@ public class JugadorController {
 		if (jugadorSeleccionado == null)
 			throw new RuntimeException("Error: no se seleccionó un jugador");
 		jugadorSeleccionado.seleccionarCaballo(caballo);
+	}
+
+	public void seleccionarCaballo(int id) { // 
+		if (jugadorSeleccionado == null)
+			throw new RuntimeException("Error: no se seleccionó un jugador");
+		Caballo caballo = caballoService.getCaballo(id);
+		jugadorSeleccionado.seleccionarCaballo(caballo);
+				
 	}
 
 	public List<JugadorDTO> listarJugadores() {
@@ -73,6 +87,11 @@ public class JugadorController {
     			jug.getMail(),
     			jug.getPuntajeAcumulado()
     			);
+		
+		Caballo caballoSeleccionado = jug.getCaballoSeleccionado();
+		if (caballoSeleccionado != null) {
+			dto.setCaballoSeleccionado(caballoSeleccionado.getId());
+		}
     	return dto;
     	
     }

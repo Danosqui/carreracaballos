@@ -13,6 +13,7 @@ public class JugadorDTO {
 		this.nombre=nombre;
 		this.mail=mail;
 		this.puntaje=puntaje;
+		this.caballoSeleccionadoId = -1;
 	}
 	
 	public int getId() {

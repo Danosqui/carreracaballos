@@ -17,6 +17,10 @@ public class CaballoService {
         caballoDAO.crearCaballo(caballo);
         return caballo;
     }
+    
+    public Caballo getCaballo(int id) {
+    	return caballoDAO.getCaballo(id);
+    }
 
     // Devuelve modelo, NO DTOs. La conversión la hace el Controller.
     public List<Caballo> listarCaballos() {

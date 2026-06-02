@@ -69,7 +69,6 @@ public class JugadorDAO {
     public void actualizarJugador(Jugador jugador) {
     	EntityManager enti = JPAUtil.getInstance().crearEntityManager();
     	try {
-    		System.out.println(jugador);
     		enti.getTransaction().begin();
     		enti.merge(jugador);
     		enti.getTransaction().commit();
