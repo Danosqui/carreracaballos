@@ -5,6 +5,7 @@ import com.uade.carreracaballos.controller.CaballoController;
 import com.uade.carreracaballos.controller.CarreraController;
 import com.uade.carreracaballos.model.Jugador;
 import com.uade.carreracaballos.model.AtributoCaballo;
+import com.uade.carreracaballos.model.Caballo;
 import com.uade.carreracaballos.dto.JugadorDTO;
 import com.uade.carreracaballos.dto.CaballoDTO;
 
@@ -45,12 +46,13 @@ public class MenuFrame extends JFrame {
     private void configurarVentana() {
 
         setTitle("Gestión de Jugadores");
-        setSize(500, 500);
+        setSize(550, 650);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
         panelContenedor = new JPanel(new GridLayout(2, 1, 10, 10));
+        panelContenedor.setBorder(BorderFactory.createEmptyBorder(15, 15, 15, 15));
         add(panelContenedor, BorderLayout.CENTER);
     }
 
@@ -183,6 +185,8 @@ public class MenuFrame extends JFrame {
                 return false;
             }
         };
+        
+        modeloTablaCaballos.addColumn("ID");
         modeloTablaCaballos.addColumn("Nombre");
         modeloTablaCaballos.addColumn("Velocidad");
         modeloTablaCaballos.addColumn("Resistencia");
@@ -190,6 +194,7 @@ public class MenuFrame extends JFrame {
 
         tablaCaballos = new JTable(modeloTablaCaballos);
         tablaCaballos.setPreferredScrollableViewportSize(new Dimension(450, 120));
+
         JScrollPane scrollTabla = new JScrollPane(tablaCaballos);
         panelCaballos.add(scrollTabla, BorderLayout.CENTER);
 
@@ -267,6 +272,7 @@ public class MenuFrame extends JFrame {
 
         for (CaballoDTO caballo : listaCaballos) {
             Object[] fila = {
+            		caballo.getId(),
                     caballo.getNombre(),
                     caballo.getVelocidad(),
                     caballo.getResistencia(),
@@ -280,16 +286,30 @@ public class MenuFrame extends JFrame {
     private void seleccionarCaballo() {
         int filaSeleccionada = tablaCaballos.getSelectedRow();
         if (filaSeleccionada == -1) {
-            JOptionPane.showMessageDialog(this, "Seleccione un caballo");
-
             return;
         }
+        
+        Jugador jugadorSeleccionado = jugadorCont.getJugadorSeleccionado();
+        if (jugadorSeleccionado == null) {
+        	JOptionPane.showMessageDialog(
+			    this,
+			    "Primero debes seleccionar un jugador.",
+			    "Error",
+			    JOptionPane.ERROR_MESSAGE
+			);
+        	tablaCaballos.clearSelection();
+        	
+        	return;
+        }
 
-        String nombre = modeloTablaCaballos.getValueAt(filaSeleccionada, 0).toString();
-        String velocidad = modeloTablaCaballos.getValueAt(filaSeleccionada, 1).toString();
-
+        String nombre = modeloTablaCaballos.getValueAt(filaSeleccionada, 1).toString();
+        String velocidad = modeloTablaCaballos.getValueAt(filaSeleccionada, 2).toString();
+        int id = Integer.parseInt(modeloTablaCaballos.getValueAt(filaSeleccionada, 0).toString());
+        
         nombreCabSelec.setText(nombre);
         velocidadCabSelec.setText(velocidad);
+        
+        //jugadorCont.seleccionarCaballo(id);
     }
 
     private void crearPanelIniciar() {
@@ -297,6 +317,36 @@ public class MenuFrame extends JFrame {
         btnIniciarCarrera = new JButton("Iniciar Carrera");
         panelIniciar.add(btnIniciarCarrera);
         add(panelIniciar, BorderLayout.SOUTH);
+        btnIniciarCarrera.addActionListener(e->iniciarCarrera());
+    }
+    
+    private void iniciarCarrera() {
+        Jugador jugadorSeleccionado = jugadorCont.getJugadorSeleccionado();
+
+        if (jugadorSeleccionado == null) {
+            JOptionPane.showMessageDialog(
+			    this,
+			    "No seleccionaste un jugador.",
+			    "Error",
+			    JOptionPane.ERROR_MESSAGE
+			);
+
+            return;
+        }
+
+        Caballo caballoSeleccionado = jugadorSeleccionado.getCaballoSeleccionado();
+
+        if (caballoSeleccionado == null) {
+            JOptionPane.showMessageDialog(
+                this,
+                "El jugador seleccionado no tiene un caballo asignado.",
+                "Error",
+                JOptionPane.ERROR_MESSAGE
+            );
+            return;
+        }
+
+        carreraCont.iniciarCarrera();
     }
 
 }
