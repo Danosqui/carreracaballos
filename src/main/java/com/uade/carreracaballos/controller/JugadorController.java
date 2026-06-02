@@ -34,6 +34,7 @@ public class JugadorController {
 	}
 
 	public void seleccionarCaballo(Caballo caballo) {
+		// hay que hacer que el caballo se reciba por id, y que el caballo service devuelva el caballo partiendo de esa id.
 		if (jugadorSeleccionado == null)
 			throw new RuntimeException("Error: no se seleccionó un jugador");
 		jugadorSeleccionado.seleccionarCaballo(caballo);
