@@ -367,45 +367,31 @@ public class MenuFrame extends JFrame {
 
         carreraCont.iniciarCarrera();
 
-        // El bucle de animación corre en un hilo aparte para no bloquear el
-        // Event Dispatch Thread; si corriera en el EDT la ventana nunca se pintaría.
-        new Thread(() -> {
-            while (!carreraCont.carreraFinalizada()) {
+        Timer timer = new Timer(32, null);
+
+        timer.addActionListener(e -> {
+        	if (carreraCont.carreraFinalizada()) {
+        		timer.stop();
+        		int puesto = carreraCont.calcularPuesto(caballoSeleccionadoId);
+        		jugadorCont.procesarPuntaje(puesto);
+        		
+                String mensaje;
+                
+                if (puesto == 1) mensaje = "Felicidades, tu caballo gano la carrera.";
+                else mensaje = "Tu caballo salio en "+puestoATexto(puesto)+" puesto.";
+      
+                JOptionPane.showMessageDialog(this, mensaje, "Carrera finalizada", JOptionPane.INFORMATION_MESSAGE);
+                
+                cargarJugadores();
+                ventanaCarrera.setVisible(false);
+                this.setVisible(true);
+        	} else {
                 carreraCont.avanzarInstante();
-
                 List<CaballoDTO> caballosDTO = caballoCont.convertirListaADTO(carreraCont.obtenerPosiciones());
-
                 ventanaCarrera.getPista().actualizar(caballosDTO, tamanioPista, caballoSeleccionadoId);
-
-                try {
-                    Thread.sleep(40);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-            
-            int puesto = carreraCont.calcularPuesto(caballoSeleccionadoId);
-            String mensaje;
-            
-            if (puesto == 1) {
-            	mensaje = "Felicidades, tu caballo gano la carrera.";
-            } else {
-            	mensaje = "Tu caballo salio en "+puestoATexto(puesto)+" puesto.";
-            }
-            jugadorCont.procesarPuntaje(puesto);
-            
-            JOptionPane.showMessageDialog(
-        	    this,
-        	    mensaje,
-        	    "Carrera finalizada",
-        	    JOptionPane.INFORMATION_MESSAGE
-        	);
-            
-            cargarJugadores();
-            ventanaCarrera.setVisible(false);
-            this.setVisible(true);
-        }).start();
-        
+        	}
+        });
+        timer.start();
     }
     
     private String puestoATexto(int puesto) {
