@@ -372,22 +372,10 @@ public class MenuFrame extends JFrame {
         new Thread(() -> {
             while (!carreraCont.carreraFinalizada()) {
                 carreraCont.avanzarInstante();
-                
-                // de aca hasta el proximo comentario esta implemnentado horrible, hay q refactor
-                List<Caballo> caballosCarrera = carreraCont.obtenerPosiciones();
-                
-                List<CaballoDTO> caballosDTO = new ArrayList<>();
-        		for (Caballo c : caballosCarrera) {
-        			caballosDTO.add(caballoCont.convertirADTO(c));
-        		}
-        		
-        		// fin 
-        		// los caballos no se deben levantar desde el service xq los intenta volver a cargar desde la base de datos y arracnan en 0.
-        		// Es necesario cargarlos desde carreraCont
 
+                List<CaballoDTO> caballosDTO = caballoCont.convertirListaADTO(carreraCont.obtenerPosiciones());
 
                 ventanaCarrera.getPista().actualizar(caballosDTO, tamanioPista, caballoSeleccionadoId);
-
 
                 try {
                     Thread.sleep(40);
