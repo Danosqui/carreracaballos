@@ -158,9 +158,7 @@ public class MenuFrame extends JFrame {
 
     private void seleccionarJugador() {
         int filaSeleccionada = tablaJugadores.getSelectedRow();
-        if (filaSeleccionada == -1) {
-            return;
-        }
+        if (filaSeleccionada == -1) return;
 
         int id = Integer.parseInt(modeloTablaJugadores.getValueAt(filaSeleccionada, 0).toString());
         String nombre = modeloTablaJugadores.getValueAt(filaSeleccionada, 1).toString();
@@ -288,9 +286,7 @@ public class MenuFrame extends JFrame {
 
     private void seleccionarCaballo() {
         int filaSeleccionada = tablaCaballos.getSelectedRow();
-        if (filaSeleccionada == -1) {
-            return;
-        }
+        if (filaSeleccionada == -1) return;
         
         JugadorDTO jugadorSeleccionado = jugadorCont.getJugadorSeleccionado();
         if (jugadorSeleccionado == null) {
@@ -301,6 +297,8 @@ public class MenuFrame extends JFrame {
 			    JOptionPane.ERROR_MESSAGE
 			);
         	
+        	tablaCaballos.clearSelection();
+
         	return;
         }
 
@@ -414,10 +412,12 @@ public class MenuFrame extends JFrame {
         	    "Carrera finalizada",
         	    JOptionPane.INFORMATION_MESSAGE
         	);
+            
+            cargarJugadores();
             ventanaCarrera.setVisible(false);
             this.setVisible(true);
         }).start();
-        cargarJugadores();
+        
     }
     
     private String puestoATexto(int puesto) {
