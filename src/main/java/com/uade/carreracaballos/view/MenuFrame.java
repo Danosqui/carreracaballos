@@ -389,7 +389,7 @@ public class MenuFrame extends JFrame {
 
 
                 try {
-                    Thread.sleep(100);
+                    Thread.sleep(40);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
