@@ -12,16 +12,19 @@ import com.uade.carreracaballos.view.ViewPista;
  */
 public class VentanaCarrera extends JFrame {
 
+    private final ViewPista pistaui = new ViewPista();
+
     public VentanaCarrera() {
         setTitle("Carrera de Caballos");
         setSize(864, 458);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
-        
-        ViewPista pistaui = new ViewPista();
-        
+
         this.add(pistaui);
-    
-        // TODO: agregar los componentes de la carrera (pista, caballos, etc.)
+    }
+
+    /** La pista donde se dibujan los caballos; la consola la refresca en cada instante. */
+    public ViewPista getPista() {
+        return pistaui;
     }
 }
