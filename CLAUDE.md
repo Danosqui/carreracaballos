@@ -33,10 +33,11 @@ referencia y está desactualizado respecto de las entidades (ver Gotchas).
 Hay **dos frontends intercambiables** que actúan como la Vista del MVC y hablan únicamente con
 los controllers. Se elige cuál corre en `Main.java` comentando/descomentando una línea:
 
-- `MenuFrame` (Swing) — la GUI, es la que arranca por defecto.
-- `CLI` — frontend de texto con animación ASCII de la carrera. **Es el camino más completo y
-  funcional**; sirve como referencia de cómo orquestar los controllers de punta a punta
-  (crear jugador → elegir caballo → correr → puntaje). La GUI está parcialmente cableada.
+- `MenuFrame` (Swing) — la GUI, es la que arranca por defecto. Ya está completamente cableada:
+  crea jugador, lista caballos, selecciona jugador y caballo, y corre la carrera con animación
+  en `VentanaCarrera`/`ViewPista`.
+- `CLI` — frontend de texto con animación ASCII de la carrera. Sirve como referencia de cómo
+  orquestar los controllers de punta a punta (crear jugador → elegir caballo → correr → puntaje).
 
 ## Arquitectura por capas
 
@@ -73,11 +74,38 @@ Reglas que definen el diseño (respetarlas al extender):
 ### Controllers y su responsabilidad
 
 - `JugadorController` — mantiene el `jugadorSeleccionado` de la sesión (estado de la "vista
-  activa"); alta, selección por id o por nombre+mail, y `procesarPuntaje(posicion)`.
+  activa"); alta, selección por id o por nombre+mail, `seleccionarCaballo(int id)` y
+  `procesarPuntaje(posicion)`.
 - `CaballoController` — alta por tipo (`AtributoCaballo`) y listado como DTOs.
-- `CarreraController` — dueño de la `Carrera` en curso: `crearCarrera`, `iniciarCarrera`,
-  `avanzarInstante`, `calcularPuesto` (ordena por distancia), `obtenerEstado`. La GUI lo crea
-  pero todavía no lo alimenta con un pool (ver Gotchas).
+  `convertirADTO(Caballo)` es el único punto de conversión modelo→DTO para caballos.
+- `CarreraController` — dueño de la `Carrera` en curso. `crearCarrera(idCaballoJugador,
+  longitudPista)` arma el pool automáticamente: obtiene caballos aleatorios de la BD
+  (excluyendo el del jugador, vía `CaballoService.getRandomCaballos`) y añade el caballo
+  del jugador. También expone `carreraFinalizada()` para el bucle de animación de la GUI.
+
+## Vistas de la carrera (GUI)
+
+El flujo de `MenuFrame.iniciarCarrera()` cuando todo está listo:
+
+1. Dialog para elegir el tamaño de pista (200–500m en pasos de 50).
+2. `carreraCont.crearCarrera(idCaballoJugador, tamanioPista)` — arma el pool y crea `Carrera`.
+3. Abre `VentanaCarrera` (986×458 px), que contiene un `ViewPista` (`JPanel` custom).
+4. Lanza un `Thread` separado (no en el EDT) que cada 40 ms (~25 fps): llama
+   `carreraCont.avanzarInstante()`, obtiene `List<Caballo>` de `obtenerPosiciones()`, convierte
+   cada elemento a DTO vía `caballoCont.convertirADTO(c)`, y llama
+   `ventanaCarrera.getPista().actualizar(caballosDTO, tamanioPista, idCaballoJugador)`.
+5. Al finalizar, muestra diálogo con el resultado, oculta `VentanaCarrera` y vuelve a `MenuFrame`.
+
+`ViewPista` dibuja un fondo (`pista.png`) y hasta 6 sprites (`caballo1.png`…`caballo6.png`). La
+posición X de cada caballo es proporcional a `distanciaRecorrida / longitudPista`. El caballo del
+jugador se etiqueta en naranja; los demás en blanco. `CaballoDTO.distanciaRecorrida` es el campo
+que alimenta esta lógica.
+
+**Excepción arquitectural conocida**: el bucle de animación en `MenuFrame` recibe
+`List<Caballo>` (modelo) directamente de `carreraCont.obtenerPosiciones()`, porque los caballos
+en carrera sólo existen en memoria y no tienen sentido releerlos de la BD. La conversión igual
+pasa por el controller (`caballoCont.convertirADTO`), pero la Vista sí ve objetos del modelo
+brevemente. El propio código lo marca como "implementado horrible, hay q refactor".
 
 ## Modelo de dominio y lógica de la simulación
 
@@ -114,15 +142,14 @@ y distancia a 0 para volver a correr.
 
 Cosas que parecen bugs pero conviene entender antes de "arreglar":
 
-- **GUI a medio cablear** (`MenuFrame`): `seleccionarCaballo()` no llama al controller (la línea
-  está comentada); `iniciarCarrera()` invoca `carreraCont.iniciarCarrera()` sin haber creado la
-  carrera ni armado el pool; `seleccionarJugador()` lee nombre y mail de la **columna 0 (el ID)**.
-  La CLI no tiene estos problemas.
-- `JugadorController.seleccionarCaballo(int id)` es un stub (cuerpo comentado); existe una nota
-  en el código sobre la duda de diseño "¿los controllers o los services deberían hablar entre sí?".
-- `Jugador.caballoSeleccionado` es `@Transient` (no se persiste). `JugadorDTO.caballoSeleccionadoId`
-  nunca se setea en el constructor, así que arranca en `0`, pero `MenuFrame.iniciarCarrera` lo
-  compara contra `-1`: esa guarda nunca se cumple.
+- **Excepción arquitectural en la animación** (ver sección "Vistas de la carrera"): el bucle en
+  `MenuFrame` obtiene `List<Caballo>` directamente de `carreraCont.obtenerPosiciones()`. Es
+  intencional (los caballos en carrera no están en la BD), pero viola estrictamente la regla
+  "Vista nunca toca el modelo".
+- `Jugador.caballoSeleccionado` es `@Transient` (no se persiste). Entre sesiones, el jugador
+  carga sin caballo asignado y hay que seleccionarlo de nuevo.
+- `JugadorController` instancia su propio `CaballoService` además del `JugadorService`. Hay una
+  nota en el código sobre si corresponde que los controllers o los services hablen entre sí.
 - Esquema vs `dbCreate.sql`: las entidades generan tablas `caballo` (singular,
   `@Table(name="caballo")`) y `jugadores`; el SQL de referencia crea `caballos` (plural). Como
   `hbm2ddl.auto=update`, mandan las entidades, no el `.sql`.
