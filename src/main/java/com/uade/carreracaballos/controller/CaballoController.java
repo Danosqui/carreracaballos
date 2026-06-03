@@ -47,7 +47,15 @@ public class CaballoController {
 		}
 		return caballosDTO;
 	}
+	public List<CaballoDTO> convertirListaADTO(List<Caballo> caballos) {
+	    List<CaballoDTO> caballosDTO = new ArrayList<>();
 
+	    for (Caballo caballo : caballos) {
+	        caballosDTO.add(convertirADTO(caballo));
+	    }
+
+	    return caballosDTO;
+	}
 	
 	// no estoy seguro de que esto deba ser public, lo cambie par aque funcione manuframe
 	public CaballoDTO convertirADTO(Caballo c) {
