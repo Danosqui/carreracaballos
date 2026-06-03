@@ -385,7 +385,7 @@ public class MenuFrame extends JFrame {
         		// Es necesario cargarlos desde carreraCont
 
 
-                ventanaCarrera.getPista().actualizar(caballosDTO, 500);
+                ventanaCarrera.getPista().actualizar(caballosDTO, 500, caballoSeleccionadoId);
 
 
                 try {

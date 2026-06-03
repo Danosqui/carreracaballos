@@ -3,6 +3,7 @@ import javax.swing.JPanel;
 import java.awt.Image;        // clase base para imágenes
 import java.awt.Graphics;     // para paintComponent
 import java.awt.Color;
+import java.awt.Font;
 import java.util.List;
 import javax.swing.ImageIcon; // para cargar el archivo
 
@@ -16,28 +17,29 @@ public class ViewPista extends JPanel {
 
     int caballoSize = 60;
 
-    private static final int X_INICIAL = 50;
-    private static final int X_META    = 755;
+    private static final int X_INICIAL = 130;
+    private static final int X_META    = 880;
 
-    private List<CaballoDTO> participantes;    private double[] distancias;       // distancia (posiblemente interpolada) por caballo
-    private int longitudPista = 1;
-    //private Caballo miCaballo;
+    private List<CaballoDTO> participantes;
+    private int longitudPista;
+    private int idCaballoJugador;
 
     public ViewPista() {
     	// imagen 1693x929, ratio
         java.net.URL urlPista = getClass().getResource("/com/uade/carreracaballos/view/assets/pista.png");
-        java.net.URL urlCaballo = getClass().getResource("/com/uade/carreracaballos/view/assets/caballo3.png");
 
         fondo = new ImageIcon(urlPista).getImage();
         for (int i=0;i<caballos.length;i++) {
+            java.net.URL urlCaballo = getClass().getResource("/com/uade/carreracaballos/view/assets/caballo"+(i+1)+".png");
         	caballos[i] = new ImageIcon(urlCaballo).getImage();
         }
     }
 
 
-    public void actualizar(List<CaballoDTO> participantes, int longitudPista) {
+    public void actualizar(List<CaballoDTO> participantes, int longitudPista, int idCaballoJugador) {
         this.participantes = participantes;
         this.longitudPista = Math.max(1, longitudPista);
+        this.idCaballoJugador = idCaballoJugador;
         
         repaint();
     }
@@ -45,7 +47,7 @@ public class ViewPista extends JPanel {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        g.drawImage(fondo, 0, 0, 864, 458, this);
+        g.drawImage(fondo, 0, 0, 986, 458, this);
 
         if (participantes == null) {
             return;
@@ -55,19 +57,19 @@ public class ViewPista extends JPanel {
         int n = Math.min(participantes.size(), caballos.length);
         for (int i = 0; i < n; i++) {
             CaballoDTO c = participantes.get(i);
-            System.out.println(c.getDistanciaRecorrida()+" "+c.getNombre());
 
             // Avance proporcional: 0 -> X_INICIAL, longitudPista -> X_META.
             double ratio = c.getDistanciaRecorrida() / longitudPista;
             ratio = Math.max(0.0, Math.min(1.0, ratio));
-            int x = X_INICIAL + (int) Math.round((X_META - X_INICIAL) * ratio);
-            int y = 90 + 35 * i;
+            int xCaballo = X_INICIAL + (int) Math.round((X_META - X_INICIAL) * ratio);
+            int yCaballo = 90 + 35 * i;
 
-            g.drawImage(caballos[i], x, y, caballoSize, caballoSize, this);
+            g.drawImage(caballos[i], xCaballo, yCaballo, caballoSize, caballoSize, this);
 
             String etiqueta = c.getNombre();
-            //g.setColor(c == miCaballo ? Color.YELLOW : Color.WHITE);
-            g.drawString(etiqueta, X_INICIAL, y + 12);
+            g.setColor(c.getId() == idCaballoJugador ? Color.ORANGE : Color.WHITE);
+            g.setFont(new Font ("Helvetica", 0, 16));
+            g.drawString(etiqueta, 20, 123 + 37*i);
         }
     }
 }

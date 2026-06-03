@@ -16,7 +16,7 @@ public class VentanaCarrera extends JFrame {
 
     public VentanaCarrera() {
         setTitle("Carrera de Caballos");
-        setSize(864, 458);
+        setSize(986, 458);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
