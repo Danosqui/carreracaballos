@@ -352,23 +352,29 @@ public class MenuFrame extends JFrame {
         }
 
 
-        
-        carreraCont.crearCarrera(caballoSeleccionadoId, 500);
+        Integer[] tamanosPista = { 200, 250, 300, 350, 400, 450, 500 };
+        Integer tamanioPista = (Integer) JOptionPane.showInputDialog(
+                this,
+                "Elegí el tamaño de la pista (metros):",
+                "Tamaño de pista",
+                JOptionPane.QUESTION_MESSAGE,
+                null,
+                tamanosPista,
+                tamanosPista[0]
+        );
+        if (tamanioPista == null) return;
+
+        carreraCont.crearCarrera(caballoSeleccionadoId, tamanioPista);
         
         VentanaCarrera ventanaCarrera = new VentanaCarrera();
         javax.swing.SwingUtilities.invokeLater(() -> ventanaCarrera.setVisible(true));
+        this.setVisible(false);
 
         carreraCont.iniciarCarrera();
 
         // El bucle de animación corre en un hilo aparte para no bloquear el
         // Event Dispatch Thread; si corriera en el EDT la ventana nunca se pintaría.
         new Thread(() -> {
-            try {
-                Thread.sleep(500);
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-
             while (!carreraCont.carreraFinalizada()) {
                 carreraCont.avanzarInstante();
                 
@@ -385,7 +391,7 @@ public class MenuFrame extends JFrame {
         		// Es necesario cargarlos desde carreraCont
 
 
-                ventanaCarrera.getPista().actualizar(caballosDTO, 500, caballoSeleccionadoId);
+                ventanaCarrera.getPista().actualizar(caballosDTO, tamanioPista, caballoSeleccionadoId);
 
 
                 try {
@@ -394,7 +400,38 @@ public class MenuFrame extends JFrame {
                     e.printStackTrace();
                 }
             }
+            
+            int puesto = carreraCont.calcularPuesto(caballoSeleccionadoId);
+            String mensaje;
+            
+            if (puesto == 1) {
+            	mensaje = "Felicidades, tu caballo gano la carrera.";
+            } else {
+            	mensaje = "Tu caballo salio en "+puestoATexto(puesto)+" puesto.";
+            }
+            
+            
+            JOptionPane.showMessageDialog(
+        	    this,
+        	    mensaje,
+        	    "Carrera finalizada",
+        	    JOptionPane.INFORMATION_MESSAGE
+        	);
+            ventanaCarrera.setVisible(false);
+            this.setVisible(true);
+            
         }).start();
+    }
+    
+    private String puestoATexto(int puesto) {
+    	String txt = puesto+"";
+    	
+    	if (puesto == 1 || puesto == 3) txt+="ro";
+    	else if (puesto == 2) txt+="do";
+    	else txt+="to";
+    	
+    	return txt;
+    	
     }
 
 }
