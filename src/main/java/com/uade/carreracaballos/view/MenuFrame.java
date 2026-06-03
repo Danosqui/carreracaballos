@@ -158,7 +158,9 @@ public class MenuFrame extends JFrame {
 
     private void seleccionarJugador() {
         int filaSeleccionada = tablaJugadores.getSelectedRow();
-        if (filaSeleccionada == -1) return;
+        if (filaSeleccionada == -1) {
+            return;
+        }
 
         int id = Integer.parseInt(modeloTablaJugadores.getValueAt(filaSeleccionada, 0).toString());
         String nombre = modeloTablaJugadores.getValueAt(filaSeleccionada, 1).toString();
@@ -267,6 +269,7 @@ public class MenuFrame extends JFrame {
     }
 
     private void cargarCaballos() {
+
         modeloTablaCaballos.setRowCount(0);
         List<CaballoDTO> listaCaballos = caballoCont.listarCaballos();
 
@@ -285,7 +288,9 @@ public class MenuFrame extends JFrame {
 
     private void seleccionarCaballo() {
         int filaSeleccionada = tablaCaballos.getSelectedRow();
-        if (filaSeleccionada == -1) return;
+        if (filaSeleccionada == -1) {
+            return;
+        }
         
         JugadorDTO jugadorSeleccionado = jugadorCont.getJugadorSeleccionado();
         if (jugadorSeleccionado == null) {
@@ -295,7 +300,6 @@ public class MenuFrame extends JFrame {
 			    "Error",
 			    JOptionPane.ERROR_MESSAGE
 			);
-        	tablaCaballos.clearSelection();
         	
         	return;
         }
@@ -396,14 +400,13 @@ public class MenuFrame extends JFrame {
             
             int puesto = carreraCont.calcularPuesto(caballoSeleccionadoId);
             String mensaje;
-            jugadorCont.procesarPuntaje(puesto);
             
             if (puesto == 1) {
             	mensaje = "Felicidades, tu caballo gano la carrera.";
             } else {
             	mensaje = "Tu caballo salio en "+puestoATexto(puesto)+" puesto.";
             }
-            
+            jugadorCont.procesarPuntaje(puesto);
             
             JOptionPane.showMessageDialog(
         	    this,
@@ -412,10 +415,9 @@ public class MenuFrame extends JFrame {
         	    JOptionPane.INFORMATION_MESSAGE
         	);
             ventanaCarrera.setVisible(false);
-            cargarJugadores();
             this.setVisible(true);
-            
         }).start();
+        cargarJugadores();
     }
     
     private String puestoATexto(int puesto) {
