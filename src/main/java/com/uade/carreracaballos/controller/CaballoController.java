@@ -48,7 +48,9 @@ public class CaballoController {
 		return caballosDTO;
 	}
 
-	private CaballoDTO convertirADTO(Caballo c) {
+	
+	// no estoy seguro de que esto deba ser public, lo cambie par aque funcione manuframe
+	public CaballoDTO convertirADTO(Caballo c) {
 		CaballoDTO dto;
 		if (c instanceof CaballoVeloz) {
 			dto = new CaballoVelozDTO();

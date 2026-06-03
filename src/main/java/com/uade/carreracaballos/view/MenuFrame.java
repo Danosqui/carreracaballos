@@ -5,13 +5,14 @@ import com.uade.carreracaballos.controller.CaballoController;
 import com.uade.carreracaballos.controller.CarreraController;
 
 import com.uade.carreracaballos.model.AtributoCaballo;
-
+import com.uade.carreracaballos.model.Caballo;
 import com.uade.carreracaballos.dto.JugadorDTO;
 import com.uade.carreracaballos.dto.CaballoDTO;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MenuFrame extends JFrame {
@@ -350,7 +351,50 @@ public class MenuFrame extends JFrame {
             return;
         }
 
+
+        
+        carreraCont.crearCarrera(caballoSeleccionadoId, 500);
+        
+        VentanaCarrera ventanaCarrera = new VentanaCarrera();
+        javax.swing.SwingUtilities.invokeLater(() -> ventanaCarrera.setVisible(true));
+
         carreraCont.iniciarCarrera();
+
+        // El bucle de animación corre en un hilo aparte para no bloquear el
+        // Event Dispatch Thread; si corriera en el EDT la ventana nunca se pintaría.
+        new Thread(() -> {
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+
+            while (!carreraCont.carreraFinalizada()) {
+                carreraCont.avanzarInstante();
+                
+                // de aca hasta el proximo comentario esta implemnentado horrible, hay q refactor
+                List<Caballo> caballosCarrera = carreraCont.obtenerPosiciones();
+                
+                List<CaballoDTO> caballosDTO = new ArrayList<>();
+        		for (Caballo c : caballosCarrera) {
+        			caballosDTO.add(caballoCont.convertirADTO(c));
+        		}
+        		
+        		// fin 
+        		// los caballos no se deben levantar desde el service xq los intenta volver a cargar desde la base de datos y arracnan en 0.
+        		// Es necesario cargarlos desde carreraCont
+
+
+                ventanaCarrera.getPista().actualizar(caballosDTO, 500, caballoSeleccionadoId);
+
+
+                try {
+                    Thread.sleep(40);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }).start();
     }
 
 }
