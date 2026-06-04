@@ -57,6 +57,11 @@ public class CaballoController {
 	    return caballosDTO;
 	}
 	
+	public void eliminarCaballo(int id) {
+		Caballo caballo = caballoService.getCaballo(id);
+		caballoService.borrarCaballo(caballo);
+	}
+
 	// no estoy seguro de que esto deba ser public, lo cambie par aque funcione manuframe
 	public CaballoDTO convertirADTO(Caballo c) {
 		CaballoDTO dto;

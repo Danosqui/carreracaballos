@@ -62,7 +62,8 @@ public class CaballoDAO {
     	EntityManager em = JPAUtil.getInstance().crearEntityManager();
     	try {
     		em.getTransaction().begin();
-    		em.remove(caballo);
+    		Caballo managed = em.merge(caballo);
+    		em.remove(managed);
     		em.getTransaction().commit();
     	}
     	catch(RuntimeException e) {

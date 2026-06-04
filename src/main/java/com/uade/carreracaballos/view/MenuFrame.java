@@ -22,7 +22,9 @@ public class MenuFrame extends JFrame {
     private CaballoController caballoCont;
 
     private JButton btnCrearJugador;
+    private JButton btnEliminarJugador;
     private JButton btnCrearCaballo;
+    private JButton btnEliminarCaballo;
     private JButton btnIniciarCarrera;
     private JTable tablaJugadores, tablaCaballos;
     private DefaultTableModel modeloTablaJugadores, modeloTablaCaballos;
@@ -91,17 +93,46 @@ public class MenuFrame extends JFrame {
         mailJugSelec = new JLabel("-");
         panelSeleccionado.add(mailJugSelec);
 
-        JPanel panelAcciones = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JPanel panelAcciones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 3));
         btnCrearJugador = new JButton("Crear Jugador");
+        btnEliminarJugador = new JButton("Eliminar Jugador") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(getBackground());
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 12, 12);
+                g2.setColor(getForeground());
+                g2.setFont(getFont());
+                FontMetrics fm = g2.getFontMetrics();
+                int x = (getWidth() - fm.stringWidth(getText())) / 2;
+                int y = (getHeight() + fm.getAscent() - fm.getDescent()) / 2;
+                g2.drawString(getText(), x, y);
+                g2.dispose();
+            }
+        };
+        btnEliminarJugador.setEnabled(false);
+        btnEliminarJugador.setBackground(Color.GRAY);
+        btnEliminarJugador.setForeground(Color.BLACK);
+        btnEliminarJugador.setContentAreaFilled(false);
+        btnEliminarJugador.setBorderPainted(false);
+        btnEliminarJugador.setOpaque(false);
+        btnEliminarJugador.setFocusPainted(false);
+        btnEliminarJugador.setFont(btnEliminarJugador.getFont().deriveFont(11f));
+        btnEliminarJugador.setPreferredSize(new Dimension(130, 26));
+        btnEliminarJugador.setHorizontalAlignment(SwingConstants.CENTER);
+        btnEliminarJugador.setVerticalAlignment(SwingConstants.CENTER);
         panelAcciones.add(btnCrearJugador);
+        panelAcciones.add(btnEliminarJugador);
 
         panelInferior.add(panelSeleccionado);
         panelInferior.add(panelAcciones);
         panelJugador.add(panelInferior, BorderLayout.SOUTH);
         panelContenedor.add(panelJugador);
-        
+
         btnCrearJugador.addActionListener(e -> crearJugador());
-        tablaJugadores.getSelectionModel().addListSelectionListener(e->seleccionarJugador());
+        btnEliminarJugador.addActionListener(e -> eliminarJugador());
+        tablaJugadores.getSelectionModel().addListSelectionListener(e -> seleccionarJugador());
         
         cargarJugadores();
     }
@@ -155,9 +186,33 @@ public class MenuFrame extends JFrame {
         }
     }
 
+    private void eliminarJugador() {
+        int fila = tablaJugadores.getSelectedRow();
+        if (fila == -1) return;
+        int id = Integer.parseInt(modeloTablaJugadores.getValueAt(fila, 0).toString());
+        String nombre = modeloTablaJugadores.getValueAt(fila, 1).toString();
+
+        int confirm = JOptionPane.showConfirmDialog(
+            this, "¿Eliminar al jugador '" + nombre + "'?", "Confirmar", JOptionPane.YES_NO_OPTION);
+        if (confirm != JOptionPane.YES_OPTION) return;
+
+        jugadorCont.eliminarJugador(id);
+        btnEliminarJugador.setEnabled(false);
+        btnEliminarJugador.setBackground(Color.GRAY);
+        btnEliminarJugador.setForeground(Color.BLACK);
+        nombreJugSelec.setText("-");
+        mailJugSelec.setText("-");
+        cargarJugadores();
+    }
+
     private void seleccionarJugador() {
         int filaSeleccionada = tablaJugadores.getSelectedRow();
-        if (filaSeleccionada == -1) return;
+        if (filaSeleccionada == -1) {
+            btnEliminarJugador.setEnabled(false);
+            btnEliminarJugador.setBackground(Color.GRAY);
+            btnEliminarJugador.setForeground(Color.BLACK);
+            return;
+        }
 
         int id = Integer.parseInt(modeloTablaJugadores.getValueAt(filaSeleccionada, 0).toString());
         String nombre = modeloTablaJugadores.getValueAt(filaSeleccionada, 1).toString();
@@ -168,6 +223,9 @@ public class MenuFrame extends JFrame {
             jugadorCont.seleccionarJugador(id);
             nombreJugSelec.setText(nombre);
             mailJugSelec.setText(mail);
+            btnEliminarJugador.setEnabled(true);
+            btnEliminarJugador.setBackground(Color.RED);
+            btnEliminarJugador.setForeground(Color.WHITE);
 
         } catch (Exception error) {
 
@@ -213,9 +271,37 @@ public class MenuFrame extends JFrame {
         velocidadCabSelec = new JLabel("-");
         panelSeleccionado.add(velocidadCabSelec);
 
-        JPanel panelAcciones = new JPanel(new FlowLayout(FlowLayout.RIGHT));
+        JPanel panelAcciones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 3));
         btnCrearCaballo = new JButton("Crear Caballo");
+        btnEliminarCaballo = new JButton("Eliminar Caballo") {
+            @Override
+            protected void paintComponent(Graphics g) {
+                Graphics2D g2 = (Graphics2D) g.create();
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(getBackground());
+                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 12, 12);
+                g2.setColor(getForeground());
+                g2.setFont(getFont());
+                FontMetrics fm = g2.getFontMetrics();
+                int x = (getWidth() - fm.stringWidth(getText())) / 2;
+                int y = (getHeight() + fm.getAscent() - fm.getDescent()) / 2;
+                g2.drawString(getText(), x, y);
+                g2.dispose();
+            }
+        };
+        btnEliminarCaballo.setEnabled(false);
+        btnEliminarCaballo.setBackground(Color.GRAY);
+        btnEliminarCaballo.setForeground(Color.BLACK);
+        btnEliminarCaballo.setContentAreaFilled(false);
+        btnEliminarCaballo.setBorderPainted(false);
+        btnEliminarCaballo.setOpaque(false);
+        btnEliminarCaballo.setFocusPainted(false);
+        btnEliminarCaballo.setFont(btnEliminarCaballo.getFont().deriveFont(11f));
+        btnEliminarCaballo.setPreferredSize(new Dimension(130, 26));
+        btnEliminarCaballo.setHorizontalAlignment(SwingConstants.CENTER);
+        btnEliminarCaballo.setVerticalAlignment(SwingConstants.CENTER);
         panelAcciones.add(btnCrearCaballo);
+        panelAcciones.add(btnEliminarCaballo);
 
         panelInferior.add(panelSeleccionado);
         panelInferior.add(panelAcciones);
@@ -223,6 +309,7 @@ public class MenuFrame extends JFrame {
         panelContenedor.add(panelCaballos);
 
         btnCrearCaballo.addActionListener(e -> crearCaballo());
+        btnEliminarCaballo.addActionListener(e -> eliminarCaballo());
         tablaCaballos.getSelectionModel().addListSelectionListener(e -> seleccionarCaballo());
 
         cargarCaballos();
@@ -272,9 +359,31 @@ public class MenuFrame extends JFrame {
         }
     }
 
+    private void eliminarCaballo() {
+        int fila = tablaCaballos.getSelectedRow();
+        if (fila == -1) return;
+        int id = Integer.parseInt(modeloTablaCaballos.getValueAt(fila, 0).toString());
+        String nombre = modeloTablaCaballos.getValueAt(fila, 1).toString();
+
+        int confirm = JOptionPane.showConfirmDialog(
+            this, "¿Eliminar el caballo '" + nombre + "'?", "Confirmar", JOptionPane.YES_NO_OPTION);
+        if (confirm != JOptionPane.YES_OPTION) return;
+
+        caballoCont.eliminarCaballo(id);
+        btnEliminarCaballo.setEnabled(false);
+        btnEliminarCaballo.setBackground(Color.GRAY);
+        btnEliminarCaballo.setForeground(Color.BLACK);
+        cargarCaballos();
+    }
+
     private void seleccionarCaballo() {
         int filaSeleccionada = tablaCaballos.getSelectedRow();
-        if (filaSeleccionada == -1) return;
+        if (filaSeleccionada == -1) {
+            btnEliminarCaballo.setEnabled(false);
+            btnEliminarCaballo.setBackground(Color.GRAY);
+            btnEliminarCaballo.setForeground(Color.BLACK);
+            return;
+        }
         
         JugadorDTO jugadorSeleccionado = jugadorCont.getJugadorSeleccionado();
         if (jugadorSeleccionado == null) {
@@ -293,10 +402,14 @@ public class MenuFrame extends JFrame {
         String nombre = modeloTablaCaballos.getValueAt(filaSeleccionada, 1).toString();
         String velocidad = modeloTablaCaballos.getValueAt(filaSeleccionada, 2).toString();
         int id = Integer.parseInt(modeloTablaCaballos.getValueAt(filaSeleccionada, 0).toString());
-        
+
         nombreCabSelec.setText(nombre);
         velocidadCabSelec.setText(velocidad);
-        
+
+        btnEliminarCaballo.setEnabled(true);
+        btnEliminarCaballo.setBackground(Color.RED);
+        btnEliminarCaballo.setForeground(Color.WHITE);
+
         jugadorCont.seleccionarCaballo(id);
     }
 

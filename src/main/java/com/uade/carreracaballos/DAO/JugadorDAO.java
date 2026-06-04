@@ -88,7 +88,8 @@ public class JugadorDAO {
     	EntityManager em = JPAUtil.getInstance().crearEntityManager();
     	try {
     		em.getTransaction().begin();
-    		em.remove(jugador);
+    		Jugador managed = em.merge(jugador);
+    		em.remove(managed);
     		em.getTransaction().commit();
     	}
     	catch(RuntimeException e) {

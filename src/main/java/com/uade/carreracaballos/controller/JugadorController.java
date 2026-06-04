@@ -64,6 +64,13 @@ public class JugadorController {
 		return dtos;
 	}
 
+	public void eliminarJugador(int id) {
+		jugadorService.eliminarJugador(id);
+		if (jugadorSeleccionado != null && jugadorSeleccionado.getId() == id) {
+			jugadorSeleccionado = null;
+		}
+	}
+
 	public void procesarPuntaje(int posicionJugador) {
 		int puntaje = 10;
 		if (posicionJugador == 1) puntaje = 30;

@@ -41,6 +41,11 @@ public class JugadorService {
     public void actualizarJugador(Jugador jugador) {
         jugadorDAO.actualizarJugador(jugador);
     }
+
+    public void eliminarJugador(int id) {
+        Jugador jugador = jugadorDAO.getJugadorById(id);
+        jugadorDAO.borrarJugador(jugador);
+    }
     
     
 }
