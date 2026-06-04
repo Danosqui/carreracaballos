@@ -5,7 +5,6 @@ import com.uade.carreracaballos.controller.CaballoController;
 import com.uade.carreracaballos.controller.CarreraController;
 
 import com.uade.carreracaballos.model.AtributoCaballo;
-import com.uade.carreracaballos.model.Caballo;
 import com.uade.carreracaballos.dto.JugadorDTO;
 import com.uade.carreracaballos.dto.CaballoDTO;
 
@@ -499,8 +498,8 @@ public class MenuFrame extends JFrame {
                 this.setVisible(true);
         	} else {
                 carreraCont.avanzarInstante();
-                List<CaballoDTO> caballosDTO = caballoCont.convertirListaADTO(carreraCont.obtenerPosiciones());
-                ventanaCarrera.getPista().actualizar(caballosDTO, tamanioPista, caballoSeleccionadoId);
+                List<CaballoDTO> posis = carreraCont.obtenerPosiciones();
+                ventanaCarrera.getPista().actualizar(posis, tamanioPista, caballoSeleccionadoId);
         	}
         });
         timer.start();

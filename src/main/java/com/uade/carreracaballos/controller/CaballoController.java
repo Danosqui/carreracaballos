@@ -47,15 +47,7 @@ public class CaballoController {
 		}
 		return caballosDTO;
 	}
-	public List<CaballoDTO> convertirListaADTO(List<Caballo> caballos) {
-	    List<CaballoDTO> caballosDTO = new ArrayList<>();
 
-	    for (Caballo caballo : caballos) {
-	        caballosDTO.add(convertirADTO(caballo));
-	    }
-
-	    return caballosDTO;
-	}
 	
 	public void eliminarCaballo(int id) {
 		Caballo caballo = caballoService.getCaballo(id);

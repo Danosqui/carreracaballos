@@ -1,8 +1,15 @@
 package com.uade.carreracaballos.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import com.uade.carreracaballos.dto.CaballoDTO;
+import com.uade.carreracaballos.dto.CaballoEquilibradoDTO;
+import com.uade.carreracaballos.dto.CaballoResistenteDTO;
+import com.uade.carreracaballos.dto.CaballoVelozDTO;
 import com.uade.carreracaballos.model.Caballo;
+import com.uade.carreracaballos.model.CaballoResistente;
+import com.uade.carreracaballos.model.CaballoVeloz;
 import com.uade.carreracaballos.model.Carrera;
 import com.uade.carreracaballos.model.EstadoCarrera;
 import com.uade.carreracaballos.service.CaballoService;
@@ -47,13 +54,37 @@ public class CarreraController {
         return true;
     }
 
-    public List<Caballo> obtenerPosiciones() {
+/*    public List<Caballo> obtenerPosiciones() {
 
         if (carrera == null) {
             return null;
         }
 
         return carrera.obtenerPosiciones();
+    }*/
+    
+    public List<CaballoDTO> obtenerPosiciones(){
+    	if (carrera==null) return null;
+    	List<Caballo> posiciones = carrera.obtenerPosiciones();
+    	List<CaballoDTO> posicionesDTO = new ArrayList<CaballoDTO>();
+    	for (Caballo c : posiciones) {
+    		CaballoDTO dto;
+    		if (c instanceof CaballoVeloz) {
+    			dto = new CaballoVelozDTO();
+    		} else if (c instanceof CaballoResistente) {
+    			dto = new CaballoResistenteDTO();
+    		} else {
+    			dto = new CaballoEquilibradoDTO();
+    		}
+    		dto.setId(c.getId());
+    		dto.setEnergia(100);
+    		dto.setNombre(c.getNombre());
+    		dto.setResistencia(c.getResistencia());
+    		dto.setVelocidad(c.getVelocidad());
+    		dto.setDistanciaRecorrida(c.getDistanciaRecorrida());
+    		posicionesDTO.add(dto);
+    	}
+    	return posicionesDTO;
     }
 
     public int calcularPuesto(int idCaballo) {
