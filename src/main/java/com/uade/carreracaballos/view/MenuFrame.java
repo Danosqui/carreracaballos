@@ -109,33 +109,32 @@ public class MenuFrame extends JFrame {
    
     
     private void crearJugador() {
-    	String nombre = JOptionPane.showInputDialog(this, "Ingresá el nombre del jugador:");
+        JTextField campoNombre = new JTextField();
+        JTextField campoMail   = new JTextField();
+        Object[] campos = {
+            "Nombre:", campoNombre,
+            "Mail:",   campoMail
+        };
 
-    	if (nombre == null || nombre.isBlank()) {
-    		JOptionPane.showMessageDialog(
-			    this,
-			    "Ingresaste un nombre invalido.",
-			    "Error",
-			    JOptionPane.ERROR_MESSAGE
-			);
-    	    return;
-    	}
-    	
-    	String mail = JOptionPane.showInputDialog(this, "Ingresá el email del jugador:");
+        int resultado = JOptionPane.showConfirmDialog(
+            this, campos, "Crear Jugador", JOptionPane.OK_CANCEL_OPTION);
 
-    	if (mail == null || mail.isBlank()) {
-    		JOptionPane.showMessageDialog(
-			    this,
-			    "Ingresaste un mail invalido.",
-			    "Error",
-			    JOptionPane.ERROR_MESSAGE
-			);
-    		
-    		return;
-    	}
-    	
-    	jugadorCont.nuevoJugador(nombre, mail);
-    	cargarJugadores();
+        if (resultado != JOptionPane.OK_OPTION) return;
+
+        String nombre = campoNombre.getText().trim();
+        String mail   = campoMail.getText().trim();
+
+        if (nombre.isBlank()) {
+            JOptionPane.showMessageDialog(this, "Ingresaste un nombre invalido.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (mail.isBlank()) {
+            JOptionPane.showMessageDialog(this, "Ingresaste un mail invalido.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        jugadorCont.nuevoJugador(nombre, mail);
+        cargarJugadores();
         
     }
 
@@ -179,6 +178,9 @@ public class MenuFrame extends JFrame {
     private void crearPanelCaballos() {
         JPanel panelCaballos = new JPanel(new BorderLayout(10, 10));
         panelCaballos.setBorder(BorderFactory.createTitledBorder("Caballo"));
+        JTextField campoNombre = new JTextField();
+        JTextField campoMail   = new JTextField();
+
 
         modeloTablaCaballos = new DefaultTableModel() {
             @Override
@@ -227,42 +229,28 @@ public class MenuFrame extends JFrame {
     }
 
     private void crearCaballo() {
-    	String nombre = JOptionPane.showInputDialog(this, "Ingresá el nombre del caballo:");
+        JTextField campoNombre = new JTextField();
+        JComboBox<AtributoCaballo> comboTipo = new JComboBox<>(AtributoCaballo.values());
 
-    	if (nombre == null || nombre.isBlank()) {
-    		JOptionPane.showMessageDialog(
-				    this,
-				    "Ingresaste un nombre invalido.",
-				    "Error",
-				    JOptionPane.ERROR_MESSAGE
-				);
-    	    return;
-    	}
+        Object[] campos = {
+            "Nombre:", campoNombre,
+            "Tipo:",   comboTipo
+        };
 
-    	AtributoCaballo[] opciones = AtributoCaballo.values();
-    	AtributoCaballo atributo = (AtributoCaballo) JOptionPane.showInputDialog(
-				this,
-				"Elegí el tipo de caballo:",
-				"Tipo",
-				JOptionPane.QUESTION_MESSAGE,
-				null,
-				opciones,
-				opciones[0]
-			);
+        int resultado = JOptionPane.showConfirmDialog(
+            this, campos, "Crear Caballo", JOptionPane.OK_CANCEL_OPTION);
 
-    	if (atributo == null) {
-    		JOptionPane.showMessageDialog(
-				    this,
-				    "Tipo de caballo invalido.",
-				    "Error",
-				    JOptionPane.ERROR_MESSAGE
-				);
+        if (resultado != JOptionPane.OK_OPTION) return;
 
-    		return;
-    	}
+        String nombre = campoNombre.getText().trim();
+        if (nombre.isBlank()) {
+            JOptionPane.showMessageDialog(this, "Ingresaste un nombre invalido.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
 
-    	caballoCont.crearCaballo(atributo, nombre);
-    	cargarCaballos();
+        AtributoCaballo atributo = (AtributoCaballo) comboTipo.getSelectedItem();
+        caballoCont.crearCaballo(atributo, nombre);
+        cargarCaballos();
 
     }
 

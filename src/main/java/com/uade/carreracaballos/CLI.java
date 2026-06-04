@@ -325,7 +325,7 @@ public class CLI {
         Caballo miCaballo = pool.get(indiceSeleccionado);
 
         // Toda la mecanica de la carrera ocurre del controller para abajo.
-        carreraController.crearCarrera(pool, longitud);
+        carreraController.crearCarrera(1, longitud);
         carreraController.iniciarCarrera();
 
         System.out.println("\n=== LARGAN! Pista de " + longitud + " metros ===\n");
@@ -366,7 +366,7 @@ public class CLI {
     /** El puesto y el puntaje los resuelven los controllers; aca solo se muestra el resultado. */
     private void finalizarCarrera(Caballo miCaballo, int longitud) {
         // El puesto de cada caballo lo determina el CarreraController (1 = ganador).
-        int puestoJugador = carreraController.calcularPuesto(miCaballo);
+        int puestoJugador = carreraController.calcularPuesto(miCaballo.getId());
 
         // Orden de la grilla solo para presentacion (el modelo ya no ordena la lista).
         List<Caballo> orden = new ArrayList<>(carreraController.obtenerPosiciones());

@@ -25,7 +25,7 @@ public class JugadorController {
 	}
 
 	public void nuevoJugador(String nombre, String mail) {
-		Jugador jugador = new Jugador(nombre, mail, 0);
+		Jugador jugador = new Jugador(nombre, mail);
 		jugadorService.guardarJugador(jugador);
 	}
 

@@ -35,7 +35,14 @@ public class Jugador {
 		this.puntajeAcumulado = puntaje;
 		this.caballoSeleccionado = null;
 	}
-	
+	public Jugador(String nombre, String mail) {
+		this.nombre = nombre;
+		this.mail = mail;
+		this.puntajeAcumulado = 0;
+		this.caballoSeleccionado = null;
+	}
+
+
 	public void sumarPuntaje(int puntaje) {
 		puntajeAcumulado += puntaje;
 	}
