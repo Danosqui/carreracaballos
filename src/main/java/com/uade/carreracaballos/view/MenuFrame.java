@@ -166,7 +166,10 @@ public class MenuFrame extends JFrame {
 
         jugadorCont.nuevoJugador(nombre, mail);
         cargarJugadores();
-        
+        //se selecciona el jugador q acabas de crear
+        int ultimaRow= tablaJugadores.getRowCount() -1;
+        tablaJugadores.setRowSelectionInterval(ultimaRow, ultimaRow);
+        seleccionarJugador();
     }
 
     private void cargarJugadores() {
@@ -226,6 +229,9 @@ public class MenuFrame extends JFrame {
             btnEliminarJugador.setEnabled(true);
             btnEliminarJugador.setBackground(Color.RED);
             btnEliminarJugador.setForeground(Color.WHITE);
+            if (tablaCaballos.getSelectedRow()!=-1) {
+            	seleccionarCaballo();
+            }
 
         } catch (Exception error) {
 
@@ -251,7 +257,7 @@ public class MenuFrame extends JFrame {
         modeloTablaCaballos.addColumn("Nombre");
         modeloTablaCaballos.addColumn("Velocidad");
         modeloTablaCaballos.addColumn("Resistencia");
-        modeloTablaCaballos.addColumn("Energía");
+        //modeloTablaCaballos.addColumn("Energía");
 
         tablaCaballos = new JTable(modeloTablaCaballos);
         tablaCaballos.setPreferredScrollableViewportSize(new Dimension(450, 120));
@@ -351,8 +357,7 @@ public class MenuFrame extends JFrame {
             		caballo.getId(),
                     caballo.getNombre(),
                     caballo.getVelocidad(),
-                    caballo.getResistencia(),
-                    caballo.getEnergia()
+                    caballo.getResistencia()
             };
 
             modeloTablaCaballos.addRow(fila);
@@ -374,6 +379,7 @@ public class MenuFrame extends JFrame {
         btnEliminarCaballo.setBackground(Color.GRAY);
         btnEliminarCaballo.setForeground(Color.BLACK);
         cargarCaballos();
+        seleccionarCaballo();
     }
 
     private void seleccionarCaballo() {
@@ -382,6 +388,11 @@ public class MenuFrame extends JFrame {
             btnEliminarCaballo.setEnabled(false);
             btnEliminarCaballo.setBackground(Color.GRAY);
             btnEliminarCaballo.setForeground(Color.BLACK);
+            
+            jugadorCont.seleccionarCaballo(-1);
+            nombreCabSelec.setText("-");
+            velocidadCabSelec.setText("-");
+
             return;
         }
         

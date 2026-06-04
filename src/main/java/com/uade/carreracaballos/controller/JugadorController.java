@@ -40,19 +40,24 @@ public class JugadorController {
 		this.jugadorSeleccionado = jugador;
 	}
 
-	public void seleccionarCaballo(Caballo caballo) {
+	/*public void seleccionarCaballo(Caballo caballo) {
 		// hay que hacer que el caballo se reciba por id, y que el caballo service devuelva el caballo partiendo de esa id.
 		// dantenota: no se como hacer, porque segun claude los controllers deberian hablar entre si, y segun gemini los service severian hablar entre si
 		if (jugadorSeleccionado == null)
 			throw new RuntimeException("Error: no se seleccionó un jugador");
 		jugadorSeleccionado.seleccionarCaballo(caballo);
-	}
+	}*/
 
 	public void seleccionarCaballo(int id) { // 
 		if (jugadorSeleccionado == null)
 			throw new RuntimeException("Error: no se seleccionó un jugador");
-		Caballo caballo = caballoService.getCaballo(id);
-		jugadorSeleccionado.seleccionarCaballo(caballo);
+		if (id ==-1) {
+			jugadorSeleccionado.seleccionarCaballo(null);
+		}
+		else {
+			Caballo caballo = caballoService.getCaballo(id);
+			jugadorSeleccionado.seleccionarCaballo(caballo);
+		}
 				
 	}
 
