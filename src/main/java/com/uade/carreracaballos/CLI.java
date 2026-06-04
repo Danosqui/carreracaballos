@@ -231,7 +231,7 @@ public class CLI {
             }
             indiceSeleccionado = idx;
             if (hayJugador) {
-                jugadorController.seleccionarCaballo(pool.get(idx));
+                //jugadorController.seleccionarCaballo(pool.get().getId());
             }
             System.out.println(">> Elegiste a " + pool.get(idx).getNombre()
                     + ". El resto correran de forma automatica.\n");
@@ -264,7 +264,7 @@ public class CLI {
         pool = poolDesdeDB();
         indiceSeleccionado = pool.size() - 1;
         if (hayJugador) {
-            jugadorController.seleccionarCaballo(pool.get(indiceSeleccionado));
+            jugadorController.seleccionarCaballo(pool.get(indiceSeleccionado).getId());
         }
         System.out.println(">> Caballo '" + nombre + "' creado y seleccionado.\n");
     }
@@ -309,7 +309,7 @@ public class CLI {
 
         // Aseguramos que el jugador activo tenga asociado el caballo elegido (cubre el caso
         // en que se eligio el caballo antes que el jugador).
-        jugadorController.seleccionarCaballo(pool.get(indiceSeleccionado));
+        jugadorController.seleccionarCaballo(pool.get(indiceSeleccionado).getId());
 
         int longitud = leerEntero("Longitud de la pista (metros, ej. 200): ");
         if (longitud <= 0) {

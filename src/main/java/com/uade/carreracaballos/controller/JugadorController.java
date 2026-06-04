@@ -78,8 +78,8 @@ public class JugadorController {
 
 	public void procesarPuntaje(int posicionJugador) {
 		int puntaje = 10;
-		if (posicionJugador == 1) puntaje = 30;
-		else if (posicionJugador == 2) puntaje = 20;
+		if (posicionJugador == 1) puntaje = 100;
+		else if (posicionJugador == 2) puntaje = 50;
 
 		jugadorSeleccionado.sumarPuntaje(puntaje);
 		jugadorService.actualizarJugador(jugadorSeleccionado);

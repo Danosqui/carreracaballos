@@ -356,8 +356,8 @@ public class MenuFrame extends JFrame {
             Object[] fila = {
             		caballo.getId(),
                     caballo.getNombre(),
-                    caballo.getVelocidad(),
-                    caballo.getResistencia()
+                    String.format("%.2f", caballo.getVelocidad()),
+                    String.format("%.2f", caballo.getResistencia())
             };
 
             modeloTablaCaballos.addRow(fila);
