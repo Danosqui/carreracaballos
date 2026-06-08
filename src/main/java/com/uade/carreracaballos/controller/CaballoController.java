@@ -22,8 +22,9 @@ public class CaballoController {
 		this.caballoService = new CaballoService();
 	}
 
-	public void crearCaballo(AtributoCaballo atributo, String nombre) {
+	public void crearCaballo(String atributoString, String nombre) {
 		Caballo nuevoCaballo;
+		AtributoCaballo atributo = AtributoCaballo.valueOf(atributoString);
 		switch (atributo) {
 			case EQUILIBRADO:
 				nuevoCaballo = new CaballoEquilibrado(nombre);
@@ -53,9 +54,18 @@ public class CaballoController {
 		Caballo caballo = caballoService.getCaballo(id);
 		caballoService.borrarCaballo(caballo);
 	}
+	
+	public String[] listarAtributosCaballo(){
+		AtributoCaballo[] atributos = AtributoCaballo.values();
+		List<String> atributosString = new ArrayList<String>();
+		for (AtributoCaballo a : atributos) {
+			atributosString.add(a.toString());
+		}
+		return atributosString.toArray(new String[0]);
+	}
 
 	// no estoy seguro de que esto deba ser public, lo cambie par aque funcione manuframe
-	public CaballoDTO convertirADTO(Caballo c) {
+	private CaballoDTO convertirADTO(Caballo c) {
 		CaballoDTO dto;
 		if (c instanceof CaballoVeloz) {
 			dto = new CaballoVelozDTO();

@@ -322,7 +322,9 @@ public class MenuFrame extends JFrame {
 
     private void crearCaballo() {
         JTextField campoNombre = new JTextField();
-        JComboBox<AtributoCaballo> comboTipo = new JComboBox<>(AtributoCaballo.values());
+        
+        JComboBox<String> comboTipo = new JComboBox<>(caballoCont.listarAtributosCaballo());
+//        JComboBox<AtributoCaballo> comboTipo = new JComboBox<>(AtributoCaballo.values());
 
         Object[] campos = {
             "Nombre:", campoNombre,
@@ -340,7 +342,7 @@ public class MenuFrame extends JFrame {
             return;
         }
 
-        AtributoCaballo atributo = (AtributoCaballo) comboTipo.getSelectedItem();
+        String atributo = (String) comboTipo.getSelectedItem();
         caballoCont.crearCaballo(atributo, nombre);
         cargarCaballos();
 
