@@ -28,7 +28,7 @@ public abstract class Caballo {
     protected double energia;
 	@Column(nullable=false)
     protected double resistencia;
-	@Column(nullable=false)
+	@Transient
     protected double distanciaRecorrida;
 
     protected static final double K = 10.0;
