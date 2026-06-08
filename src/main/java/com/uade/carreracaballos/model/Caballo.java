@@ -9,6 +9,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Inheritance;
 import jakarta.persistence.InheritanceType;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 
 @Entity
 @Table(name = "caballo")
@@ -23,7 +24,7 @@ public abstract class Caballo {
     protected String nombre;
 	@Column(nullable=false)
     protected double velocidad;
-	@Column(nullable=false)
+	@Transient
     protected double energia;
 	@Column(nullable=false)
     protected double resistencia;
