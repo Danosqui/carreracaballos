@@ -11,7 +11,7 @@ import jakarta.persistence.Table;
 @DiscriminatorColumn(name="tipo_caballo")
 public class CaballoResistente extends Caballo {
 	protected CaballoResistente() {
-    	//idem padre
+		this.energia=100;
     }
     public CaballoResistente(String nombre) {
         super(nombre);
@@ -29,5 +29,6 @@ public class CaballoResistente extends Caballo {
         distanciaRecorrida += avance;
         double desgaste = (100.0 - resistencia) / K;
         energia = Math.max(resistencia, energia - desgaste);
+
     }
 }

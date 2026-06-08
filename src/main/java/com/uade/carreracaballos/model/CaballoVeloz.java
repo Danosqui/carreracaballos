@@ -12,7 +12,7 @@ import jakarta.persistence.Table;
 @DiscriminatorColumn(name="tipo_caballo")
 public class CaballoVeloz extends Caballo {
 	protected CaballoVeloz() {
-    	//idem padre
+    	this.energia=100;
     }
     public CaballoVeloz(String nombre) {
         super(nombre);
