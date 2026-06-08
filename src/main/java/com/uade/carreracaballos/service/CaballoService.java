@@ -13,9 +13,9 @@ public class CaballoService {
         this.caballoDAO = new CaballoDAO();
     }
 
-    public Caballo crearCaballo(Caballo caballo) {
+    public void crearCaballo(Caballo caballo) {
         caballoDAO.crearCaballo(caballo);
-        return caballo;
+
     }
     
     public Caballo getCaballo(int id) {

@@ -39,19 +39,10 @@ public class CarreraController {
         }
     }
 
-    public boolean avanzarInstante() {
-
-        if (carrera == null) {
-            return false;
-        }
-
-        if (carrera.getEstado() == EstadoCarrera.FINALIZADA) {
-            return false;
-        }
+    public void avanzarInstante() {
 
         carrera.avanzarCorredores();
 
-        return true;
     }
 
 /*    public List<Caballo> obtenerPosiciones() {

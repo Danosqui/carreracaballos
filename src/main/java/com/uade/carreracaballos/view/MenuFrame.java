@@ -476,7 +476,7 @@ public class MenuFrame extends JFrame {
         javax.swing.SwingUtilities.invokeLater(() -> ventanaCarrera.setVisible(true));
         this.setVisible(false);
 
-        carreraCont.iniciarCarrera();
+        carreraCont.iniciarCarrera(); //realmente hace falta esto? lo unico q hace es estadocarrera=en curso
 
         Timer timer = new Timer(32, null);
 
