@@ -107,12 +107,10 @@ public class MenuFrame extends JFrame {
 
         btnCrearJugador.addActionListener(e -> crearJugador());
         btnEliminarJugador.addActionListener(e -> eliminarJugador());
-        tablaJugadores.getSelectionModel().addListSelectionListener(e -> seleccionarJugador());
+        tablaJugadores.getSelectionModel().addListSelectionListener(e -> procesarSeleccionJugador());
         
         cargarJugadores();
     }
-    
-   
     
     private void crearJugador() {
         JTextField campoNombre = new JTextField();
@@ -144,7 +142,7 @@ public class MenuFrame extends JFrame {
         //se selecciona el jugador q acabas de crear
         int ultimaRow= tablaJugadores.getRowCount() -1;
         tablaJugadores.setRowSelectionInterval(ultimaRow, ultimaRow);
-        seleccionarJugador();
+        procesarSeleccionJugador();
     }
 
     private void cargarJugadores() {
@@ -179,12 +177,13 @@ public class MenuFrame extends JFrame {
         nombreJugSelec.setText("-");
         mailJugSelec.setText("-");
         cargarJugadores();
+        cargarCaballos();
     }
 
-    private void seleccionarJugador() {
+    private void procesarSeleccionJugador() {
         int filaSeleccionada = tablaJugadores.getSelectedRow();
         if (filaSeleccionada == -1) {
-            btnEliminarJugador.setEnabled(false);
+            // NO METER CODIGO ACA.
             return;
         }
 
@@ -199,7 +198,7 @@ public class MenuFrame extends JFrame {
             mailJugSelec.setText(mail);
             btnEliminarJugador.setEnabled(true);
             if (tablaCaballos.getSelectedRow()!=-1) {
-            	seleccionarCaballo();
+            	procesarSeleccionCaballo();
             }
 
         } catch (Exception error) {
@@ -211,9 +210,6 @@ public class MenuFrame extends JFrame {
     private void crearPanelCaballos() {
         JPanel panelCaballos = new JPanel(new BorderLayout(10, 10));
         panelCaballos.setBorder(BorderFactory.createTitledBorder("Caballo"));
-        JTextField campoNombre = new JTextField();
-        JTextField campoMail   = new JTextField();
-
 
         modeloTablaCaballos = new DefaultTableModel() {
             @Override
@@ -260,7 +256,7 @@ public class MenuFrame extends JFrame {
 
         btnCrearCaballo.addActionListener(e -> crearCaballo());
         btnEliminarCaballo.addActionListener(e -> eliminarCaballo());
-        tablaCaballos.getSelectionModel().addListSelectionListener(e -> seleccionarCaballo());
+        tablaCaballos.getSelectionModel().addListSelectionListener(e -> procesarSeleccionCaballo());
 
         cargarCaballos();
     }
@@ -269,7 +265,6 @@ public class MenuFrame extends JFrame {
         JTextField campoNombre = new JTextField();
         
         JComboBox<String> comboTipo = new JComboBox<>(caballoCont.listarAtributosCaballo());
-//        JComboBox<AtributoCaballo> comboTipo = new JComboBox<>(AtributoCaballo.values());
 
         Object[] campos = {
             "Nombre:", campoNombre,
@@ -290,7 +285,20 @@ public class MenuFrame extends JFrame {
         String atributo = (String) comboTipo.getSelectedItem();
         caballoCont.crearCaballo(atributo, nombre);
         cargarCaballos();
-
+      
+        JugadorDTO jSeleccionado = jugadorCont.getJugadorSeleccionado();
+        if (jSeleccionado != null) {
+        	int caballoSeleccionado = jSeleccionado.getCaballoSeleccionadoId();
+        	if (caballoSeleccionado != -1) {
+        		for (int i = 0; i < tablaCaballos.getRowCount(); i++) {
+        			int idFila = Integer.parseInt(modeloTablaCaballos.getValueAt(i, 0).toString());
+        			if (idFila == caballoSeleccionado) {
+        				tablaCaballos.setRowSelectionInterval(i, i);
+        			}
+        	        
+        		}
+        	}
+        }
     }
 
     private void cargarCaballos() {
@@ -300,10 +308,10 @@ public class MenuFrame extends JFrame {
 
         for (CaballoDTO caballo : listaCaballos) {
             Object[] fila = {
-            		caballo.getId(),
-                    caballo.getNombre(),
-                    String.format("%.2f", caballo.getVelocidad()),
-                    String.format("%.2f", caballo.getResistencia())
+                caballo.getId(),
+                caballo.getNombre(),
+                String.format("%.2f", caballo.getVelocidad()),
+                String.format("%.2f", caballo.getResistencia())
             };
 
             modeloTablaCaballos.addRow(fila);
@@ -321,22 +329,18 @@ public class MenuFrame extends JFrame {
         if (confirm != JOptionPane.YES_OPTION) return;
 
         caballoCont.eliminarCaballo(id);
-        btnEliminarCaballo.setEnabled(false);
+        jugadorCont.seleccionarCaballo(-1);
+		btnEliminarCaballo.setEnabled(false);
+		nombreCabSelec.setText("-");
+		velocidadCabSelec.setText("-");
 
         cargarCaballos();
-        seleccionarCaballo();
     }
 
-    private void seleccionarCaballo() {
+    private void procesarSeleccionCaballo() {
         int filaSeleccionada = tablaCaballos.getSelectedRow();
         if (filaSeleccionada == -1) {
-            btnEliminarCaballo.setEnabled(false);
-
-            
-            jugadorCont.seleccionarCaballo(-1);
-            nombreCabSelec.setText("-");
-            velocidadCabSelec.setText("-");
-
+        	// NO METER CODIGO ACA.
             return;
         }
         

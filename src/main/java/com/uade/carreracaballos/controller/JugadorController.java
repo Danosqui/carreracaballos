@@ -30,14 +30,8 @@ public class JugadorController {
 	}
 
 	public void seleccionarJugador(int id) {
-		
-		this.jugadorSeleccionado = jugadorService.getJugador(id);
-	}
-
-	public void seleccionarJugador(String nombre, String mail) {
-		Jugador jugador = jugadorService.buscarJugador(nombre, mail);
-		if (jugador == null) throw new RuntimeException("Jugador no encontrado: " + nombre);
-		this.jugadorSeleccionado = jugador;
+		if (id == -1) this.jugadorSeleccionado = null;
+		else this.jugadorSeleccionado = jugadorService.getJugador(id);
 	}
 
 	public void seleccionarCaballo(int id) { // 
@@ -64,7 +58,7 @@ public class JugadorController {
 	public void eliminarJugador(int id) {
 		jugadorService.eliminarJugador(id);
 		if (jugadorSeleccionado != null && jugadorSeleccionado.getId() == id) {
-			jugadorSeleccionado = null;
+			this.seleccionarJugador(-1);
 		}
 	}
 
