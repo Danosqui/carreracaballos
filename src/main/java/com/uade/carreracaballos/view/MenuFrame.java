@@ -94,33 +94,9 @@ public class MenuFrame extends JFrame {
 
         JPanel panelAcciones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 3));
         btnCrearJugador = new JButton("Crear Jugador");
-        btnEliminarJugador = new JButton("Eliminar Jugador") {
-            @Override
-            protected void paintComponent(Graphics g) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(getBackground());
-                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 12, 12);
-                g2.setColor(getForeground());
-                g2.setFont(getFont());
-                FontMetrics fm = g2.getFontMetrics();
-                int x = (getWidth() - fm.stringWidth(getText())) / 2;
-                int y = (getHeight() + fm.getAscent() - fm.getDescent()) / 2;
-                g2.drawString(getText(), x, y);
-                g2.dispose();
-            }
-        };
+        btnEliminarJugador = new JButton("Eliminar Jugador");
         btnEliminarJugador.setEnabled(false);
-        btnEliminarJugador.setBackground(Color.GRAY);
-        btnEliminarJugador.setForeground(Color.BLACK);
-        btnEliminarJugador.setContentAreaFilled(false);
-        btnEliminarJugador.setBorderPainted(false);
-        btnEliminarJugador.setOpaque(false);
-        btnEliminarJugador.setFocusPainted(false);
-        btnEliminarJugador.setFont(btnEliminarJugador.getFont().deriveFont(11f));
-        btnEliminarJugador.setPreferredSize(new Dimension(130, 26));
-        btnEliminarJugador.setHorizontalAlignment(SwingConstants.CENTER);
-        btnEliminarJugador.setVerticalAlignment(SwingConstants.CENTER);
+
         panelAcciones.add(btnCrearJugador);
         panelAcciones.add(btnEliminarJugador);
 
@@ -200,8 +176,6 @@ public class MenuFrame extends JFrame {
 
         jugadorCont.eliminarJugador(id);
         btnEliminarJugador.setEnabled(false);
-        btnEliminarJugador.setBackground(Color.GRAY);
-        btnEliminarJugador.setForeground(Color.BLACK);
         nombreJugSelec.setText("-");
         mailJugSelec.setText("-");
         cargarJugadores();
@@ -211,9 +185,6 @@ public class MenuFrame extends JFrame {
         int filaSeleccionada = tablaJugadores.getSelectedRow();
         if (filaSeleccionada == -1) {
             btnEliminarJugador.setEnabled(false);
-            btnEliminarJugador.setBackground(Color.GRAY);
-            btnEliminarJugador.setForeground(Color.BLACK);
-            return;
         }
 
         int id = Integer.parseInt(modeloTablaJugadores.getValueAt(filaSeleccionada, 0).toString());
@@ -226,8 +197,6 @@ public class MenuFrame extends JFrame {
             nombreJugSelec.setText(nombre);
             mailJugSelec.setText(mail);
             btnEliminarJugador.setEnabled(true);
-            btnEliminarJugador.setBackground(Color.RED);
-            btnEliminarJugador.setForeground(Color.WHITE);
             if (tablaCaballos.getSelectedRow()!=-1) {
             	seleccionarCaballo();
             }
@@ -278,33 +247,8 @@ public class MenuFrame extends JFrame {
 
         JPanel panelAcciones = new JPanel(new FlowLayout(FlowLayout.RIGHT, 5, 3));
         btnCrearCaballo = new JButton("Crear Caballo");
-        btnEliminarCaballo = new JButton("Eliminar Caballo") {
-            @Override
-            protected void paintComponent(Graphics g) {
-                Graphics2D g2 = (Graphics2D) g.create();
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(getBackground());
-                g2.fillRoundRect(0, 0, getWidth(), getHeight(), 12, 12);
-                g2.setColor(getForeground());
-                g2.setFont(getFont());
-                FontMetrics fm = g2.getFontMetrics();
-                int x = (getWidth() - fm.stringWidth(getText())) / 2;
-                int y = (getHeight() + fm.getAscent() - fm.getDescent()) / 2;
-                g2.drawString(getText(), x, y);
-                g2.dispose();
-            }
-        };
+        btnEliminarCaballo = new JButton("Eliminar Caballo");
         btnEliminarCaballo.setEnabled(false);
-        btnEliminarCaballo.setBackground(Color.GRAY);
-        btnEliminarCaballo.setForeground(Color.BLACK);
-        btnEliminarCaballo.setContentAreaFilled(false);
-        btnEliminarCaballo.setBorderPainted(false);
-        btnEliminarCaballo.setOpaque(false);
-        btnEliminarCaballo.setFocusPainted(false);
-        btnEliminarCaballo.setFont(btnEliminarCaballo.getFont().deriveFont(11f));
-        btnEliminarCaballo.setPreferredSize(new Dimension(130, 26));
-        btnEliminarCaballo.setHorizontalAlignment(SwingConstants.CENTER);
-        btnEliminarCaballo.setVerticalAlignment(SwingConstants.CENTER);
         panelAcciones.add(btnCrearCaballo);
         panelAcciones.add(btnEliminarCaballo);
 
@@ -377,8 +321,7 @@ public class MenuFrame extends JFrame {
 
         caballoCont.eliminarCaballo(id);
         btnEliminarCaballo.setEnabled(false);
-        btnEliminarCaballo.setBackground(Color.GRAY);
-        btnEliminarCaballo.setForeground(Color.BLACK);
+
         cargarCaballos();
         seleccionarCaballo();
     }
@@ -387,8 +330,7 @@ public class MenuFrame extends JFrame {
         int filaSeleccionada = tablaCaballos.getSelectedRow();
         if (filaSeleccionada == -1) {
             btnEliminarCaballo.setEnabled(false);
-            btnEliminarCaballo.setBackground(Color.GRAY);
-            btnEliminarCaballo.setForeground(Color.BLACK);
+
             
             jugadorCont.seleccionarCaballo(-1);
             nombreCabSelec.setText("-");
@@ -419,8 +361,6 @@ public class MenuFrame extends JFrame {
         velocidadCabSelec.setText(velocidad);
 
         btnEliminarCaballo.setEnabled(true);
-        btnEliminarCaballo.setBackground(Color.RED);
-        btnEliminarCaballo.setForeground(Color.WHITE);
 
         jugadorCont.seleccionarCaballo(id);
     }
