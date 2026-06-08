@@ -185,6 +185,7 @@ public class MenuFrame extends JFrame {
         int filaSeleccionada = tablaJugadores.getSelectedRow();
         if (filaSeleccionada == -1) {
             btnEliminarJugador.setEnabled(false);
+            return;
         }
 
         int id = Integer.parseInt(modeloTablaJugadores.getValueAt(filaSeleccionada, 0).toString());
