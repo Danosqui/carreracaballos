@@ -48,7 +48,7 @@ public class CaballoDAO {
     	EntityManager em = JPAUtil.getInstance().crearEntityManager();
     	int CANTIDAD_CABALLOS_CARRERA=5;
     	try { //NOTA: SI ESTO NO FUNCIONA CAMBIAR EL <> POR !=, ESTOY CONFIANDO EN CLAUDIA ME DIJO Q ES ASI
-    		return em.createQuery("SELECT c FROM Caballo c WHERE c.id <> :excluir", Caballo.class)
+    		return em.createQuery("SELECT c FROM Caballo c WHERE c.id <> :excluir ORDER BY RAND()", Caballo.class)
     		.setParameter("excluir", idExcluir)
     		.setMaxResults(CANTIDAD_CABALLOS_CARRERA)
     		.getResultList();
