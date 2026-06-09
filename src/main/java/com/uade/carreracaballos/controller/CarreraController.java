@@ -47,30 +47,13 @@ public class CarreraController {
     	List<Caballo> posiciones = carrera.obtenerPosiciones();
     	List<CaballoDTO> posicionesDTO = new ArrayList<CaballoDTO>();
     	for (Caballo c : posiciones) {
-    		CaballoDTO dto = new CaballoDTO();
-    		dto.setId(c.getId());
-    		dto.setEnergia(c.getEnergia());
-    		dto.setNombre(c.getNombre());
-    		dto.setResistencia(c.getResistencia());
-    		dto.setVelocidad(c.getVelocidad());
-    		dto.setDistanciaRecorrida(c.getDistanciaRecorrida());
-    		posicionesDTO.add(dto);
+    		posicionesDTO.add(caballoService.aDTO(c));
     	}
     	return posicionesDTO;
     }
 
     public int calcularPuesto(int idCaballo) {
-        List<Caballo> caballos = carrera.obtenerPosiciones();
-
-		caballos.sort((c1, c2) -> Double.compare(c2.getDistanciaRecorrida(), c1.getDistanciaRecorrida())); //ordenamos por distancia recorrida, el que mas corrio primero
-
-        for (int i = 0; i < caballos.size(); i++) {
-            if (caballos.get(i).getId() == idCaballo) {
-                return i + 1; // El puesto es el índice + 1
-            }
-        }
-        
-        return -1;
+    	return carrera.calcularPuesto(idCaballo);
     }
     
     public boolean carreraFinalizada() {

@@ -17,10 +17,4 @@ public class CaballoEquilibrado extends Caballo {
         this.velocidad = 5.5 + Math.random() * 1.5;
         this.resistencia = 52.0 + Math.random() * 13.0;
     }
-
-    public CaballoEquilibrado(String nombre, double velocidad, double resistencia) {
-        super(nombre, velocidad, resistencia);
-    }
-
-    
 }

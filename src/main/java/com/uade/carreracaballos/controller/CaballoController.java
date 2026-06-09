@@ -41,7 +41,7 @@ public class CaballoController {
 	public List<CaballoDTO> listarCaballos() {
 		List<CaballoDTO> caballosDTO = new ArrayList<>();
 		for (Caballo c : caballoService.listarCaballos()) {
-			caballosDTO.add(convertirADTO(c));
+			caballosDTO.add(caballoService.aDTO(c));
 		}
 		return caballosDTO;
 	}
@@ -59,16 +59,5 @@ public class CaballoController {
 			atributosString.add(a.toString());
 		}
 		return atributosString.toArray(new String[0]);
-	}
-
-	private CaballoDTO convertirADTO(Caballo c) {
-		CaballoDTO dto = new CaballoDTO();
-		dto.setId(c.getId());
-		dto.setNombre(c.getNombre());
-		dto.setVelocidad(c.getVelocidad());
-		dto.setResistencia(c.getResistencia());
-		dto.setEnergia(c.getEnergia());
-		dto.setDistanciaRecorrida(c.getDistanciaRecorrida());
-		return dto;
 	}
 }
