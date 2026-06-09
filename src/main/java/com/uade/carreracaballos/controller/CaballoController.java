@@ -4,8 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.uade.carreracaballos.dto.CaballoDTO;
-import com.uade.carreracaballos.dto.CaballoEquilibradoDTO;
-import com.uade.carreracaballos.dto.CaballoResistenteDTO;
 import com.uade.carreracaballos.model.AtributoCaballo;
 import com.uade.carreracaballos.model.Caballo;
 import com.uade.carreracaballos.model.CaballoEquilibrado;
