@@ -129,8 +129,8 @@ Al terminar cada carrera, el jugador suma puntos según la posición de su cabal
 
 | Posición | Puntos |
 |---|---|
-| 1° lugar | 30 |
-| 2° lugar | 20 |
+| 1° lugar | 100 |
+| 2° lugar | 50 |
 | 3° en adelante | 10 |
 
 El puntaje es acumulado a lo largo de todas las carreras del jugador.

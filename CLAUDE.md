@@ -28,16 +28,14 @@ hardcodeada en `src/main/resources/META-INF/persistence.xml` (usuario/clave `roo
 crea el esquema solo (`hibernate.hbm2ddl.auto=update`), por lo que `dbCreate.sql` es sólo
 referencia y está desactualizado respecto de las entidades (ver Gotchas).
 
-## Dos vistas, mismo negocio
+## La Vista: MenuFrame (Swing)
 
-Hay **dos frontends intercambiables** que actúan como la Vista del MVC y hablan únicamente con
-los controllers. Se elige cuál corre en `Main.java` comentando/descomentando una línea:
+La Vista del MVC es la GUI Swing, que habla únicamente con los controllers (recibe/usa DTOs). Se
+lanza desde `Main.java`.
 
-- `MenuFrame` (Swing) — la GUI, es la que arranca por defecto. Ya está completamente cableada:
-  crea jugador, lista caballos, selecciona jugador y caballo, y corre la carrera con animación
-  en `VentanaCarrera`/`ViewPista`.
-- `CLI` — frontend de texto con animación ASCII de la carrera. Sirve como referencia de cómo
-  orquestar los controllers de punta a punta (crear jugador → elegir caballo → correr → puntaje).
+- `MenuFrame` (Swing) — la única vista. Ya está completamente cableada: crea jugador, lista
+  caballos, selecciona jugador y caballo, y corre la carrera con animación en
+  `VentanaCarrera`/`ViewPista`.
 
 ## Arquitectura por capas
 
@@ -45,7 +43,7 @@ El flujo es estricto y unidireccional: **Vista → Controller → Service → DA
 Cada capa sólo conoce a la de abajo.
 
 ```
-View (MenuFrame / CLI)     habla SOLO con Controllers; recibe/usa DTOs
+View (MenuFrame)           habla SOLO con Controllers; recibe/usa DTOs
    ↓
 Controller                 convierte Model↔DTO; arma los casos de uso
    ↓
@@ -59,13 +57,13 @@ Model (entidades JPA)
 Reglas que definen el diseño (respetarlas al extender):
 
 - **La conversión Model↔DTO vive en el Controller**, nunca en el Service ni en el DAO.
-  `CaballoController.convertirADTO(...)` y `JugadorController.construirDTO(...)` son los únicos
-  puntos de traducción. Los Services devuelven `Caballo`/`Jugador` del modelo a propósito.
-- **La Vista nunca toca el modelo** salvo una excepción documentada: ningún controller devuelve
-  objetos `Caballo` del modelo, así que la `CLI` reconstruye instancias de `Caballo` desde los
-  DTOs (`caballoDesdeDTO`) para armar el pool de la carrera. Instanciar participantes no se
-  considera lógica de negocio; el avance, el ganador y el puntaje siguen ocurriendo en los
-  controllers.
+  `CaballoController.convertirADTO(...)` (caballos) y `JugadorController.construirDTO(...)`
+  (jugador) son los puntos de traducción. `CarreraController.obtenerPosiciones()` también arma
+  `CaballoDTO` con la misma lógica inline (duplicación conocida, pendiente de unificar). Los
+  Services devuelven `Caballo`/`Jugador` del modelo a propósito.
+- **La Vista nunca toca el modelo**: todos los controllers devuelven DTOs. En particular, el
+  bucle de animación usa `CarreraController.obtenerPosiciones()`, que devuelve
+  `List<CaballoDTO>` (no objetos del modelo).
 - **Singleton**: `config/JPAUtil` centraliza el `EntityManagerFactory`. Todos los DAO piden
   `JPAUtil.getInstance().crearEntityManager()`, abren transacción, y **cierran el EM en un
   `finally`** por operación. Consecuencia: las entidades quedan *detached* al volver al service,
@@ -74,7 +72,7 @@ Reglas que definen el diseño (respetarlas al extender):
 ### Controllers y su responsabilidad
 
 - `JugadorController` — mantiene el `jugadorSeleccionado` de la sesión (estado de la "vista
-  activa"); alta, selección por id o por nombre+mail, `seleccionarCaballo(int id)` y
+  activa"); alta, selección por id, `seleccionarCaballo(int id)` y
   `procesarPuntaje(posicion)`.
 - `CaballoController` — alta por tipo (`AtributoCaballo`) y listado como DTOs.
   `convertirADTO(Caballo)` es el único punto de conversión modelo→DTO para caballos.
@@ -90,22 +88,18 @@ El flujo de `MenuFrame.iniciarCarrera()` cuando todo está listo:
 1. Dialog para elegir el tamaño de pista (200–500m en pasos de 50).
 2. `carreraCont.crearCarrera(idCaballoJugador, tamanioPista)` — arma el pool y crea `Carrera`.
 3. Abre `VentanaCarrera` (986×458 px), que contiene un `ViewPista` (`JPanel` custom).
-4. Lanza un `Thread` separado (no en el EDT) que cada 40 ms (~25 fps): llama
-   `carreraCont.avanzarInstante()`, obtiene `List<Caballo>` de `obtenerPosiciones()`, convierte
-   cada elemento a DTO vía `caballoCont.convertirADTO(c)`, y llama
-   `ventanaCarrera.getPista().actualizar(caballosDTO, tamanioPista, idCaballoJugador)`.
+4. Lanza un `javax.swing.Timer` (~32 ms) que en cada tick: si la carrera no terminó, llama
+   `carreraCont.avanzarInstante()`, obtiene `List<CaballoDTO>` de
+   `carreraCont.obtenerPosiciones()` y llama
+   `ventanaCarrera.getPista().actualizar(posis, tamanioPista, idCaballoJugador)`. Cuando
+   `carreraCont.carreraFinalizada()` da true, frena el Timer, calcula el puesto y procesa el
+   puntaje.
 5. Al finalizar, muestra diálogo con el resultado, oculta `VentanaCarrera` y vuelve a `MenuFrame`.
 
 `ViewPista` dibuja un fondo (`pista.png`) y hasta 6 sprites (`caballo1.png`…`caballo6.png`). La
 posición X de cada caballo es proporcional a `distanciaRecorrida / longitudPista`. El caballo del
 jugador se etiqueta en naranja; los demás en blanco. `CaballoDTO.distanciaRecorrida` es el campo
 que alimenta esta lógica.
-
-**Excepción arquitectural conocida**: el bucle de animación en `MenuFrame` recibe
-`List<Caballo>` (modelo) directamente de `carreraCont.obtenerPosiciones()`, porque los caballos
-en carrera sólo existen en memoria y no tienen sentido releerlos de la BD. La conversión igual
-pasa por el controller (`caballoCont.convertirADTO`), pero la Vista sí ve objetos del modelo
-brevemente. El propio código lo marca como "implementado horrible, hay q refactor".
 
 ## Modelo de dominio y lógica de la simulación
 
@@ -130,22 +124,18 @@ energía exactamente en el instante 10**, sin importar el tipo. Eso divide la ca
 "burst" (1–10, los Veloces ganan en pistas cortas) y fase sostenida (11+, los Resistentes
 ganan en pistas largas). El punto de equilibrio está cerca de los 300m.
 
-Puntaje **implementado** (`JugadorController.procesarPuntaje`): 1°=30, 2°=20, resto=10.
-Ojo: `consigna.md` pide 100/50/10 — la implementación sigue a `logica_caballos.md`, no a la
-consigna.
+Puntaje **implementado** (`JugadorController.procesarPuntaje`): 1°=100, 2°=50, resto=10, en línea
+con `consigna.md` y `logica_caballos.md`.
 
 `Carrera` (no es entidad JPA, es objeto en memoria) corre con todos los caballos del pool y marca
-`EstadoCarrera.FINALIZADA` apenas uno cruza la meta. `Caballo.descansar()` resetea energía a 100
-y distancia a 0 para volver a correr.
+`EstadoCarrera.FINALIZADA` apenas uno cruza la meta. Cada carrera arma su pool releyendo caballos
+frescos de la BD; como `energia` y `distanciaRecorrida` son `@Transient`, los constructores
+no-arg los reinician (energía 100, distancia 0), así que no hace falta un reset manual.
 
 ## Gotchas / partes incompletas
 
 Cosas que parecen bugs pero conviene entender antes de "arreglar":
 
-- **Excepción arquitectural en la animación** (ver sección "Vistas de la carrera"): el bucle en
-  `MenuFrame` obtiene `List<Caballo>` directamente de `carreraCont.obtenerPosiciones()`. Es
-  intencional (los caballos en carrera no están en la BD), pero viola estrictamente la regla
-  "Vista nunca toca el modelo".
 - `Jugador.caballoSeleccionado` es `@Transient` (no se persiste). Entre sesiones, el jugador
   carga sin caballo asignado y hay que seleccionarlo de nuevo.
 - `JugadorController` instancia su propio `CaballoService` además del `JugadorService`. Hay una
@@ -154,7 +144,8 @@ Cosas que parecen bugs pero conviene entender antes de "arreglar":
   `@Table(name="caballo")`) y `jugadores`; el SQL de referencia crea `caballos` (plural). Como
   `hbm2ddl.auto=update`, mandan las entidades, no el `.sql`.
 - `persistence.xml` mezcla credenciales: la `jdbc.url` embebe `root:admin123` y además hay
-  props `user`/`password` con `root`/`root`. Es config local de desarrollo.
+  props `jdbc.user=root` / `jdbc.password=adminadmin123123` (tres valores distintos). Conviene
+  unificarlas a las credenciales reales del MySQL local. Es config local de desarrollo.
 
 ## Diagramas
 
