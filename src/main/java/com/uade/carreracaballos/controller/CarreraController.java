@@ -6,7 +6,6 @@ import java.util.List;
 import com.uade.carreracaballos.dto.CaballoDTO;
 import com.uade.carreracaballos.dto.CaballoEquilibradoDTO;
 import com.uade.carreracaballos.dto.CaballoResistenteDTO;
-import com.uade.carreracaballos.dto.CaballoVelozDTO;
 import com.uade.carreracaballos.model.Caballo;
 import com.uade.carreracaballos.model.CaballoResistente;
 import com.uade.carreracaballos.model.CaballoVeloz;
@@ -50,14 +49,7 @@ public class CarreraController {
     	List<Caballo> posiciones = carrera.obtenerPosiciones();
     	List<CaballoDTO> posicionesDTO = new ArrayList<CaballoDTO>();
     	for (Caballo c : posiciones) {
-    		CaballoDTO dto;
-    		if (c instanceof CaballoVeloz) {
-    			dto = new CaballoVelozDTO();
-    		} else if (c instanceof CaballoResistente) {
-    			dto = new CaballoResistenteDTO();
-    		} else {
-    			dto = new CaballoEquilibradoDTO();
-    		}
+    		CaballoDTO dto = new CaballoDTO();
     		dto.setId(c.getId());
     		dto.setEnergia(c.getEnergia());
     		dto.setNombre(c.getNombre());

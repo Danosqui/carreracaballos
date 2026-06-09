@@ -6,7 +6,6 @@ import java.util.List;
 import com.uade.carreracaballos.dto.CaballoDTO;
 import com.uade.carreracaballos.dto.CaballoEquilibradoDTO;
 import com.uade.carreracaballos.dto.CaballoResistenteDTO;
-import com.uade.carreracaballos.dto.CaballoVelozDTO;
 import com.uade.carreracaballos.model.AtributoCaballo;
 import com.uade.carreracaballos.model.Caballo;
 import com.uade.carreracaballos.model.CaballoEquilibrado;
@@ -65,14 +64,7 @@ public class CaballoController {
 	}
 
 	private CaballoDTO convertirADTO(Caballo c) {
-		CaballoDTO dto;
-		if (c instanceof CaballoVeloz) {
-			dto = new CaballoVelozDTO();
-		} else if (c instanceof CaballoResistente) {
-			dto = new CaballoResistenteDTO();
-		} else {
-			dto = new CaballoEquilibradoDTO();
-		}
+		CaballoDTO dto = new CaballoDTO();
 		dto.setId(c.getId());
 		dto.setNombre(c.getNombre());
 		dto.setVelocidad(c.getVelocidad());

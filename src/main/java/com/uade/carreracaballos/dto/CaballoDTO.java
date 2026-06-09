@@ -1,6 +1,6 @@
 package com.uade.carreracaballos.dto;
 
-public abstract class CaballoDTO {
+public class CaballoDTO {
 	protected int id;
 	protected String nombre;
 	protected double velocidad;
