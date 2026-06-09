@@ -22,12 +22,5 @@ public class CaballoResistente extends Caballo {
         super(nombre, velocidad, resistencia);
     }
 
-    @Override
-    public void avanzar() {
-        double avance = velocidad * (energia / 100.0);
-        distanciaRecorrida += avance;
-        double desgaste = (100.0 - resistencia) / K;
-        energia = Math.max(resistencia, energia - desgaste);
 
-    }
 }
