@@ -47,14 +47,7 @@ public class CarreraController {
     	List<Caballo> posiciones = carrera.obtenerPosiciones();
     	List<CaballoDTO> posicionesDTO = new ArrayList<CaballoDTO>();
     	for (Caballo c : posiciones) {
-    		CaballoDTO dto = new CaballoDTO();
-    		dto.setId(c.getId());
-    		dto.setEnergia(c.getEnergia());
-    		dto.setNombre(c.getNombre());
-    		dto.setResistencia(c.getResistencia());
-    		dto.setVelocidad(c.getVelocidad());
-    		dto.setDistanciaRecorrida(c.getDistanciaRecorrida());
-    		posicionesDTO.add(dto);
+    		posicionesDTO.add(caballoService.aDTO(c));
     	}
     	return posicionesDTO;
     }
