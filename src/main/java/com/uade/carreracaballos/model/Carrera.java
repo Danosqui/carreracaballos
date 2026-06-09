@@ -29,6 +29,17 @@ public class Carrera {
 		return estado;
 	}
 	
+	public int calcularPuesto(int idCaballo) {
+		List<Caballo> caballos = obtenerPosiciones();
+
+		caballos.sort((c1, c2) -> Double.compare(c2.getDistanciaRecorrida(), c1.getDistanciaRecorrida()));
+		
+        for (int i = 0; i < caballos.size(); i++) 
+            if (caballos.get(i).getId() == idCaballo) return i + 1;
+        
+        return -1;
+	}
+	
 	public List<Caballo> obtenerPosiciones(){
 		return caballos;
 	}
