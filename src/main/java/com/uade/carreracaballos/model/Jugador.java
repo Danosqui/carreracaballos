@@ -76,7 +76,6 @@ public class Jugador {
 	}
 
 	public int getId() {
-		// TODO Auto-generated method stub
 		return id;
 	}
 }

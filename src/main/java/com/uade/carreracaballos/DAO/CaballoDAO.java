@@ -1,10 +1,8 @@
 package com.uade.carreracaballos.DAO;
 
 import com.uade.carreracaballos.model.Caballo;
-import com.uade.carreracaballos.model.Jugador;
 
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.NoResultException;
 import com.uade.carreracaballos.config.JPAUtil;
 import java.util.List;
 
@@ -30,7 +28,12 @@ public class CaballoDAO {
     
     public Caballo getCaballo(int id) {
     	EntityManager em = JPAUtil.getInstance().crearEntityManager();
-    	return em.find(Caballo.class, id);
+    	try {
+    		return em.find(Caballo.class, id);
+    	}
+    	finally {
+    		em.close();
+    	}
     }
 
     public List<Caballo> listarCaballos() {
@@ -47,7 +50,7 @@ public class CaballoDAO {
     public List<Caballo> getRandomCaballos(int idExcluir) {
     	EntityManager em = JPAUtil.getInstance().crearEntityManager();
     	int CANTIDAD_CABALLOS_CARRERA=5;
-    	try { //NOTA: SI ESTO NO FUNCIONA CAMBIAR EL <> POR !=, ESTOY CONFIANDO EN CLAUDIA ME DIJO Q ES ASI
+    	try {
     		return em.createQuery("SELECT c FROM Caballo c WHERE c.id <> :excluir ORDER BY RAND()", Caballo.class)
     		.setParameter("excluir", idExcluir)
     		.setMaxResults(CANTIDAD_CABALLOS_CARRERA)

@@ -53,11 +53,6 @@ public abstract class Caballo {
 
     public abstract void avanzar();
 
-    public void descansar() {
-        energia = 100.0;
-        distanciaRecorrida = 0.0;
-    }
-
     public String getNombre() { return nombre; }
     public void setNombre(String nombre) { this.nombre = nombre; }
 

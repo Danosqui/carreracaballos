@@ -44,15 +44,6 @@ public class CarreraController {
         carrera.avanzarCorredores();
 
     }
-
-/*    public List<Caballo> obtenerPosiciones() {
-
-        if (carrera == null) {
-            return null;
-        }
-
-        return carrera.obtenerPosiciones();
-    }*/
     
     public List<CaballoDTO> obtenerPosiciones(){
     	if (carrera==null) return null;
@@ -68,7 +59,7 @@ public class CarreraController {
     			dto = new CaballoEquilibradoDTO();
     		}
     		dto.setId(c.getId());
-    		dto.setEnergia(100);
+    		dto.setEnergia(c.getEnergia());
     		dto.setNombre(c.getNombre());
     		dto.setResistencia(c.getResistencia());
     		dto.setVelocidad(c.getVelocidad());
@@ -90,15 +81,6 @@ public class CarreraController {
         }
         
         return -1;
-    }
-
-    public EstadoCarrera obtenerEstado() {
-
-        if (carrera == null) {
-            return null;
-        }
-
-        return carrera.getEstado();
     }
     
     public boolean carreraFinalizada() {

@@ -22,26 +22,13 @@ public class JugadorDAO {
     		if (em.getTransaction().isActive()) {
     			em.getTransaction().rollback();
     		}
+    		throw e;
     	}
     	finally {
     		em.close();
     	}
     }
 
-    public Jugador buscarJugador(String nombre) {
-    	EntityManager enti = JPAUtil.getInstance().crearEntityManager();
-    	try {
-    		return enti.createQuery("SELECT j FROM Jugador j WHERE j.nombre = :nombre", Jugador.class)
-    		.setParameter("nombre", nombre)
-    		.getSingleResult();
-    	}
-    	catch(NoResultException e){
-    		return null;
-    	}
-    	finally {
-    		enti.close();
-    	}
-    }
     public Jugador getJugadorById(int id) {
     	EntityManager enti = JPAUtil.getInstance().crearEntityManager();
     	try {

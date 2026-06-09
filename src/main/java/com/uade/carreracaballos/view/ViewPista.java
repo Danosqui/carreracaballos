@@ -8,7 +8,6 @@ import java.util.List;
 import javax.swing.ImageIcon; // para cargar el archivo
 
 import com.uade.carreracaballos.dto.CaballoDTO;
-import com.uade.carreracaballos.model.Caballo;
 
 public class ViewPista extends JPanel {
 

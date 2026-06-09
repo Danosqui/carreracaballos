@@ -1,7 +1,6 @@
 package com.uade.carreracaballos.service;
 
 import com.uade.carreracaballos.DAO.JugadorDAO;
-import com.uade.carreracaballos.dto.JugadorDTO;
 import com.uade.carreracaballos.model.Jugador;
 
 import java.util.List;
@@ -16,16 +15,6 @@ public class JugadorService {
 
     public void guardarJugador(Jugador jugador) {
         jugadorDAO.crearJugador(jugador);
-    }
-
-    public Jugador buscarJugador(String nombre, String mail) {
-        Jugador jugador = jugadorDAO.buscarJugador(nombre);
-
-        if (jugador == null || !jugador.getMail().equals(mail)) {
-            return null;
-        }
-
-        return jugador;
     }
     
     public Jugador getJugador(int id) {

@@ -64,7 +64,6 @@ public class CaballoController {
 		return atributosString.toArray(new String[0]);
 	}
 
-	// no estoy seguro de que esto deba ser public, lo cambie par aque funcione manuframe
 	private CaballoDTO convertirADTO(Caballo c) {
 		CaballoDTO dto;
 		if (c instanceof CaballoVeloz) {
