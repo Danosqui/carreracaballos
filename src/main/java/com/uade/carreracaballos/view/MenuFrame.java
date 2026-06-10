@@ -183,7 +183,6 @@ public class MenuFrame extends JFrame {
     private void procesarSeleccionJugador() {
         int filaSeleccionada = tablaJugadores.getSelectedRow();
         if (filaSeleccionada == -1) {
-            // NO METER CODIGO ACA.
             return;
         }
 
@@ -222,7 +221,6 @@ public class MenuFrame extends JFrame {
         modeloTablaCaballos.addColumn("Nombre");
         modeloTablaCaballos.addColumn("Velocidad");
         modeloTablaCaballos.addColumn("Resistencia");
-        //modeloTablaCaballos.addColumn("Energía");
 
         tablaCaballos = new JTable(modeloTablaCaballos);
         tablaCaballos.setPreferredScrollableViewportSize(new Dimension(450, 120));
@@ -340,7 +338,6 @@ public class MenuFrame extends JFrame {
     private void procesarSeleccionCaballo() {
         int filaSeleccionada = tablaCaballos.getSelectedRow();
         if (filaSeleccionada == -1) {
-        	// NO METER CODIGO ACA.
             return;
         }
         

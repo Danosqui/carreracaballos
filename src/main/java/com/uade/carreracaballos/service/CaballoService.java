@@ -23,12 +23,10 @@ public class CaballoService {
     	return caballoDAO.getCaballo(id);
     }
 
-    // Devuelve modelo, NO DTOs. La conversión la hace el Controller.
     public List<Caballo> listarCaballos() {
         return caballoDAO.listarCaballos();
     }
 
-    // Devuelve caballos aleatorios excluyendo el del jugador
     public List<Caballo> getRandomCaballos(int idExcluir) {
         return caballoDAO.getRandomCaballos(idExcluir);
     }

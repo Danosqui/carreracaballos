@@ -12,9 +12,7 @@ import java.util.List;
 public class JugadorController {
 
 	private JugadorService jugadorService;
-	private CaballoService caballoService; // no estamos del todo seguros de que sea asi.
-	// Habria q ver bien q onda, no sabemos si corresponde esto ya que se crean 2 instancias del service, o sino crear una sola instancia en main y mandarsela a los controllers
-	// info al respecto https://claude.ai/share/9e54dd5f-08bc-4fa8-b627-94a1af79903a
+	private CaballoService caballoService; 
 	
 	private Jugador jugadorSeleccionado;
 
@@ -34,7 +32,7 @@ public class JugadorController {
 		else this.jugadorSeleccionado = jugadorService.getJugador(id);
 	}
 
-	public void seleccionarCaballo(int id) { // 
+	public void seleccionarCaballo(int id) {
 		if (jugadorSeleccionado == null)
 			throw new RuntimeException("Error: no se seleccionó un jugador");
 		if (id ==-1) {

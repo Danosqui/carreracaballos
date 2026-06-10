@@ -50,7 +50,6 @@ public class Jugador {
 		caballoSeleccionado = caballo;
 	}
 	
-	//getters y setters aunque en realidad seleccionarcaballo es un setter con otro nombre
 	public String getNombre() {
 		return nombre;
 	}

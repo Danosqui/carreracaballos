@@ -1,11 +1,11 @@
 package com.uade.carreracaballos.view;
 import javax.swing.JPanel;
-import java.awt.Image;        // clase base para imágenes
-import java.awt.Graphics;     // para paintComponent
+import java.awt.Image; 
+import java.awt.Graphics;
 import java.awt.Color;
 import java.awt.Font;
 import java.util.List;
-import javax.swing.ImageIcon; // para cargar el archivo
+import javax.swing.ImageIcon;
 
 import com.uade.carreracaballos.dto.CaballoDTO;
 
@@ -24,7 +24,7 @@ public class ViewPista extends JPanel {
     private int idCaballoJugador;
 
     public ViewPista() {
-    	// imagen 1693x929, ratio
+    	// imagen 1693x929
         java.net.URL urlPista = getClass().getResource("/com/uade/carreracaballos/view/assets/pista.png");
 
         fondo = new ImageIcon(urlPista).getImage();
@@ -52,12 +52,11 @@ public class ViewPista extends JPanel {
             return;
         }
 
-        // Como mucho 6 caballos (hay 6 carriles / imagenes).
+
         int n = Math.min(participantes.size(), caballos.length);
         for (int i = 0; i < n; i++) {
             CaballoDTO c = participantes.get(i);
 
-            // Avance proporcional: 0 -> X_INICIAL, longitudPista -> X_META.
             double ratio = c.getDistanciaRecorrida() / longitudPista;
             ratio = Math.max(0.0, Math.min(1.0, ratio));
             int xCaballo = X_INICIAL + (int) Math.round((X_META - X_INICIAL) * ratio);
