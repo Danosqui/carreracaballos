@@ -18,7 +18,7 @@ public class Carrera {
 		this.estado = EstadoCarrera.EN_CURSO;
 	}
 	
-	public EstadoCarrera avanzarCorredores() {
+	public void avanzarCorredores() {
 		for (Caballo caballo : caballos) {
 			caballo.avanzar();
 			if (caballo.distanciaRecorrida >= this.longitudPista) {
@@ -26,7 +26,6 @@ public class Carrera {
 				break;
 			}
 		}
-		return estado;
 	}
 	
 	public int calcularPuesto(int idCaballo) {
