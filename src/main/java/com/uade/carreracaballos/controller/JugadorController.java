@@ -46,10 +46,7 @@ public class JugadorController {
 	}
 
 	public List<JugadorDTO> listarJugadores() {
-		List<JugadorDTO> dtos = new ArrayList<JugadorDTO>();
-		for (Jugador j : jugadorService.listarJugadores()) {
-			dtos.add(construirDTO(j));
-		}
+		List<JugadorDTO> dtos = jugadorService.listarJugadores();
 		return dtos;
 	}
 
@@ -73,22 +70,8 @@ public class JugadorController {
 		if (jugadorSeleccionado==null) {
 			return null;
 		}
-		return construirDTO(jugadorSeleccionado);
+		JugadorDTO jug= jugadorService.construirDTO(jugadorSeleccionado);
+		return jug;
 	}
 	
-	private JugadorDTO construirDTO(Jugador jug) {
-		JugadorDTO dto = new JugadorDTO(
-    			jug.getId(),
-    			jug.getNombre(),
-    			jug.getMail(),
-    			jug.getPuntajeAcumulado()
-    			);
-		
-		Caballo caballoSeleccionado = jug.getCaballoSeleccionado();
-		if (caballoSeleccionado != null) {
-			dto.setCaballoSeleccionado(caballoSeleccionado.getId());
-		}
-    	return dto;
-    	
-    }
 }

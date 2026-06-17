@@ -39,10 +39,7 @@ public class CaballoController {
 	}
 
 	public List<CaballoDTO> listarCaballos() {
-		List<CaballoDTO> caballosDTO = new ArrayList<>();
-		for (Caballo c : caballoService.listarCaballos()) {
-			caballosDTO.add(caballoService.aDTO(c));
-		}
+		List<CaballoDTO> caballosDTO = caballoService.listarCaballos();
 		return caballosDTO;
 	}
 

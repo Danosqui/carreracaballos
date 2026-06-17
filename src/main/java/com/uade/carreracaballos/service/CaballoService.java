@@ -4,6 +4,7 @@ import com.uade.carreracaballos.DAO.CaballoDAO;
 import com.uade.carreracaballos.model.Caballo;
 import com.uade.carreracaballos.dto.CaballoDTO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class CaballoService {
@@ -23,8 +24,13 @@ public class CaballoService {
     	return caballoDAO.getCaballo(id);
     }
 
-    public List<Caballo> listarCaballos() {
-        return caballoDAO.listarCaballos();
+    public List<CaballoDTO> listarCaballos() {
+        List<Caballo> caballo=caballoDAO.listarCaballos();
+        List<CaballoDTO> caballosDTO = new ArrayList<>();
+        for (Caballo c : caballo) {
+			caballosDTO.add(aDTO(c));
+		}
+        return caballosDTO;
     }
 
     public List<Caballo> getRandomCaballos(int idExcluir) {
