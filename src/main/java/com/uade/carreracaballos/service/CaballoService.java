@@ -3,20 +3,21 @@ package com.uade.carreracaballos.service;
 import com.uade.carreracaballos.DAO.CaballoDAO;
 import com.uade.carreracaballos.model.Caballo;
 import com.uade.carreracaballos.dto.CaballoDTO;
+import com.uade.carreracaballos.interfaz.InterfazCaballo;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class CaballoService {
 
-    private CaballoDAO caballoDAO;
+    private InterfazCaballo caballoDAO;
 
     public CaballoService() {
         this.caballoDAO = new CaballoDAO();
     }
 
     public void crearCaballo(Caballo caballo) {
-        caballoDAO.crearCaballo(caballo);
+    	caballoDAO.crearCaballo(caballo);
 
     }
     

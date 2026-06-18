@@ -4,13 +4,12 @@ import com.uade.carreracaballos.model.Jugador;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import com.uade.carreracaballos.config.JPAUtil;
-
-
+import com.uade.carreracaballos.interfaz.InterfazJugador;
 
 import java.util.List;
 
-public class JugadorDAO {
-
+public class JugadorDAO implements InterfazJugador {
+	@Override
     public void crearJugador(Jugador jugador) {
     	EntityManager em = JPAUtil.getInstance().crearEntityManager();
     	try {
@@ -28,7 +27,7 @@ public class JugadorDAO {
     		em.close();
     	}
     }
-
+	@Override
     public Jugador getJugadorById(int id) {
     	EntityManager enti = JPAUtil.getInstance().crearEntityManager();
     	try {
@@ -41,7 +40,7 @@ public class JugadorDAO {
     		enti.close();
     	}
     }
-
+	@Override
     public List<Jugador> listarJugadores(){
     	EntityManager em = JPAUtil.getInstance().crearEntityManager();
     	try {
@@ -52,7 +51,7 @@ public class JugadorDAO {
     		em.close();
     	}
     }
-
+	@Override
     public void actualizarJugador(Jugador jugador) {
     	EntityManager enti = JPAUtil.getInstance().crearEntityManager();
     	try {
@@ -70,7 +69,7 @@ public class JugadorDAO {
     		enti.close();
     	}
     }
-    
+	@Override
     public void borrarJugador(Jugador jugador) {
     	EntityManager em = JPAUtil.getInstance().crearEntityManager();
     	try {

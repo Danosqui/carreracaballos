@@ -4,10 +4,13 @@ import com.uade.carreracaballos.model.Caballo;
 
 import jakarta.persistence.EntityManager;
 import com.uade.carreracaballos.config.JPAUtil;
+import com.uade.carreracaballos.interfaz.InterfazCaballo;
+
 import java.util.List;
 
-public class CaballoDAO {
-
+public class CaballoDAO implements InterfazCaballo{
+	
+	@Override
     public void crearCaballo(Caballo caballo) {
     	EntityManager enti = JPAUtil.getInstance().crearEntityManager();
     	try {
@@ -25,7 +28,7 @@ public class CaballoDAO {
     		enti.close();
     	}
     }
-    
+	@Override
     public Caballo getCaballo(int id) {
     	EntityManager em = JPAUtil.getInstance().crearEntityManager();
     	try {
@@ -35,7 +38,7 @@ public class CaballoDAO {
     		em.close();
     	}
     }
-
+	@Override
     public List<Caballo> listarCaballos() {
     	EntityManager em = JPAUtil.getInstance().crearEntityManager();
     	try {
@@ -46,7 +49,7 @@ public class CaballoDAO {
     		em.close();
     	}
     }
-
+	@Override
     public List<Caballo> getRandomCaballos(int idExcluir) {
     	EntityManager em = JPAUtil.getInstance().crearEntityManager();
     	int CANTIDAD_CABALLOS_CARRERA=5;
@@ -60,7 +63,7 @@ public class CaballoDAO {
     		em.close();
     	}
     }
-
+    @Override
     public void borrarCaballo(Caballo caballo) {
     	EntityManager em = JPAUtil.getInstance().crearEntityManager();
     	try {
