@@ -4,11 +4,11 @@ import com.uade.carreracaballos.model.Jugador;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
 import com.uade.carreracaballos.config.JPAUtil;
-import com.uade.carreracaballos.interfaz.InterfazJugador;
+import com.uade.carreracaballos.interfaz.IJugadorDAO;
 
 import java.util.List;
 
-public class JugadorDAO implements InterfazJugador {
+public class JugadorDAO implements IJugadorDAO {
 	@Override
     public void crearJugador(Jugador jugador) {
     	EntityManager em = JPAUtil.getInstance().crearEntityManager();

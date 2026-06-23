@@ -3,7 +3,7 @@ import java.util.List;
 
 import com.uade.carreracaballos.model.Caballo;
 
-public interface InterfazCaballo {
+public interface ICaballoDAO {
 	 void crearCaballo(Caballo caballo);
 	 Caballo getCaballo(int id);
 	 List<Caballo> listarCaballos();

@@ -3,7 +3,7 @@ package com.uade.carreracaballos.service;
 import com.uade.carreracaballos.DAO.JugadorDAO;
 import com.uade.carreracaballos.dto.CaballoDTO;
 import com.uade.carreracaballos.dto.JugadorDTO;
-import com.uade.carreracaballos.interfaz.InterfazJugador;
+import com.uade.carreracaballos.interfaz.IJugadorDAO;
 import com.uade.carreracaballos.model.Caballo;
 import com.uade.carreracaballos.model.Jugador;
 
@@ -12,7 +12,7 @@ import java.util.List;
 
 public class JugadorService {
 
-    private InterfazJugador jugadorDAO;
+    private IJugadorDAO jugadorDAO;
 
     public JugadorService() {
         this.jugadorDAO = new JugadorDAO();

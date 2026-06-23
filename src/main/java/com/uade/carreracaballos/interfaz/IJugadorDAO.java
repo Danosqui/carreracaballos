@@ -3,7 +3,7 @@ import java.util.List;
 
 import com.uade.carreracaballos.model.Jugador;
 
-public interface InterfazJugador {
+public interface IJugadorDAO {
 	void crearJugador(Jugador jugador);
 	Jugador getJugadorById(int id);
 	List<Jugador> listarJugadores();

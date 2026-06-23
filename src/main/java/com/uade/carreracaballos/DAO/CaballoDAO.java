@@ -4,11 +4,11 @@ import com.uade.carreracaballos.model.Caballo;
 
 import jakarta.persistence.EntityManager;
 import com.uade.carreracaballos.config.JPAUtil;
-import com.uade.carreracaballos.interfaz.InterfazCaballo;
+import com.uade.carreracaballos.interfaz.ICaballoDAO;
 
 import java.util.List;
 
-public class CaballoDAO implements InterfazCaballo{
+public class CaballoDAO implements ICaballoDAO{
 	
 	@Override
     public void crearCaballo(Caballo caballo) {
